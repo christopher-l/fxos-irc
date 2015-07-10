@@ -10,16 +10,13 @@ gaia-header{
 }
 gaia-drawer{
   position: absolute;
-  /*position: relative;*/
   display: block;
   width: 100%;
   min-height: calc(100% - 3rem);
   z-index: 1;
 }
-gaia-drawer section {
-}
+
 gaia-drawer li {
-  /*height: 4.5rem;*/
   padding: 0 1.5rem;
   border: solid 1px #eee;
 }
@@ -30,7 +27,6 @@ gaia-drawer li {
   width: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 0;
 }
 #content {
   flex: 3 3 0%;
