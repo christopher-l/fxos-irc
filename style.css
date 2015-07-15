@@ -12,12 +12,12 @@ body {
   flex-direction: column;
 }
 
-gaia-header{
+gaia-header button{
+  transition: opacity 200ms 0ms !important;
 }
 
 gaia-drawer{
   position: absolute;
-  /*display: block;*/
   width: 100%;
   min-height: 100%;
   z-index: 1;
@@ -36,7 +36,6 @@ gaia-drawer li {
 #input {
   width: 100%;
 }
-
 
 @media all and (max-height: 10rem) {
   gaia-header {
