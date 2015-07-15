@@ -9,14 +9,19 @@ header.addEventListener('action', function() {
   drawer.toggle();
 });
 
-drawer.addEventListener('DOMAttrModified', function (event) {
-  if (event.attrName !== 'open') { return; }
-  var button = header.querySelector('button');
-  if (event.attrChange === 2) { // open drawer
-    // button.style.visibility = 'hidden';
-    button.style.opacity = 0;
-  } else if (event.attrChange === 3) { // close drawer
-    // button.style.visibility = 'visible';
-    button.style.opacity = 100;
-  }
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.type !== 'attributes' || mutation.attributeName !== 'open') {
+      return;
+    }
+    var isOpen = drawer.hasAttribute('open');
+    var button = header.querySelector('button');
+    if (isOpen) {
+      button.style.opacity = 0;
+    } else {
+      button.style.opacity = 100;
+    }
+  });
 });
+
+observer.observe(drawer, {attributes: true});
