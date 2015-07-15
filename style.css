@@ -4,15 +4,22 @@ body {
   margin: 0;
 }
 
-gaia-header{
-  position: relative;
-  display: block;
+#main {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
+
+gaia-header{
+}
+
 gaia-drawer{
   position: absolute;
-  display: block;
+  /*display: block;*/
   width: 100%;
-  min-height: calc(100% - 3rem);
+  min-height: 100%;
   z-index: 1;
 }
 
@@ -21,13 +28,6 @@ gaia-drawer li {
   border: solid 1px #eee;
 }
 
-#main {
-  position: absolute;
-  height: calc(100% - 3rem);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
 #content {
   flex: 3 3 0%;
   overflow-y: scroll;
@@ -38,8 +38,8 @@ gaia-drawer li {
 }
 
 
-/*@media all and (max-height: 10rem) {
+@media all and (max-height: 10rem) {
   gaia-header {
     visibility: collapse;
   }
-}*/
+}
