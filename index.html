@@ -19,7 +19,7 @@
     <script src="bower_components/font-fit/font-fit.js"></script>
     <script src="bower_components/gaia-header/gaia-header.js"></script>
     <script src="bower_components/gaia-text-input/gaia-text-input.js"></script>
-    <!-- // <script src="bower_components/gaia-button/gaia-button.js"></script> -->
+    <script src="bower_components/gaia-button/gaia-button.js"></script>
     <script src="bower_components/gaia-drawer/script.js"></script>
   </head>
 
@@ -33,19 +33,24 @@
       </gaia-header>
 
       <gaia-drawer>
-        <section data-type="list">
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-          <li><p>Some content hidden in the drawer</p></li>
-        </section>
+        <div id="drawer-main">
+          <section data-type="list" id="drawer-list">
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+            <li><p>Some content hidden in the drawer</p></li>
+          </section>
+          <div id="drawer-buttons">
+            <gaia-button><i data-icon="settings"></i></gaia-button>
+          </div>
+        </div>
       </gaia-drawer>
 
       <div id="content">
