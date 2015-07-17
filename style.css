@@ -21,7 +21,7 @@ gaia-drawer {
   width: 100%;
   height: 100%;
   z-index: 1;
-  display: block;
+  /*display: block;*/
 }
 
 gaia-drawer > div {
@@ -42,7 +42,11 @@ gaia-drawer > div li {
 }
 
 gaia-drawer > div > #drawer-buttons {
-  /*flex: 0 0 0%;*/
+  display: flex;
+}
+
+gaia-drawer > div > #drawer-buttons > div {
+  margin: 0 auto;
 }
 
 #content {

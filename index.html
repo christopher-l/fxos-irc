@@ -29,7 +29,7 @@
 
       <gaia-header action="menu">
         <h1>Action 'menu'</h1>
-        <button data-icon="user"></button>
+        <button data-icon="contacts"></button>
       </gaia-header>
 
       <gaia-drawer>
@@ -48,7 +48,15 @@
             <li><p>Some content hidden in the drawer</p></li>
           </section>
           <div id="drawer-buttons">
-            <gaia-button><i data-icon="settings"></i></gaia-button>
+            <div>
+              <gaia-button circular>#</gaia-button>
+            </div>
+            <div>
+              <gaia-button circular><i data-icon="add"></i></gaia-button>
+            </div>
+            <div>
+              <gaia-button circular><i data-icon="settings"></i></gaia-button>
+            </div>
           </div>
         </div>
       </gaia-drawer>
