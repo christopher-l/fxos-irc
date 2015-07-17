@@ -36,9 +36,21 @@ gaia-drawer > div > #drawer-list {
   overflow-y: scroll;
 }
 
-gaia-drawer > div li {
-  padding: 0 1.5rem;
-  border: solid 1px #eee;
+gaia-drawer > div > section > h2 {
+  text-indent: 1.5rem;
+  margin: 0;
+  padding: .5rem 0;
+  border-bottom: solid 1px #eee;
+}
+
+gaia-drawer > div > section > ul {
+  padding: 0;
+  margin: 0;
+  text-indent: 3rem;
+}
+
+gaia-drawer > div > section > ul > li {
+  border-bottom: solid 1px #eee;
 }
 
 gaia-drawer > div > #drawer-buttons {
