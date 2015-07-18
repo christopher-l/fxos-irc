@@ -24,37 +24,78 @@ gaia-drawer {
   /*display: block;*/
 }
 
-gaia-drawer > div {
+gaia-drawer > #drawer-main {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 200px);
   max-height: calc(100vh - 95px);
 }
 
-gaia-drawer > div > #drawer-list {
+gaia-drawer #network-list {
   flex: 1 1 0%;
   overflow-y: scroll;
 }
 
-gaia-drawer > div > section > h2 {
-  text-indent: 1.5rem;
+gaia-drawer #network-list > div {
+  position: relative;
   margin: 0;
-  padding: .5rem 0;
-  border-bottom: solid 1px #eee;
+  line-height: 3.5rem;
+  text-indent: 3rem;
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
 }
 
-gaia-drawer > div > section > ul {
+gaia-drawer #network-list > div > p {
+  margin: 0;
+  border-bottom: solid 1px #DFDFDF;
+  background-color: white;
+}
+
+gaia-drawer #network-list > div > p,
+gaia-drawer #network-list > div > ul > li {
+  height: 3.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 4rem;
+  white-space: nowrap;
+}
+
+gaia-drawer #network-list .indicator {
+  position: absolute;
+  top: 1.5rem;
+  left:1.1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #5F5F5F;
+}
+
+gaia-drawer #network-list .counter {
+  position: absolute;
+  right: 1rem;
+  border-radius: 1rem;
+  height: 1.5rem;
+  margin: 1.0rem;
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  background-color: #DFDFDF;
+  text-indent: 0;
+}
+
+gaia-drawer #network-list ul {
   padding: 0;
   margin: 0;
-  text-indent: 3rem;
+  /*text-indent: 3rem;*/
 }
 
-gaia-drawer > div > section > ul > li {
-  border-bottom: solid 1px #eee;
+gaia-drawer #network-list ul > li {
+  position: relative;
+  border-bottom: solid 1px #DFDFDF;
 }
 
 gaia-drawer > div > #drawer-buttons {
   display: flex;
+  background-color: #DFDFDF;
 }
 
 gaia-drawer > div > #drawer-buttons > div {
