@@ -2,6 +2,7 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
   margin: 0;
+  font-family: fira sans, droid sans fallback;
 }
 
 #main {
@@ -39,7 +40,6 @@ gaia-drawer #network-list > div {
   position: relative;
   margin: 0;
   line-height: 3.5rem;
-  text-indent: 3rem;
   font-size: 1.2rem;
   text-overflow: ellipsis;
 }
@@ -54,6 +54,7 @@ gaia-drawer #network-list > div > p,
 gaia-drawer #network-list > div > ul > li {
   height: 3.5rem;
   overflow: hidden;
+  text-indent: 3rem;
   text-overflow: ellipsis;
   padding-right: 4rem;
   white-space: nowrap;
@@ -81,10 +82,15 @@ gaia-drawer #network-list .counter {
   text-indent: 0;
 }
 
+gaia-drawer #network-list .collapse-indicator {
+  position: absolute;
+  font-size: 1.5rem;
+  left: 1rem;
+}
+
 gaia-drawer #network-list ul {
   padding: 0;
   margin: 0;
-  /*text-indent: 3rem;*/
 }
 
 gaia-drawer #network-list ul > li {
