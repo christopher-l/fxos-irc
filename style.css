@@ -37,6 +37,8 @@ gaia-drawer #network-list {
   flex: 1 1 0%;
   overflow-x: hidden;
   overflow-y: scroll;
+  color: var(--text-color);
+  background-color: var(--background);
 }
 
 gaia-drawer #network-list > div {
@@ -53,7 +55,8 @@ gaia-drawer #network-list .network {
   margin: 0;
   padding-right: 1rem;
   border-bottom: solid 1px var(--border-color);
-  background-color: var(--color-beta);
+  background-color: var(--text-input-background);
+  /*color: var(--input-color);*/
 }
 
 gaia-drawer #network-list .network .network-name {
@@ -94,7 +97,8 @@ gaia-drawer #network-list .counter {
   margin: 1rem 0 1rem .5rem;
   padding: 0 0.5rem;
   line-height: 1.5rem;
-  background-color: var(--color-theta);
+  color: var(--text-color);
+  background-color: var(--background-plus);
   text-indent: 0;
 }
 
@@ -102,6 +106,7 @@ gaia-drawer #network-list .collapse-indicator {
   position: absolute;
   font-size: 1.5rem;
   left: 1rem;
+  /*color: var(--input-color);*/
 }
 
 gaia-drawer #network-list ul {
@@ -116,7 +121,7 @@ gaia-drawer #network-list ul > li {
 
 gaia-drawer > div > #drawer-buttons {
   display: flex;
-  background-color: var(--color-theta);
+  background-color: var(--background-plus);
 }
 
 gaia-drawer > div > #drawer-buttons > div {
