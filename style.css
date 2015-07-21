@@ -3,6 +3,8 @@ body {
   overflow-y: hidden;
   margin: 0;
   font-family: fira sans, droid sans fallback;
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 #main {
@@ -50,8 +52,8 @@ gaia-drawer #network-list .network {
   height: 3.5rem;
   margin: 0;
   padding-right: 1rem;
-  border-bottom: solid 1px #DFDFDF;
-  background-color: white;
+  border-bottom: solid 1px var(--border-color);
+  background-color: var(--color-beta);
 }
 
 gaia-drawer #network-list .network .network-name {
@@ -83,7 +85,7 @@ gaia-drawer #network-list .indicator {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 0.5rem;
-  background-color: #5F5F5F;
+  background-color: var(--color-delta);
 }
 
 gaia-drawer #network-list .counter {
@@ -92,7 +94,7 @@ gaia-drawer #network-list .counter {
   margin: 1rem 0 1rem .5rem;
   padding: 0 0.5rem;
   line-height: 1.5rem;
-  background-color: #DFDFDF;
+  background-color: var(--color-theta);
   text-indent: 0;
 }
 
@@ -109,12 +111,12 @@ gaia-drawer #network-list ul {
 
 gaia-drawer #network-list ul > li {
   position: relative;
-  border-bottom: solid 1px #DFDFDF;
+  border-bottom: solid 1px var(--border-color);
 }
 
 gaia-drawer > div > #drawer-buttons {
   display: flex;
-  background-color: #DFDFDF;
+  background-color: var(--color-theta);
 }
 
 gaia-drawer > div > #drawer-buttons > div {
