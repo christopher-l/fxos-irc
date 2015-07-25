@@ -9,15 +9,21 @@
 
     <title>Hello World</title>
 
+    <!-- Gaia components -->
     <!-- <link href="bower_components/base/base.css" type="text/css" rel="stylesheet"></link> -->
     <link href="bower_components/gaia-theme/gaia-theme.css" type="text/css" rel="stylesheet"></link>
     <link rel="stylesheet" type="text/css" href="app://theme.gaiamobile.org/shared/elements/gaia-theme/gaia-theme.css">
     <link href="bower_components/gaia-fonts/style.css" type="text/css" rel="stylesheet"></link>
 
+
+    <script src="components/channel/script.js"></script>
+    <script src="components/network-list-entry/script.js"></script>
+
     <link href="style.css" type="text/css" rel="stylesheet"></link>
 
     <script src="app.js" defer></script>
 
+    <!-- Gaia components -->
     <script src="bower_components/gaia-icons/gaia-icons.js"></script>
     <script src="bower_components/gaia-component/gaia-component.js"></script>
     <script src="bower_components/font-fit/font-fit.js"></script>
@@ -39,57 +45,14 @@
       <gaia-drawer>
         <div id="drawer-main">
           <section data-type="list" id="network-list">
-            <div>
-              <span class="collapse-indicator">&#9660;</span>
-              <p class="network">
-                <span class="network-name">Network</span>
-                <span class="counter">3</span>
-              </p>
-              <ul>
-                <li class="channel">
-                  <span class="indicator"></span>
-                  <span class="channel-name">#some-really-long-channel-name-foo-bar</span>
-                  <span class="counter">3</span>
-                </li>
-                <li class="channel">
-                  <span class="indicator"></span>
-                  <span class="channel-name">#mediensysteme-offtopic</span>
-                </li>
-                <li class="channel">
-                  <span class="indicator"></span>
-                  <span class="channel-name">#some-really-long-channel-name-foo-bar</span>
-                  <span class="counter" style="display:none">3</span>
-                </li>
-                <li class="channel">
-                  <span class="indicator"></span>
-                  <span class="channel-name">#channel</span>
-                  <span class="counter">42</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <span class="collapse-indicator">&#9654;</span>
-              <p class="network">
-                <span class="network-name">Some really long network name foo bar</span>
-                <span class="counter">493</span>
-              </p>
-              <ul>
-              </ul>
-            </div>
-            <div>
-              <span class="collapse-indicator">&#9660;</span>
-              <p class="network">
-                <span class="network-name">Another long looooong network name</span>
-                <span class="counter" style="display:none;">3</span>
-              </p>
-              <ul>
-                <li class="channel">
-                  <span class="indicator"></span>
-                  <span class="channel-name">#channel</span>
-                  <span class="counter">113</span>
-                </li>
-              </ul>
-            </div>
+            <network-list-entry>
+              <span>Network</span>
+              <irc-channel>Channel asdfasdf asdfasdf asdfasdf</irc-channel>
+              <irc-channel>Channel</irc-channel>
+            </network-list-entry>
+            <network-list-entry>
+              <span>Network asdfasdf asdfasdfasd asdfasd</span>
+            </network-list-entry>
           </section>
           <div id="drawer-buttons">
             <div>
