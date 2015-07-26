@@ -6,6 +6,7 @@ var proto = Object.create(HTMLElement.prototype);
 var baseUrl = '/components/network-list-entry/';
 
 proto.createdCallback = function() {
+  var self = this;
   var tmpl = template.content.cloneNode(true);
   var shadow = this.createShadowRoot();
 
@@ -14,9 +15,7 @@ proto.createdCallback = function() {
   this.els.network = tmpl.querySelector('.network');
   this.els.channelList = tmpl.querySelector('.channel-list');
   this.els.channelWrapper = tmpl.querySelector('.channel-wrapper');
-  this.collapse();
 
-  this.els.network.style.cursor = 'pointer';
   this.els.network.onclick = this.toggle.bind(this);
 
   shadow.appendChild(tmpl);
@@ -25,6 +24,16 @@ proto.createdCallback = function() {
   style.setAttribute('scoped', '');
   style.innerHTML = '@import url(' + baseUrl + 'style.css);';
   shadow.appendChild(style);
+
+  // var observer = new MutationObserver(function(mutations) {
+  //   mutations.forEach(function(mutation) {
+  //     if (mutation.type !== 'childList') { return; }
+  //     self.updateActualHeight.bind(self);
+  //   });
+  // });
+  // observer.observe(this.els.channelWrapper, {childList: true});
+
+  window.addEventListener('load', this.updateActualHeight.bind(this));
 };
 
 proto.attributeChangedCallback = function(attr, oldVal, newVal) {
@@ -33,13 +42,16 @@ proto.attributeChangedCallback = function(attr, oldVal, newVal) {
   }
 };
 
+proto.updateActualHeight = function() {
+  var height = this.els.channelWrapper.clientHeight;
+  this.els.channelList.style.setProperty('--actual-height', height);
+};
+
 /*
  * @private
  */
 proto.collapse = function(value) {
   if (value == false) { return this.expand(); }
-  var height = this.els.channelWrapper.clientHeight;
-  this.els.channelList.style.setProperty('--actual-height', height);
   this.els.inner.setAttribute('collapsed', '');
 };
 
@@ -47,7 +59,6 @@ proto.collapse = function(value) {
  * @private
  */
 proto.expand = function() {
-  var height = this.els.channelWrapper.clientHeight;
   this.els.inner.removeAttribute('collapsed');
 };
 
