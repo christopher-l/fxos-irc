@@ -36,9 +36,6 @@ proto.collapse = function(value) {
   if (value == false) { return this.expand(); }
   var height = this.els.channelWrapper.clientHeight;
   this.els.channelList.style.setProperty('--actual-height', height);
-  // this.els.channelList.style.height = '0px';
-  // this.els.channelList.style.zIndex = '0';
-  // this.els.channelList.style.transform = 'translateY(-' + height + 'px)';
   this.els.inner.setAttribute('collapsed', '');
 };
 
@@ -47,9 +44,6 @@ proto.collapse = function(value) {
  */
 proto.expand = function() {
   var height = this.els.channelWrapper.clientHeight;
-  // this.els.channelList.style.height = height + 'px';
-  // this.els.channelList.style.zIndex = '';
-  // this.els.channelList.style.transform = '';
   this.els.inner.removeAttribute('collapsed');
 };
 
