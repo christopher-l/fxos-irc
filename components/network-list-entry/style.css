@@ -7,13 +7,15 @@
 }
 
 .network {
+  position: relative;
   display: flex;
   height: 3.5rem;
   margin: 0;
   padding-right: 1rem;
   border-bottom: solid 1px var(--border-color);
-  background-color: var(--text-input-background);
+  background-color: var(--input-background);
   /*color: var(--input-color);*/
+  z-index: 2;
 }
 
 .collapse-indicator {
@@ -46,4 +48,10 @@
 .channel-list {
   padding: 0;
   margin: 0;
+  transition: height 500ms 0ms, transform 500ms 0ms !important;
+  z-index: 1;
 }
+
+[collapsed] .channel-list {
+  /*display: none;*/
+  /*height: 0;*/
