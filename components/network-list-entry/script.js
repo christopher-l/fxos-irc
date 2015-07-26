@@ -29,27 +29,36 @@ proto.attributeChangedCallback = function(attr, oldVal, newVal) {
   }
 };
 
+/*
+ * @private
+ */
 proto.collapse = function(value) {
   if (value == false) { return this.expand(); }
   var height = this.els.channelWrapper.clientHeight;
-  this.els.channelList.style.height = '0px';
-  this.els.channelList.style.zIndex = '0';
-  this.els.channelList.style.transform = 'translateY(-' + height + 'px)';
+  this.els.channelList.style.setProperty('--actual-height', height);
+  // this.els.channelList.style.height = '0px';
+  // this.els.channelList.style.zIndex = '0';
+  // this.els.channelList.style.transform = 'translateY(-' + height + 'px)';
   this.els.inner.setAttribute('collapsed', '');
-  if (!this.hasAttribute('collapsed')) { this.setAttribute('collapsed', ''); }
 };
 
+/*
+ * @private
+ */
 proto.expand = function() {
   var height = this.els.channelWrapper.clientHeight;
-  this.els.channelList.style.height = height + 'px';
-  this.els.channelList.style.zIndex = '';
-  this.els.channelList.style.transform = '';
+  // this.els.channelList.style.height = height + 'px';
+  // this.els.channelList.style.zIndex = '';
+  // this.els.channelList.style.transform = '';
   this.els.inner.removeAttribute('collapsed');
-  if (this.hasAttribute('collapsed')) { this.removeAttribute('collapsed'); }
 };
 
 proto.toggle = function () {
-  this.collapse(!this.hasAttribute('collapsed'));
+  if (this.hasAttribute('collapsed')) {
+    this.removeAttribute('collapsed');
+  } else {
+    this.setAttribute('collapsed', '');
+  }
 };
 
 var template = document.createElement('template');

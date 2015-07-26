@@ -23,6 +23,7 @@
   font-size: 1.5rem;
   left: 1rem;
   /*color: var(--input-color);*/
+  transition: transform 200ms 0ms;
 }
 
 .network-name {
@@ -48,10 +49,17 @@
 .channel-list {
   padding: 0;
   margin: 0;
-  transition: height 500ms 0ms, transform 500ms 0ms !important;
+  transition: height 200ms 0ms, transform 200ms 0ms;
   z-index: 1;
+  height: calc(var(--actual-height) * 1px);
 }
 
 [collapsed] .channel-list {
-  /*display: none;*/
-  /*height: 0;*/
+  height: 0;
+  transform: translateY( calc(var(--actual-height) * -1px) );
+  z-index: 0;
+}
+
+[collapsed] .collapse-indicator {
+  transform: rotate(-90deg);
+}
