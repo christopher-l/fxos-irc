@@ -76,7 +76,7 @@ template.innerHTML = `
     <p class="network">
       <span class="collapse-indicator">&#9660;</span>
       <span class="network-name"><content select="span"></content></span>
-      <span class="counter"></span>
+      <span class="counter">42</span>
     </p>
     <div class="channel-list">
       <div class="channel-wrapper">

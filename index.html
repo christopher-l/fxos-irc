@@ -10,7 +10,7 @@
     <title>Hello World</title>
 
     <!-- Gaia components -->
-    <!-- <link href="bower_components/base/base.css" type="text/css" rel="stylesheet"></link> -->
+    <link href="bower_components/base/base.css" type="text/css" rel="stylesheet"></link>
     <link href="bower_components/gaia-theme/gaia-theme.css" type="text/css" rel="stylesheet"></link>
     <link rel="stylesheet" type="text/css" href="app://theme.gaiamobile.org/shared/elements/gaia-theme/gaia-theme.css">
     <link href="bower_components/gaia-fonts/style.css" type="text/css" rel="stylesheet"></link>
@@ -31,6 +31,13 @@
     <script src="bower_components/gaia-text-input/gaia-text-input.js"></script>
     <script src="bower_components/gaia-button/gaia-button.js"></script>
     <script src="bower_components/gaia-drawer/script.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-alert.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-confirm.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-prompt.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-action.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-select.js"></script>
+    <script src="bower_components/gaia-dialog/gaia-dialog-menu.js"></script>
   </head>
 
   <body class="theme-communications">
@@ -54,9 +61,7 @@
               <span>Network 2</span>
               <irc-channel>Channel 2 1</irc-channel>
               <irc-channel>Channel 2 2</irc-channel>
-            </network-list-entry>
-            <network-list-entry>
-              <span>Network asdfasdf asdfasdfasd asdfasd</span>
+              <irc-channel>Foo-Channel</irc-channel>
             </network-list-entry>
           </section>
           <div id="drawer-buttons">
@@ -78,6 +83,37 @@
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
         </div>
 
+        <gaia-dialog-action>
+          <h1>Descriptions...</h1>
+          <button>Action 1</button>
+          <button>Action 2</button>
+        </gaia-dialog-action>
+
+        <gaia-dialog id="custom-dialog-1">
+          <section>
+            <h1>Application Download</h1>
+            <p>Do you want to download and install this application?</p>
+          </section>
+          <fieldset>
+            <button on-click="close">Cancel</button>
+            <button on-click="close">Action</button>
+          </fieldset>
+        </gaia-dialog>
+
+        <gaia-dialog-menu>
+          <button on-click="close" data-icon="firefox">Open in new window</button>
+          <button on-click="close" data-icon="firefox">Add to Home Screen</button>
+          <button on-click="close" data-icon="firefox">Share link</button>
+          <button on-click="close" data-icon="firefox">Settings</button>
+        </gaia-dialog-menu>
+
+        <gaia-dialog-confirm>Are you sure you want to delete this contact?</gaia-dialog-confirm>
+        <gaia-dialog-select>
+          <h1>Ring tone</h1>
+          <li>Classic prism</li>
+          <li>Wallphone</li>
+        </gaia-dialog-select>
+
       </div>
 
       <div id=input>
@@ -86,7 +122,6 @@
       </div>
 
     </div>
-
 
   </body>
 

@@ -20,7 +20,7 @@ var template = document.createElement('template');
 template.innerHTML = `
   <div class="inner">
     <span class="channel-name"><content></content></span>
-    <span class="counter"></span>
+    <span class="counter">23</span>
   </div>
 `;
 
