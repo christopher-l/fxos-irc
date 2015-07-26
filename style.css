@@ -41,6 +41,7 @@ gaia-drawer #network-list {
 }
 
 gaia-drawer > div > #drawer-buttons {
+  position: relative;
   display: flex;
   background-color: var(--background-plus);
 }
