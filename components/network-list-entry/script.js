@@ -11,9 +11,13 @@ proto.createdCallback = function() {
 
   this.els = {};
   this.els.inner = tmpl.querySelector('.inner');
+  this.els.network = tmpl.querySelector('.network');
   this.els.channelList = tmpl.querySelector('.channel-list');
   this.els.channelWrapper = tmpl.querySelector('.channel-wrapper');
   this.collapse();
+
+  this.els.network.style.cursor = 'pointer';
+  this.els.network.onclick = this.toggle.bind(this);
 
   shadow.appendChild(tmpl);
 

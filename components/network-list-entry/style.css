@@ -47,17 +47,19 @@
 }
 
 .channel-list {
+  position: relative;
   padding: 0;
   margin: 0;
-  transition: height 200ms 0ms, transform 200ms 0ms;
+  transition: height 200ms 0ms, transform 200ms 0ms, z-index 200ms 0ms;
   z-index: 1;
   height: calc(var(--actual-height) * 1px);
+  background-color: var(--background);
 }
 
 [collapsed] .channel-list {
   height: 0;
   transform: translateY( calc(var(--actual-height) * -1px) );
-  z-index: 0;
+  z-index: -1;
 }
 
 [collapsed] .collapse-indicator {
