@@ -9,32 +9,42 @@ var proto = {};
 // var baseUrl = '/components/dialog/';
 
 proto.created = function() {
-  // var self = this;
+  var self = this;
   var shadow = this.setupShadowRoot();
 
   this.els = {
-    inner: this.shadowRoot.querySelector('.inner')
+    inner: this.shadowRoot.querySelector('.inner'),
+    cancel: this.shadowRoot.querySelector('.cancel'),
+    buttons: this.querySelectorAll('gaia-button')
   };
 
-  // var style = document.createElement('style');
-  // style.setAttribute('scoped', '');
-  // style.innerHTML = '@import url(' + baseUrl + 'style.css);';
-  // this.shadowRoot.appendChild(style);
+  this.els.cancel.addEventListener('click', this.close.bind(this));
+  Array.prototype.forEach.call(this.els.buttons, function(button) {
+    button.addEventListener('click', self.close.bind(self))
+  });
 };
 
 proto.attrs = {
-  open: {
+  opened: {
     get: function() { return this.getAttribute('open'); },
     set: function(value) {
       value = !!(value === '' || value);
       if (value) {
-        this.setAttribute('open', '');
+        this.setAttribute('opened', '');
       } else {
-        this.removeAttribute('open');
+        this.removeAttribute('opened');
       }
     }
   }
 };
+
+proto.open = function() {
+  this.opened = true;
+}
+
+proto.close = function() {
+  this.opened = false;
+}
 
 proto.template = `
   <div class="inner">
@@ -42,7 +52,7 @@ proto.template = `
     <div class="actions">
       <content></content>
     </div>
-    <gaia-button>Cancel</gaia-button>
+    <gaia-button class="cancel">Cancel</gaia-button>
   </div>
 
   <style>
@@ -57,7 +67,7 @@ proto.template = `
       transition: transform 200ms 0ms ease;
     }
 
-    :host([open]) {
+    :host([opened]) {
       transform: none;
     }
 
