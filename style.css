@@ -1,3 +1,15 @@
+/*gaia-button {
+  box-shadow: none !important;
+}
+gaia-button[danger] {
+  background: #e51e1e !important;
+  color: white !important;
+}
+gaia-button[recommend] {
+  background: #00caf2 !important;
+  color: white !important;
+}*/
+
 body {
   overflow-x: hidden;
   overflow-y: hidden;
