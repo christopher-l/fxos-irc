@@ -1,12 +1,15 @@
 (function(define){define(function(require,exports,module){
+/*jshint esnext:true*/
 'use strict';
+
+const TOUCH_MOVE_THRESH = 10; // virtual pixels
+const LONG_PRESS_TIME = 200;  // ms
 
 var proto = Object.create(HTMLElement.prototype);
 
 var baseUrl = '/components/network-list-entry/';
 
 proto.createdCallback = function() {
-  var self = this;
   var tmpl = template.content.cloneNode(true);
   var shadow = this.createShadowRoot();
 
@@ -16,8 +19,6 @@ proto.createdCallback = function() {
   this.els.channelList = tmpl.querySelector('.channel-list');
   this.els.channelWrapper = tmpl.querySelector('.channel-wrapper');
 
-  this.els.network.onclick = this.toggle.bind(this);
-
   shadow.appendChild(tmpl);
 
   var style = document.createElement('style');
@@ -25,6 +26,12 @@ proto.createdCallback = function() {
   style.innerHTML = '@import url(' + baseUrl + 'style.css);';
   shadow.appendChild(style);
 
+  this.registerListenerHeight();
+  this.registerListenerTouch();
+};
+
+proto.registerListenerHeight = function() {
+  // var self = this;
   // var observer = new MutationObserver(function(mutations) {
   //   mutations.forEach(function(mutation) {
   //     if (mutation.type !== 'childList') { return; }
@@ -32,8 +39,63 @@ proto.createdCallback = function() {
   //   });
   // });
   // observer.observe(this.els.channelWrapper, {childList: true});
-
   window.addEventListener('load', this.updateActualHeight.bind(this));
+};
+
+proto.registerListenerTouch = function() {
+  /* hack to get long press events */
+  var self = this;
+  var pressing;
+  var pressTimer;
+  var touchX;
+  var touchY;
+  var mouseDisabled;
+
+  var down = function() {
+    pressing = true;
+    pressTimer = window.setTimeout(function() {
+      pressing = false;
+      self.showDialog();
+    }, LONG_PRESS_TIME);
+  };
+
+  var up = function() {
+    if (pressing) {
+      pressing = false;
+      clearTimeout(pressTimer);
+      self.toggle();
+    }
+  };
+
+  var ignoreMouseEvents = function() {
+    if (!mouseDisabled) {
+      self.els.network.removeEventListener('mousedown', down);
+      self.els.network.removeEventListener('mouseup', up);
+      mouseDisabled = true;
+    }
+  };
+
+  self.els.network.addEventListener('mousedown', down);
+  self.els.network.addEventListener('mouseup', up);
+
+  self.els.network.addEventListener('touchstart', function(evt) {
+    ignoreMouseEvents();
+    touchX = evt.changedTouches[0].screenX;
+    touchY = evt.changedTouches[0].screenY;
+    down();
+  });
+
+  self.els.network.addEventListener('touchend', up);
+
+  self.els.network.addEventListener('touchmove', function(evt) {
+    if (Math.abs(evt.changedTouches[0].screenX - touchX) >
+          TOUCH_MOVE_THRESH ||
+        Math.abs(evt.changedTouches[0].screenY - touchY) >
+          TOUCH_MOVE_THRESH) {
+      clearTimeout(pressTimer);
+      pressing = false;
+    }
+  });
 };
 
 proto.attributeChangedCallback = function(attr, oldVal, newVal) {
@@ -51,7 +113,7 @@ proto.updateActualHeight = function() {
  * @private
  */
 proto.collapse = function(value) {
-  if (value == false) { return this.expand(); }
+  if (value === false) { return this.expand(); }
   this.els.inner.setAttribute('collapsed', '');
 };
 
@@ -68,6 +130,10 @@ proto.toggle = function () {
   } else {
     this.setAttribute('collapsed', '');
   }
+};
+
+proto.showDialog = function () {
+  alert('foo');
 };
 
 var template = document.createElement('template');
