@@ -23,6 +23,19 @@ proto.created = function() {
   Array.prototype.forEach.call(this.els.buttons, function(button) {
     button.addEventListener('click', self.close.bind(self));
   });
+
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === "childList") {
+        [].forEach.call(mutation.addedNodes, function(node) {
+          if (node.nodeName === 'GAIA-BUTTON') {
+            node.addEventListener('click', self.close.bind(self));
+          }
+        });
+      }
+    });
+  });
+  observer.observe(this, { childList: true });
 };
 
 proto.attrs = {
@@ -45,6 +58,9 @@ proto.open = function() {
 
 proto.close = function() {
   this.opened = false;
+  if (this.onClose) {
+    window.setTimeout(this.onClose.bind(this), 200);
+  }
 };
 
 proto.template = `
@@ -64,12 +80,13 @@ proto.template = `
       padding: 1rem 1rem 0 1rem;
       z-index: 100;
       background-color: var(--color-alpha);
-      transform: translateY(100%);
-      transition: transform 200ms 0ms ease;
+      opacity: 0;
+      transition: opacity 200ms 0ms;
+      -moz-user-select: none;
     }
 
     :host([opened]) {
-      transform: none;
+      opacity: 1;
     }
 
     .inner {
