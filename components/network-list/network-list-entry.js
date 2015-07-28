@@ -11,7 +11,7 @@ const LONG_PRESS_TIME = 200;  // ms
 var proto = Object.create(HTMLElement.prototype);
 
 var baseUrl = '/components/network-list/';
-var name = 'network-list-entry';
+var component = 'network-list-entry';
 
 proto.createdCallback = function() {
   var tmpl = template.content.cloneNode(true);
@@ -20,14 +20,17 @@ proto.createdCallback = function() {
   this.els = {};
   this.els.inner = tmpl.querySelector('.inner');
   this.els.network = tmpl.querySelector('.network');
+  this.els.networkName = tmpl.querySelector('.network-name');
   this.els.channelList = tmpl.querySelector('.channel-list');
   this.els.channelWrapper = tmpl.querySelector('.channel-wrapper');
+
+  this.els.networkName.innerHTML = this.getAttribute('name');
 
   shadow.appendChild(tmpl);
 
   var style = document.createElement('style');
   style.setAttribute('scoped', '');
-  style.innerHTML = '@import url(' + baseUrl + name + '.css);';
+  style.innerHTML = '@import url(' + baseUrl + component + '.css);';
   shadow.appendChild(style);
 
   this.registerListenerHeight();
@@ -103,7 +106,7 @@ proto.registerListenerTouch = function() {
 };
 
 proto.attributeChangedCallback = function(attr, oldVal, newVal) {
-  if (attr == 'collapsed') {
+  if (attr === 'collapsed') {
     this.collapse(newVal !== null);
   }
 };
@@ -138,7 +141,12 @@ proto.toggle = function () {
 
 proto.showDialog = function () {
   var dialog = new Dialog();
-  // var showButton = new GaiaButton();
+  var h = document.createElement('h1');
+  h.innerHTML = this.getAttribute('name');
+  dialog.appendChild(h);
+  var showButton = new GaiaButton();
+  showButton.innerHTML = 'Show';
+  dialog.appendChild(showButton);
   document.body.appendChild(dialog);
   window.setTimeout(dialog.open.bind(dialog), 0);
 };
@@ -148,7 +156,7 @@ template.innerHTML = `
   <div class="inner">
     <p class="network">
       <span class="collapse-indicator">&#9660;</span>
-      <span class="network-name"><content select="span"></content></span>
+      <span class="network-name"></content></span>
       <span class="counter">42</span>
     </p>
     <div class="channel-list">

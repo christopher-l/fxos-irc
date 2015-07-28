@@ -5,7 +5,7 @@
 var proto = Object.create(HTMLElement.prototype);
 
 var baseUrl = '/components/network-list/';
-var name = 'channel';
+var component = 'channel';
 
 proto.createdCallback = function() {
   var tmpl = template.content.cloneNode(true);
@@ -14,7 +14,7 @@ proto.createdCallback = function() {
 
   var style = document.createElement('style');
   style.setAttribute('scoped', '');
-  style.innerHTML = '@import url(' + baseUrl + name + '.css);';
+  style.innerHTML = '@import url(' + baseUrl + component + '.css);';
   shadow.appendChild(style);
 };
 
