@@ -61,7 +61,7 @@ proto.template = `
       position: absolute;
       width: 100%;
       height: 100%;
-      padding: 1rem;
+      padding: 1rem 1rem 0 1rem;
       z-index: 100;
       background-color: var(--color-alpha);
       transform: translateY(100%);
@@ -81,7 +81,8 @@ proto.template = `
 
     .actions {
       flex: 1 1 0%;
-      overflow-y: scroll
+      overflow-y: auto;
+      border-bottom: solid 1px var(--color-delta);
     }
 
     ::content h1 {

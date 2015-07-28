@@ -2,6 +2,9 @@
 /*jshint esnext:true*/
 'use strict';
 
+var Dialog = require('irc-dialog');
+var GaiaButton = require('gaia-button');
+
 const TOUCH_MOVE_THRESH = 10; // virtual pixels
 const LONG_PRESS_TIME = 200;  // ms
 
@@ -134,7 +137,10 @@ proto.toggle = function () {
 };
 
 proto.showDialog = function () {
-  alert('foo');
+  var dialog = new Dialog();
+  // var showButton = new GaiaButton();
+  document.body.appendChild(dialog);
+  window.setTimeout(dialog.open.bind(dialog), 0);
 };
 
 var template = document.createElement('template');
