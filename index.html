@@ -24,9 +24,9 @@
     <script src="bower_components/gaia-drawer/script.js"></script>
 
     <!-- App specific -->
-    <script src="components/channel/script.js"></script>
-    <script src="components/network-list-entry/script.js"></script>
-    <script src="components/dialog/script.js"></script>
+    <script src="components/network-list/channel.js"></script>
+    <script src="components/network-list/network-list-entry.js"></script>
+    <script src="components/dialog/dialog.js"></script>
 
     <link href="style.css" type="text/css" rel="stylesheet"></link>
 
@@ -54,17 +54,17 @@
       <gaia-drawer>
         <div id="drawer-main">
           <section data-type="list" id="network-list">
-            <network-list-entry>
+            <irc-network-list-entry>
               <span>Network</span>
               <irc-channel>Channel asdfasdf asdfasdf asdfasdf</irc-channel>
               <irc-channel>Channel</irc-channel>
-            </network-list-entry>
-            <network-list-entry>
+            </irc-network-list-entry>
+            <irc-network-list-entry>
               <span>Network 2</span>
               <irc-channel>Channel 2 1</irc-channel>
               <irc-channel>Channel 2 2</irc-channel>
               <irc-channel>Foo-Channel</irc-channel>
-            </network-list-entry>
+            </irc-network-list-entry>
           </section>
           <div id="drawer-buttons">
             <div>
