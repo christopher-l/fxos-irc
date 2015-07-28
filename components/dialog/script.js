@@ -1,4 +1,5 @@
 (function(define){define(function(require,exports,module){
+/*jshint esnext:true*/
 'use strict';
 
 var component = require('gaia-component');
@@ -20,7 +21,7 @@ proto.created = function() {
 
   this.els.cancel.addEventListener('click', this.close.bind(this));
   Array.prototype.forEach.call(this.els.buttons, function(button) {
-    button.addEventListener('click', self.close.bind(self))
+    button.addEventListener('click', self.close.bind(self));
   });
 };
 
@@ -40,11 +41,11 @@ proto.attrs = {
 
 proto.open = function() {
   this.opened = true;
-}
+};
 
 proto.close = function() {
   this.opened = false;
-}
+};
 
 proto.template = `
   <div class="inner">

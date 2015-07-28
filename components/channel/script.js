@@ -1,4 +1,5 @@
 (function(define){define(function(require,exports,module){
+/*jshint esnext:true*/
 'use strict';
 
 var proto = Object.create(HTMLElement.prototype);
