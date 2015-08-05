@@ -14,7 +14,8 @@ props.created = function() {
 
   this.els = {
     inner: this.shadowRoot.querySelector('.inner'),
-    buttons: this.shadowRoot.querySelectorAll('gaia-button')
+    buttons: this.shadowRoot.querySelectorAll('gaia-button'),
+    statusBarColor: document.head.querySelector('meta[name=theme-color]')
   };
 
   Array.prototype.forEach.call(this.els.buttons, function(button) {
@@ -55,11 +56,13 @@ props.attrs = {
 
 props.open = function() {
   this.opened = true;
+  this.els.statusBarColor.setAttribute('content', 'var(--color-alpha)');
 };
 
 props.close = function() {
   this.opened = false;
   window.setTimeout(this.removeChild.bind(this.parentNode, this), 200);
+  this.els.statusBarColor.setAttribute('content', 'var(--header-background)');
 };
 
 
