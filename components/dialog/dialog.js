@@ -47,8 +47,11 @@ props.attrs = {
       value = !!(value === '' || value);
       if (value) {
         this.setAttribute('opened', '');
+        this.els.statusBarColor.setAttribute('content', 'var(--color-alpha)');
       } else {
         this.removeAttribute('opened');
+        this.els.statusBarColor
+            .setAttribute('content', 'var(--header-background)');
       }
     }
   }
@@ -56,13 +59,11 @@ props.attrs = {
 
 props.open = function() {
   this.opened = true;
-  this.els.statusBarColor.setAttribute('content', 'var(--color-alpha)');
 };
 
 props.close = function() {
   this.opened = false;
   window.setTimeout(this.removeChild.bind(this.parentNode, this), 200);
-  this.els.statusBarColor.setAttribute('content', 'var(--header-background)');
 };
 
 
