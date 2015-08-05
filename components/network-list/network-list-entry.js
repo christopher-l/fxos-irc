@@ -3,6 +3,7 @@
 'use strict';
 
 var ActionDialog = require('irc-action-dialog');
+var ConfirmDialog = require('irc-confirm-dialog');
 var GaiaButton = require('gaia-button');
 
 const TOUCH_MOVE_THRESH = 10; // virtual pixels
@@ -166,7 +167,25 @@ proto.showDialog = function() {
   var deleteButton = new GaiaButton();
   deleteButton.innerHTML = 'Delete';
   deleteButton.setAttribute('danger', '');
+  deleteButton.addEventListener('click', this.confirmDeleteNetwork.bind(this));
   dialog.appendChild(deleteButton);
+
+  document.body.appendChild(dialog);
+};
+
+proto.confirmDeleteNetwork = function() {
+  var networkName = this.getAttribute('name');
+
+  var dialog = new ConfirmDialog();
+
+  var header = document.createElement('h1');
+  header.innerHTML = 'Delete ' + networkName;
+  dialog.appendChild(header);
+
+  var text = document.createElement('p');
+  text.innerHTML = 'Permanently delete ' + networkName + '? ' +
+      'All related settings will be lost.';
+  dialog.appendChild(text);
 
   document.body.appendChild(dialog);
 };

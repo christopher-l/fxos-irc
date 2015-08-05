@@ -115,7 +115,16 @@ var baseStyle = `
     box-shadow: none !important;
   }
 
+  gaia-button {
+    box-shadow: none !important;
+  }
+
   ::content gaia-button[danger] {
+    background: #e51e1e !important;
+    color: white !important;
+  }
+
+  gaia-button[danger] {
     background: #e51e1e !important;
     color: white !important;
   }
@@ -124,6 +133,12 @@ var baseStyle = `
     background: #00caf2 !important;
     color: white !important;
   }
+
+  gaia-button[recommend] {
+    background: #00caf2 !important;
+    color: white !important;
+  }
+
 `;
 
 module.exports = component.register('irc-dialog', props);
