@@ -71,3 +71,7 @@ gaia-drawer > div > #drawer-buttons > div {
     visibility: collapse;
   }
 }
+
+gaia-drawer[open] {
+  pointer-events: auto !important;
+}

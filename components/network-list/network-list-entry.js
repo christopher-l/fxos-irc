@@ -2,7 +2,7 @@
 /*jshint esnext:true*/
 'use strict';
 
-var Dialog = require('irc-dialog');
+var ActionDialog = require('irc-action-dialog');
 var GaiaButton = require('gaia-button');
 
 const TOUCH_MOVE_THRESH = 10; // virtual pixels
@@ -143,7 +143,7 @@ proto.toggle = function () {
 };
 
 proto.showDialog = function() {
-  var dialog = new Dialog();
+  var dialog = new ActionDialog();
 
   var header = document.createElement('h1');
   header.innerHTML = this.getAttribute('name');
