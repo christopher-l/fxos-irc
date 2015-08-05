@@ -38,6 +38,10 @@ proto.created = function() {
   observer.observe(this, { childList: true });
 };
 
+proto.attached = function() {
+  window.setTimeout(this.open.bind(this), 0);
+};
+
 proto.attrs = {
   opened: {
     get: function() { return this.getAttribute('open'); },
@@ -58,9 +62,7 @@ proto.open = function() {
 
 proto.close = function() {
   this.opened = false;
-  if (this.onClose) {
-    window.setTimeout(this.onClose.bind(this), 200);
-  }
+  window.setTimeout(this.removeChild.bind(this.parentNode, this), 200);
 };
 
 proto.template = `

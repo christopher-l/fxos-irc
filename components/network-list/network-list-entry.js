@@ -144,21 +144,20 @@ proto.toggle = function () {
 
 proto.showDialog = function() {
   var dialog = new Dialog();
-  dialog.onClose = function() { document.body.removeChild(dialog); };
 
-  var h = document.createElement('h1');
-  h.innerHTML = this.getAttribute('name');
-  dialog.appendChild(h);
-
-  var showButton = new GaiaButton();
-  showButton.innerHTML = 'Show';
-  showButton.addEventListener('click', this.show.bind(this));
-  dialog.appendChild(showButton);
+  var header = document.createElement('h1');
+  header.innerHTML = this.getAttribute('name');
+  dialog.appendChild(header);
 
   var connectButton = new GaiaButton();
   connectButton.innerHTML = 'Connect';
   connectButton.setAttribute('recommend', '');
   dialog.appendChild(connectButton);
+
+  var showButton = new GaiaButton();
+  showButton.innerHTML = 'Show';
+  showButton.addEventListener('click', this.show.bind(this));
+  dialog.appendChild(showButton);
 
   var editButton = new GaiaButton();
   editButton.innerHTML = 'Edit';
@@ -170,7 +169,6 @@ proto.showDialog = function() {
   dialog.appendChild(deleteButton);
 
   document.body.appendChild(dialog);
-  window.setTimeout(dialog.open.bind(dialog), 0);
 };
 
 proto.show = function() {
