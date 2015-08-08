@@ -29,6 +29,7 @@
     <script src="components/dialog/confirm-dialog.js"></script>
     <script src="components/network-list/channel.js"></script>
     <script src="components/network-list/network-list-entry.js"></script>
+    <script src="components/settings/settings.js"></script>
 
     <link href="style.css" type="text/css" rel="stylesheet"></link>
 
@@ -38,14 +39,6 @@
 
   <body class="theme-communications">
 
-    <!-- <irc-dialog opened>
-      <h1>Network</h1>
-      <gaia-button recommend>Connect</gaia-button>
-      <gaia-button>Show</gaia-button>
-      <gaia-button>Edit</gaia-button>
-      <gaia-button danger>Delete</gaia-button>
-    </irc-dialog>
- -->
     <div id="main">
 
       <gaia-header action="menu">
@@ -74,7 +67,7 @@
               <gaia-button circular><i data-icon="add"></i></gaia-button>
             </div>
             <div>
-              <gaia-button circular><i data-icon="settings"></i></gaia-button>
+              <gaia-button circular id="settings-button"><i data-icon="settings"></i></gaia-button>
             </div>
           </div>
         </div>

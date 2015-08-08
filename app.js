@@ -1,3 +1,9 @@
+var require = function(name) {
+  return this[name];
+};
+
+var Settings = require('irc-settings');
+
 window.addEventListener('load', function() {
   console.log('Hello World!');
   // localStorage.theme = "communications";
@@ -9,7 +15,7 @@ header.addEventListener('action', function() {
   drawer.toggle();
 });
 
-var observer = new MutationObserver(function(mutations) {
+new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
     if (mutation.type !== 'attributes' || mutation.attributeName !== 'open') {
       return;
@@ -22,6 +28,9 @@ var observer = new MutationObserver(function(mutations) {
       button.style.opacity = 100;
     }
   });
-});
+}).observe(drawer, {attributes: true});
 
-observer.observe(drawer, {attributes: true});
+drawer.querySelector('#settings-button').addEventListener('click', function() {
+  var settings = new Settings();
+  document.body.appendChild(settings);
+});
