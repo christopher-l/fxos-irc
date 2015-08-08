@@ -183,8 +183,8 @@ proto.confirmDeleteNetwork = function() {
   dialog.appendChild(header);
 
   var text = document.createElement('p');
-  text.innerHTML = 'Permanently delete ' + networkName + '? ' +
-      'All related settings will be lost.';
+  text.innerHTML = 'The Network ' + networkName + ' and all of its settings ' +
+      'will be deleted.';
   dialog.appendChild(text);
 
   document.body.appendChild(dialog);

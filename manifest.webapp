@@ -1,6 +1,6 @@
 {
-  "name": "foo",
-  "description": "A Hello World app",
+  "name": "IRC",
+  "description": "An app that doesn't do anything yet",
   "type": "certified",
   "launch_path": "/index.html",
   "icons": {
@@ -10,7 +10,7 @@
     "128": "/icons/icon128x128.png"
   },
   "developer": {
-    "name": "Your name",
+    "name": "Christopher Lübbemeier",
     "url": "http://example.com"
   },
   "permissions": {
