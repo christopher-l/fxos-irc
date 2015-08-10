@@ -18,14 +18,29 @@ settings.innerHTML = `
       </label>
       <gaia-switch id="theme-switch"></gaia-switch>
     </li>
+    <li>
+      <gaia-slider id="font-size-slider" flex>
+        <label>Font Size</label>
+        <output></output>
+      </gaia-slider>
+    </li>
   </gaia-list>
+  <style>
+    gaia-slider {
+      margin: 0px !important;
+    }
+    gaia-slider output::after {
+      content: 'pt' !important;
+    }
+  </style>
 `;
 
 var els = {
   statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
   statusBarColor: document.head.querySelector('meta[name=theme-color]'),
   body: document.querySelector('body'),
-  themeSwitch: settings.querySelector('#theme-switch')
+  themeSwitch: settings.querySelector('#theme-switch'),
+  fontSizeSlider: settings.querySelector('#font-size-slider')
 };
 
 /*
@@ -57,6 +72,14 @@ els.themeSwitch.addEventListener('change', function(e) {
   var theme = state ? 'dark' : 'light';
   switchTheme(theme);
 });
+
+/*
+ * Font Size
+ */
+els.fontSizeSlider.els.input.setAttribute('min', '6');
+els.fontSizeSlider.els.input.setAttribute('max', '20');
+els.fontSizeSlider.els.input.setAttribute('value', '12');
+els.fontSizeSlider.updateOutput();
 
 function openSettings() {
   document.body.appendChild(settings);
