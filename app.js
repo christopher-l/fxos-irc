@@ -1,8 +1,7 @@
+/*jshint esnext:true*/
 var require = function(name) {
   return this[name];
 };
-
-var Settings = require('irc-settings');
 
 window.addEventListener('load', function() {
   console.log('Hello World!');
@@ -29,8 +28,3 @@ new MutationObserver(function(mutations) {
     }
   });
 }).observe(drawer, {attributes: true});
-
-drawer.querySelector('#settings-button').addEventListener('click', function() {
-  var settings = new Settings();
-  document.body.appendChild(settings);
-});
