@@ -13,7 +13,7 @@ settings.innerHTML = `
       <label flex flexbox for="theme-switch">
         <div class=gaia-item-title>
           Dark Theme
-          <p>Requires application restart</p>
+          <!-- <p>Requires application restart</p> -->
         </div>
       </label>
       <gaia-switch id="theme-switch"></gaia-switch>
@@ -23,6 +23,7 @@ settings.innerHTML = `
 
 var els = {
   statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
+  statusBarColor: document.head.querySelector('meta[name=theme-color]'),
   body: document.querySelector('body'),
   themeSwitch: settings.querySelector('#theme-switch')
 };
@@ -31,6 +32,7 @@ var els = {
  * Theme
  */
 var switchTheme = function(theme) {
+  if (!theme) { return; }
   localStorage.theme = theme;
   els.themeSwitch.checked = theme === 'dark';
   settings.updateTheme();
@@ -40,6 +42,11 @@ var switchTheme = function(theme) {
   };
   var newTheme = themes[theme];
   els.statusBarTheme.setAttribute('content', newTheme);
+  // Force update of statusbar color
+  document.head.removeChild(els.statusBarTheme);
+  document.head.removeChild(els.statusBarColor);
+  document.head.appendChild(els.statusBarTheme);
+  document.head.appendChild(els.statusBarColor);
   els.body.setAttribute('class', newTheme);
 };
 
