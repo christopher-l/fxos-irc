@@ -1,24 +1,61 @@
+(function() {
 /*jshint esnext:true*/
 
 var List = require('irc-list');
 
-drawer.querySelector('#settings-button').addEventListener('click', function() {
-  var settings = new List();
-  settings.title = "IRC Settings";
-  settings.innerHTML = `
-    <h2>Interface</h2>
-    <gaia-list>
-      <li class="ripple">
-        <i data-icon="themes"></i>
-        <label flex flexbox for="theme-switch">
-          <div class=gaia-item-title>
-            Dark Theme
-            <p>Requires application restart</p>
-          </div>
-        </label>
-        <gaia-switch id="theme-switch"></gaia-switch>
-      </li>
-    </gaia-list>
-  `;
-  document.body.appendChild(settings);
+var settings = new List();
+settings.title = "IRC Settings";
+settings.innerHTML = `
+  <h2>Interface</h2>
+  <gaia-list>
+    <li class="ripple">
+      <i data-icon="themes"></i>
+      <label flex flexbox for="theme-switch">
+        <div class=gaia-item-title>
+          Dark Theme
+          <p>Requires application restart</p>
+        </div>
+      </label>
+      <gaia-switch id="theme-switch"></gaia-switch>
+    </li>
+  </gaia-list>
+`;
+
+var els = {
+  statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
+  body: document.querySelector('body'),
+  themeSwitch: settings.querySelector('#theme-switch')
+};
+
+/*
+ * Theme
+ */
+var switchTheme = function(theme) {
+  localStorage.theme = theme;
+  els.themeSwitch.checked = theme === 'dark';
+  settings.updateTheme();
+  var themes = {
+    'light': 'theme-communications',
+    'dark': 'theme-media'
+  };
+  var newTheme = themes[theme];
+  els.statusBarTheme.setAttribute('content', newTheme);
+  els.body.setAttribute('class', newTheme);
+};
+
+switchTheme(localStorage.theme);
+
+els.themeSwitch.addEventListener('change', function(e) {
+  var state = e.target.checked;
+  var theme = state ? 'dark' : 'light';
+  switchTheme(theme);
 });
+
+function openSettings() {
+  document.body.appendChild(settings);
+}
+
+var settingsButton = document.querySelector('#settings-button');
+settingsButton.addEventListener('click', openSettings);
+
+})();

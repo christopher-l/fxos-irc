@@ -5,7 +5,6 @@ var require = function(name) {
 
 window.addEventListener('load', function() {
   console.log('Hello World!');
-  // localStorage.theme = "communications";
 });
 
 var header = document.querySelector('gaia-header');

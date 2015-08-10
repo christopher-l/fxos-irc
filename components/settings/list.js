@@ -7,7 +7,7 @@ var component = require('gaia-component');
 var props = {};
 
 props.created = function() {
-  this.setAttribute('class', 'theme-settings');
+  this.updateTheme();
   var shadow = this.setupShadowRoot();
 
   this.els = {
@@ -33,7 +33,7 @@ props.attrs = {
       if (value) {
         this.setAttribute('opened', '');
         // this.els.statusBarTheme.setAttribute('content', 'theme-settings');
-        this.els.statusBarColor .setAttribute('content', 'var(--background)');
+        this.els.statusBarColor.setAttribute('content', 'var(--background)');
       } else {
         this.removeAttribute('opened');
         // this.els.statusBarTheme
@@ -57,6 +57,11 @@ props.open = function() {
 props.close = function() {
   this.opened = false;
   window.setTimeout(this.removeChild.bind(this.parentNode, this), 200);
+};
+
+props.updateTheme = function() {
+  var theme = localStorage.theme === 'dark' ? 'theme-media' : 'theme-settings';
+  this.setAttribute('class', theme);
 };
 
 props.template = `
