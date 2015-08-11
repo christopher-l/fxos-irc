@@ -61,6 +61,7 @@ gaia-drawer > div > #drawer-buttons > div {
   flex: 3 3 0%;
   overflow-y: scroll;
   padding: 1rem;
+  line-height: normal;
 }
 #input {
   width: 100%;

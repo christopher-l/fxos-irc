@@ -1,5 +1,6 @@
 (function() {
 /*jshint esnext:true*/
+'use strict';
 
 var List = require('irc-list');
 
@@ -35,51 +36,93 @@ settings.innerHTML = `
   </style>
 `;
 
-var els = {
-  statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
-  statusBarColor: document.head.querySelector('meta[name=theme-color]'),
-  body: document.querySelector('body'),
-  themeSwitch: settings.querySelector('#theme-switch'),
-  fontSizeSlider: settings.querySelector('#font-size-slider')
+var items = {
+  theme: {
+    _body: document.querySelector('body'),
+    _statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
+    _statusBarColor: document.head.querySelector('meta[name=theme-color]'),
+    _themes: {
+      'light': 'theme-communications',
+      'dark': 'theme-media'
+    },
+    element: settings.querySelector('#theme-switch'),
+    default: 'light',
+    set: function(value) {
+      this.element.checked = value === 'dark';
+    },
+    get: function() {
+      return this.element.checked ? 'dark' : 'light';
+    },
+    listen: function(fun) {
+      this.element.addEventListener('change', fun);
+    },
+    apply: function(value) {
+      settings.updateTheme();
+      var newTheme = this._themes[value];
+      this._statusBarTheme.setAttribute('content', newTheme);
+      // Force update of statusbar color
+      document.head.removeChild(this._statusBarTheme);
+      document.head.removeChild(this._statusBarColor);
+      document.head.appendChild(this._statusBarTheme);
+      document.head.appendChild(this._statusBarColor);
+      this._body.setAttribute('class', newTheme);
+    }
+  },
+  fontSize: {
+    _content: document.querySelector('#content'),
+    element: settings.querySelector('#font-size-slider'),
+    default: '12',
+    init: function() {
+      this.element.els.input.min = 6;
+      this.element.els.input.max = 20;
+    },
+    set: function(value) {
+      this.element.els.input.value = value;
+      this.element.updateOutput();
+    },
+    get: function() {
+      return this.element.els.input.value;
+    },
+    listen: function(fun) {
+      this.element.els.input.addEventListener('input', fun);
+    },
+    apply: function(value) {
+      this._content.style = 'font-size: ' + value + 'pt;';
+    }
+  }
 };
 
-/*
- * Theme
- */
-var switchTheme = function(theme) {
-  if (!theme) { return; }
-  localStorage.theme = theme;
-  els.themeSwitch.checked = theme === 'dark';
-  settings.updateTheme();
-  var themes = {
-    'light': 'theme-communications',
-    'dark': 'theme-media'
-  };
-  var newTheme = themes[theme];
-  els.statusBarTheme.setAttribute('content', newTheme);
-  // Force update of statusbar color
-  document.head.removeChild(els.statusBarTheme);
-  document.head.removeChild(els.statusBarColor);
-  document.head.appendChild(els.statusBarTheme);
-  document.head.appendChild(els.statusBarColor);
-  els.body.setAttribute('class', newTheme);
+
+var updateItem = function(itemName) {
+  var item = items[itemName];
+  var value = item.get();
+  localStorage[itemName] = value;
+  item.apply(value);
 };
 
-switchTheme(localStorage.theme);
+var registerItems = function() {
+  for (var itemName in items) {
+    if (items.hasOwnProperty(itemName)) {
+      var item = items[itemName];
+      item.listen(updateItem.bind(this, itemName));
+    }
+  }
+};
 
-els.themeSwitch.addEventListener('change', function(e) {
-  var state = e.target.checked;
-  var theme = state ? 'dark' : 'light';
-  switchTheme(theme);
-});
+var initSettings = function(storage) {
+  for (var itemName in items) {
+    if (items.hasOwnProperty(itemName)) {
+      var item = items[itemName];
+      var value = storage[itemName] ? storage[itemName] : item.default;
+      if (item.init) { item.init(); }
+      item.set(value);
+      item.apply(value);
+    }
+  }
+};
 
-/*
- * Font Size
- */
-els.fontSizeSlider.els.input.setAttribute('min', '6');
-els.fontSizeSlider.els.input.setAttribute('max', '20');
-els.fontSizeSlider.els.input.setAttribute('value', '12');
-els.fontSizeSlider.updateOutput();
+initSettings(localStorage);
+registerItems();
 
 function openSettings() {
   document.body.appendChild(settings);
