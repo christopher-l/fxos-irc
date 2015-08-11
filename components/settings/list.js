@@ -7,7 +7,6 @@ var component = require('gaia-component');
 var props = {};
 
 props.created = function() {
-  this.updateTheme();
   var shadow = this.setupShadowRoot();
 
   this.els = {
@@ -16,13 +15,13 @@ props.created = function() {
     header: this.shadowRoot.querySelector('gaia-header'),
     doneButton: this.shadowRoot.querySelector('gaia-header button'),
     statusBarColor: document.head.querySelector('meta[name=theme-color]')
-    // statusBarTheme: document.head.querySelector('meta[name=theme-group]')
   };
 
   this.els.doneButton.addEventListener('click', this.close.bind(this));
 };
 
 props.attached = function() {
+  this.updateTheme();
   window.setTimeout(this.open.bind(this), 0);
 };
 
@@ -33,14 +32,15 @@ props.attrs = {
       value = !!(value === '' || value);
       if (value) {
         this.setAttribute('opened', '');
-        // this.els.statusBarTheme.setAttribute('content', 'theme-settings');
-        this.els.statusBarColor.setAttribute('content', 'var(--background)');
+        if (!this.theme) {
+          this.els.statusBarColor.setAttribute('content', 'var(--background)');
+        }
       } else {
         this.removeAttribute('opened');
-        // this.els.statusBarTheme
-        //     .setAttribute('content', 'theme-communications');
-        this.els.statusBarColor
-            .setAttribute('content', 'var(--header-background)');
+        if (!this.theme) {
+          this.els.statusBarColor
+              .setAttribute('content', 'var(--header-background)');
+        }
       }
     }
   },
@@ -61,7 +61,8 @@ props.close = function() {
 };
 
 props.updateTheme = function() {
-  var theme = localStorage.theme === 'dark' ? 'theme-media' : 'theme-settings';
+  var lightTheme = this.theme ? this.theme : 'theme-settings';
+  var theme = localStorage.theme === 'dark' ? 'theme-media' : lightTheme;
   this.setAttribute('class', theme);
 };
 
@@ -71,7 +72,9 @@ props.template = `
       <h1 class="title"></h1>
       <button>Done</button>
     </gaia-header>
-    <content></content>
+    <div class="content">
+      <content></content>
+    </div>
   </div>
   <style>
     :host {
@@ -90,6 +93,12 @@ props.template = `
       height: 100%;
       background-color: var(--background);
       -moz-user-select: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      overflow-y: auto;
+      flex: 1 1 0%;
     }
     ::content h2 {
       margin: 0px;
