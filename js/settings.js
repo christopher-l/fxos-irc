@@ -38,7 +38,6 @@ settings.innerHTML = `
 
 var items = {
   theme: {
-    _body: document.querySelector('body'),
     _statusBarTheme: document.head.querySelector('meta[name=theme-group]'),
     _statusBarColor: document.head.querySelector('meta[name=theme-color]'),
     _themes: {
@@ -65,7 +64,7 @@ var items = {
       document.head.removeChild(this._statusBarColor);
       document.head.appendChild(this._statusBarTheme);
       document.head.appendChild(this._statusBarColor);
-      this._body.setAttribute('class', newTheme);
+      document.body.setAttribute('class', newTheme);
     }
   },
   fontSize: {
@@ -124,11 +123,9 @@ var initSettings = function(storage) {
 initSettings(localStorage);
 registerItems();
 
-function openSettings() {
-  document.body.appendChild(settings);
-}
-
-var settingsButton = document.querySelector('#settings-button');
-settingsButton.addEventListener('click', openSettings);
+document.querySelector('#settings-button')
+    .addEventListener('click', function() {
+      document.body.appendChild(settings);
+    });
 
 })();
