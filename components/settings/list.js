@@ -13,6 +13,7 @@ props.created = function() {
   this.els = {
     inner: this.shadowRoot.querySelector('.inner'),
     title: this.shadowRoot.querySelector('.title'),
+    header: this.shadowRoot.querySelector('gaia-header'),
     doneButton: this.shadowRoot.querySelector('gaia-header button'),
     statusBarColor: document.head.querySelector('meta[name=theme-color]')
     // statusBarTheme: document.head.querySelector('meta[name=theme-group]')

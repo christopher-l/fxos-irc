@@ -27,3 +27,7 @@ new MutationObserver(function(mutations) {
     }
   });
 }).observe(drawer, {attributes: true});
+
+var Network = require('irc-network');
+var net = new Network();
+net.openConfig();
