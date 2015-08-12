@@ -111,6 +111,14 @@ props.template = `
     ::content gaia-list {
       z-index: 1; /* needed for ripple effect */
     }
+    ::content label {
+      background: none;
+    }
+    ::content li > label {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+    }
   </style>
 `;
 
