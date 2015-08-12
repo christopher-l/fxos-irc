@@ -108,6 +108,9 @@ props.template = `
       background-color: var(--border-color, #E7E7E7);
       color: var(--text-color);
     }
+    ::content gaia-list {
+      z-index: 1; /* needed for ripple effect */
+    }
   </style>
 `;
 
