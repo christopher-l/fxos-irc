@@ -27,6 +27,7 @@ Network.prototype.openConfig = function() {
 };
 
 const CONFIG_HTML = `
+  <h2>Network</h2>
   <gaia-list>
     <li>
       <div flex>
@@ -36,8 +37,8 @@ const CONFIG_HTML = `
     </li>
     <li>
       <div flex>
-        <h3>URL</h3>
-        <gaia-text-input id="url" placeholder="e.g. irc.freenode.net" required></gaia-text-input>
+        <h3>Server</h3>
+        <gaia-text-input id="server" placeholder="e.g. irc.freenode.net" required></gaia-text-input>
       </div>
     </li>
     <li flexbox>
@@ -60,6 +61,27 @@ const CONFIG_HTML = `
       <gaia-checkbox id="auto-connect"></gaia-checkbox>
     </li>
   </gaia-list>
+  <h2>Identity</h2>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Nick</h3>
+        <gaia-text-input id="nick" required></gaia-text-input>
+      </div>
+    </li>
+    <li>
+      <label flex>
+        <h3>User</h3>
+      </label>
+      <gaia-text-input id="user" placeholder="Optional"></gaia-text-input>
+    </li>
+    <li>
+      <label flex>
+        <h3>Password</h3>
+      </label>
+      <gaia-text-input id="password" type="password" placeholder="Optional"></gaia-text-input>
+    </li>
+  </gaia-list>
   <style>
     h3, p {
       padding-left: 1rem;
@@ -70,6 +92,9 @@ const CONFIG_HTML = `
     #port {
       width: 5rem !important;
       margin: 0px !important;
+    }
+    #user, #password {
+      width: calc(100% - 7rem);
     }
   </style>
 `;
