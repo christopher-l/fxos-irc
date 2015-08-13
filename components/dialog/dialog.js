@@ -6,11 +6,11 @@ var component = require('gaia-component');
 
 var props = {};
 
-// var baseUrl = '/components/dialog/';
-
 props.created = function() {
   var self = this;
   var shadow = this.setupShadowRoot();
+
+  this.classList.add('theme-media');
 
   this.els = {
     inner: this.shadowRoot.querySelector('.inner'),
@@ -69,9 +69,6 @@ props.close = function() {
 
 var baseInner = `
   <content select="h1"></content>
-  <div class="content">
-    <content></content>
-  </div>
 `;
 
 var baseStyle = `
@@ -118,11 +115,15 @@ var baseStyle = `
 
   ::content gaia-button {
     box-shadow: none !important;
+    color: var(--color-gamma) !important;
+    background-color: var(--color-theta) !important;
   }
 
   gaia-button {
     box-shadow: none !important;
     margin: 0px;
+    color: var(--color-gamma) !important;
+    background-color: var(--color-theta) !important;
   }
 
   ::content gaia-button[danger] {

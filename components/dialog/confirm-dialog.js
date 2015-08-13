@@ -15,6 +15,9 @@ props.created = function() {
 };
 
 var inner = `
+  <div class="content">
+    <content></content>
+  </div>
   <div class="buttons">
     <gaia-button class="cancel">Cancel</gaia-button>
     <gaia-button class="confirm" danger>Confirm</gaia-button>

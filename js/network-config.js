@@ -185,7 +185,7 @@ const HTML = `
     </li>
     <li class="ripple">
       <label flex for="auto-connect">
-        <h3>Auto Connect</h3>
+        <h3>Auto connect</h3>
       </label>
       <gaia-checkbox id="auto-connect"></gaia-checkbox>
     </li>
@@ -228,13 +228,6 @@ const HTML = `
     }
   </style>
 `;
-
-function mixin(target, source) { // from gaia-components.js
-  for (var key in source) {
-    target[key] = source[key];
-  }
-  return target;
-}
 
 function toHyphenSeparated(string) {
   return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();

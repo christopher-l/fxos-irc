@@ -189,7 +189,7 @@ props.confirmDeleteNetwork = function() {
   dialog.appendChild(header);
 
   var text = document.createElement('p');
-  text.innerHTML = 'The Network ' + networkName + ' and all of its settings ' +
+  text.innerHTML = 'The network ' + networkName + ' and all of its settings ' +
       'will be deleted.';
   dialog.appendChild(text);
 

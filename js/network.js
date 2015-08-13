@@ -3,6 +3,7 @@
 'use strict';
 
 var GaiaToast = require('gaia-toast');
+var Prompt = require('irc-prompt');
 var NetworkConfig = require('irc-network-config');
 var NetworkEntry = require('irc-network-entry');
 var Channel = require('irc-channel');
@@ -34,10 +35,16 @@ Network.prototype.delete = function () {
 };
 
 Network.prototype.addChannel = function() {
-  var prompt = new GaiaDialogPrompt();
-  prompt.innerHTML = 'Add channel';
+  var prompt = new Prompt();
+  prompt.innerHTML = '<h1>Add a channel</h1>' +
+      '<p>Add a channel to network ' + this.name + '.';
   document.body.appendChild(prompt);
-  prompt.open();
+  prompt.els.okButton.addEventListener('click',
+      this.addChannelCB.bind(this, prompt));
+};
+
+Network.prototype.addChannelCB = function (prompt) {
+  var name = prompt.value;
   if (this.channels[name]) {
     toast('Channel ' + name + ' already exists.');
     return;

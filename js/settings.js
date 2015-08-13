@@ -13,7 +13,7 @@ settings.innerHTML = `
       <i data-icon="themes"></i>
       <label flex flexbox for="theme-switch">
         <div class=gaia-item-title>
-          Dark Theme
+          Dark theme
           <!-- <p>Requires application restart</p> -->
         </div>
       </label>
@@ -21,7 +21,7 @@ settings.innerHTML = `
     </li>
     <li>
       <gaia-slider id="font-size-slider" flex>
-        <label>Font Size</label>
+        <label>Font size</label>
         <output></output>
       </gaia-slider>
     </li>

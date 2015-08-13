@@ -12,12 +12,27 @@ props.extends = Dialog.prototype;
 props.created = function() {
   Dialog.prototype.created.call(this);
   this.els.textInput = this.shadowRoot.querySelector('gaia-text-input');
+  this.els.okButton = this.shadowRoot.querySelector('.ok');
   this.els.textInput.focus();
 };
 
+props.attrs = mixin({
+  value: {
+    get: function() {
+      return this.els.textInput.value;
+    },
+    set: function(value) {
+      this.els.textInput.value = value;
+    }
+  }
+}, Dialog.prototype.attrs);
+
 var inner = `
-  <gaia-text-input focus></gaia-text-input>
   <div class="spacer"></div>
+  <div class="content">
+    <content></content>
+  </div>
+  <gaia-text-input focus placeholder="Channel name"></gaia-text-input>
   <div class="buttons">
     <gaia-button class="cancel">Cancel</gaia-button>
     <gaia-button class="ok" recommend>Ok</gaia-button>
@@ -46,6 +61,9 @@ var style = `
   }
   .spacer {
     flex: 1 1 0%;
+  }
+  ::content p {
+    padding-bottom: 0px;
   }
 `;
 
