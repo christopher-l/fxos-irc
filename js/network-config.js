@@ -16,10 +16,7 @@ var NetworkConfig = function(network) {
     this.window.els.header.addEventListener('action',
         this.window.close.bind(this.window));
   }
-  this.window.els.doneButton.addEventListener('click', function() {
-    network.updateListEntry();
-    if (isNew) {network.appendListEntry(); }
-  });
+  this.window.buttonAction = this.buttonAction.bind(this, isNew);
   this.window.innerHTML = HTML;
   this.setupItems();
 };
@@ -96,10 +93,30 @@ NetworkConfig.prototype.setupItems = function() {
       item.name = itemName;
       item.element = this.window.querySelector(
           '#' + toHyphenSeparated(itemName));
+      if (this.network[itemName]) { item.value = this.network[itemName]; }
       item.listen(onItemChanged.bind(item, this.network, this.window));
       if (item.init) { item.init(); }
     }
   }
+};
+
+NetworkConfig.prototype.isValid = function() {
+  for (var itemName in this.items) {
+    if (this.items.hasOwnProperty(itemName)) {
+      var item = this.items[itemName];
+      if (item.element.hasAttribute('required') && !item.value) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+NetworkConfig.prototype.buttonAction = function (isNew) {
+    if (!this.isValid()) { return; }
+    this.network.updateListEntry();
+    if (isNew) { this.network.appendListEntry(); }
+    this.window.close();
 };
 
 const HTML = `

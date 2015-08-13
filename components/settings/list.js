@@ -7,6 +7,7 @@ var component = require('gaia-component');
 var props = {};
 
 props.created = function() {
+  var self = this;
   var shadow = this.setupShadowRoot();
 
   this.els = {
@@ -17,7 +18,9 @@ props.created = function() {
     statusBarColor: document.head.querySelector('meta[name=theme-color]')
   };
 
-  this.els.doneButton.addEventListener('click', this.close.bind(this));
+  this.els.doneButton.addEventListener('click', function() {
+    self.buttonAction();
+  });
 };
 
 props.attached = function() {
@@ -49,6 +52,10 @@ props.attrs = {
       this.els.title.innerHTML = value;
     }
   }
+};
+
+props.buttonAction = function() {
+  this.close();
 };
 
 props.open = function() {
