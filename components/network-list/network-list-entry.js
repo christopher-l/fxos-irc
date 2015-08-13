@@ -108,7 +108,19 @@ props.registerListenerTouch = function() {
 
 props.attrs = {
   collapsed: {
-    set: function(value) { this.collapse(value !== null); }
+    get: function() {
+      return this.hasAttribute('collapsed');
+    },
+    set: function(value) {
+      value = !!(value === '' || value);
+      if (value) {
+        this.setAttribute('collapsed', '');
+        this.els.inner.setAttribute('collapsed', '');
+      } else {
+        this.removeAttribute('collapsed');
+        this.els.inner.removeAttribute('collapsed');
+      }
+    }
   },
   name: {
     get: function() {
@@ -126,27 +138,8 @@ props.updateActualHeight = function() {
   this.els.channelList.style.setProperty('--actual-height', height);
 };
 
-/*
- * @private
- */
-props.collapse = function(value) {
-  if (value === false) { return this.expand(); }
-  this.els.inner.setAttribute('collapsed', '');
-};
-
-/*
- * @private
- */
-props.expand = function() {
-  this.els.inner.removeAttribute('collapsed');
-};
-
 props.toggle = function () {
-  if (this.hasAttribute('collapsed')) {
-    this.removeAttribute('collapsed');
-  } else {
-    this.setAttribute('collapsed', '');
-  }
+  this.collapsed = !this.collapsed;
 };
 
 props.showDialog = function() {
