@@ -187,6 +187,9 @@ props.confirmDeleteNetwork = function() {
       'will be deleted.';
   dialog.appendChild(text);
 
+  dialog.els.confirmButton.addEventListener('click',
+      this.network.delete.bind(this.network));
+
   document.body.appendChild(dialog);
 };
 

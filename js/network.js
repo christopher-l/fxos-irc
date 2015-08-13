@@ -25,6 +25,10 @@ Network.prototype.appendListEntry = function () {
   networkList.appendChild(this.listEntry);
 };
 
+Network.prototype.delete = function () {
+  this.listEntry.remove();
+};
+
 
 module.exports = Network;
 

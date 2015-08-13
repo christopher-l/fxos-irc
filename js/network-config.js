@@ -4,6 +4,7 @@
 
 var List = require('irc-list');
 var ConfirmDialog = require('irc-confirm-dialog');
+var GaiaToast = require('gaia-toast');
 
 var NetworkConfig = function(network) {
   this.network = network;
@@ -100,7 +101,10 @@ NetworkConfig.prototype.setupItems = function() {
 };
 
 NetworkConfig.prototype.saveButtonAction = function () {
-    if (!this.isValid()) { return; }
+    if (!this.isValid()) {
+      this.showToast();
+      return;
+    }
     this.save();
     this.network.updateListEntry();
     if (this.isNew) { this.network.appendListEntry(); }
@@ -125,6 +129,7 @@ NetworkConfig.prototype.isValid = function() {
     if (this.items.hasOwnProperty(itemName)) {
       var item = this.items[itemName];
       if (item.element.hasAttribute('required') && !item.value) {
+        this.missing = itemName;
         return false;
       }
     }
@@ -138,6 +143,14 @@ NetworkConfig.prototype.save = function () {
       this.network[itemName] = this.items[itemName].value;
     }
   }
+};
+
+NetworkConfig.prototype.showToast = function () {
+  var toast = new GaiaToast();
+  toast.innerHTML = 'Cannot leave field "' + this.missing + '" empty.';
+  this.window.appendChild(toast);
+  toast.show();
+  window.setTimeout(toast.remove.bind(toast), 2000);
 };
 
 const HTML = `
