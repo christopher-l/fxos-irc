@@ -3,14 +3,28 @@
 'use strict';
 
 var NetworkConfig = require('irc-network-config');
+var NetworkListEntry = require('irc-network-list-entry');
+
+var networkList = document.querySelector('#network-list');
 
 var Network = function() {
+  this.listEntry = new NetworkListEntry();
+  this.listEntry.network = this;
 };
 
 Network.prototype.openConfig = function () {
   var config = new NetworkConfig(this);
   config.open();
 };
+
+Network.prototype.updateListEntry = function () {
+  this.listEntry.name = this.name;
+};
+
+Network.prototype.appendListEntry = function () {
+  networkList.appendChild(this.listEntry);
+};
+
 
 module.exports = Network;
 

@@ -2,6 +2,7 @@
 /*jshint esnext:true*/
 'use strict';
 
+var component = require('gaia-component');
 var ActionDialog = require('irc-action-dialog');
 var ConfirmDialog = require('irc-confirm-dialog');
 var GaiaButton = require('gaia-button');
@@ -9,36 +10,32 @@ var GaiaButton = require('gaia-button');
 const TOUCH_MOVE_THRESH = 10; // virtual pixels
 const LONG_PRESS_TIME = 200;  // ms
 
-var proto = Object.create(HTMLElement.prototype);
+var props = {};
 
 var baseUrl = '/components/network-list/';
-var component = 'network-list-entry';
 
-proto.createdCallback = function() {
-  var tmpl = template.content.cloneNode(true);
-  var shadow = this.createShadowRoot();
+props.created = function() {
+  this.setupShadowRoot();
 
   this.els = {};
-  this.els.inner = tmpl.querySelector('.inner');
-  this.els.network = tmpl.querySelector('.network');
-  this.els.networkName = tmpl.querySelector('.network-name');
-  this.els.channelList = tmpl.querySelector('.channel-list');
-  this.els.channelWrapper = tmpl.querySelector('.channel-wrapper');
+  this.els.inner = this.shadowRoot.querySelector('.inner');
+  this.els.network = this.shadowRoot.querySelector('.network');
+  this.els.networkName = this.shadowRoot.querySelector('.network-name');
+  this.els.channelList = this.shadowRoot.querySelector('.channel-list');
+  this.els.channelWrapper = this.shadowRoot.querySelector('.channel-wrapper');
 
-  this.els.networkName.innerHTML = this.getAttribute('name');
-
-  shadow.appendChild(tmpl);
+  this.name = this.getAttribute('name');
 
   var style = document.createElement('style');
   style.setAttribute('scoped', '');
-  style.innerHTML = '@import url(' + baseUrl + component + '.css);';
-  shadow.appendChild(style);
+  style.innerHTML = '@import url(' + baseUrl + 'network-list-entry.css);';
+  this.shadowRoot.appendChild(style);
 
   this.registerListenerHeight();
   this.registerListenerTouch();
 };
 
-proto.registerListenerHeight = function() {
+props.registerListenerHeight = function() {
   // var self = this;
   // var observer = new MutationObserver(function(mutations) {
   //   mutations.forEach(function(mutation) {
@@ -50,7 +47,7 @@ proto.registerListenerHeight = function() {
   window.addEventListener('load', this.updateActualHeight.bind(this));
 };
 
-proto.registerListenerTouch = function() {
+props.registerListenerTouch = function() {
   /* hack to get long press events */
   var self = this;
   var pressing;
@@ -109,13 +106,22 @@ proto.registerListenerTouch = function() {
   });
 };
 
-proto.attributeChangedCallback = function(attr, oldVal, newVal) {
-  if (attr === 'collapsed') {
-    this.collapse(newVal !== null);
+props.attrs = {
+  collapsed: {
+    set: function(value) { this.collapse(value !== null); }
+  },
+  name: {
+    get: function() {
+      return this.getAttribute('name');
+    },
+    set: function(value) {
+      this.setAttribute('name', value);
+      this.els.networkName.innerHTML = value;
+    }
   }
 };
 
-proto.updateActualHeight = function() {
+props.updateActualHeight = function() {
   var height = this.els.channelWrapper.clientHeight;
   this.els.channelList.style.setProperty('--actual-height', height);
 };
@@ -123,7 +129,7 @@ proto.updateActualHeight = function() {
 /*
  * @private
  */
-proto.collapse = function(value) {
+props.collapse = function(value) {
   if (value === false) { return this.expand(); }
   this.els.inner.setAttribute('collapsed', '');
 };
@@ -131,11 +137,11 @@ proto.collapse = function(value) {
 /*
  * @private
  */
-proto.expand = function() {
+props.expand = function() {
   this.els.inner.removeAttribute('collapsed');
 };
 
-proto.toggle = function () {
+props.toggle = function () {
   if (this.hasAttribute('collapsed')) {
     this.removeAttribute('collapsed');
   } else {
@@ -143,7 +149,7 @@ proto.toggle = function () {
   }
 };
 
-proto.showDialog = function() {
+props.showDialog = function() {
   var dialog = new ActionDialog();
 
   var header = document.createElement('h1');
@@ -162,6 +168,7 @@ proto.showDialog = function() {
 
   var editButton = new GaiaButton();
   editButton.innerHTML = 'Edit';
+  editButton.addEventListener('click', this.network.openConfig.bind(this.network));
   dialog.appendChild(editButton);
 
   var deleteButton = new GaiaButton();
@@ -173,7 +180,7 @@ proto.showDialog = function() {
   document.body.appendChild(dialog);
 };
 
-proto.confirmDeleteNetwork = function() {
+props.confirmDeleteNetwork = function() {
   var networkName = this.getAttribute('name');
 
   var dialog = new ConfirmDialog();
@@ -190,12 +197,11 @@ proto.confirmDeleteNetwork = function() {
   document.body.appendChild(dialog);
 };
 
-proto.show = function() {
+props.show = function() {
   document.querySelector('gaia-drawer').close();
 };
 
-var template = document.createElement('template');
-template.innerHTML = `
+props.template = `
   <div class="inner">
     <p class="network">
       <span class="collapse-indicator">&#9660;</span>
@@ -210,7 +216,7 @@ template.innerHTML = `
   </div>
 `;
 
-module.exports = document.registerElement('irc-network-list-entry', { prototype: proto });
+module.exports = component.register('irc-network-list-entry', props);
 
 });})((function(n,w){return typeof define=='function'&&define.amd?
 define:typeof module=='object'?function(c){c(require,exports,module);}:function(c){

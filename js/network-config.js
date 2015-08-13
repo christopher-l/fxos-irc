@@ -16,6 +16,10 @@ var NetworkConfig = function(network) {
     this.window.els.header.addEventListener('action',
         this.window.close.bind(this.window));
   }
+  this.window.els.doneButton.addEventListener('click', function() {
+    network.updateListEntry();
+    if (isNew) {network.appendListEntry(); }
+  });
   this.window.innerHTML = HTML;
   this.setupItems();
 };
@@ -32,9 +36,6 @@ var textInput = {
     }
   },
   proto: {
-    init: function() {
-      // this.element.els.input.setAttribute('mozactionhint', 'next');
-    },
     listen: function(fun) { this.element.addEventListener('blur', fun); }
   }
 };
@@ -65,7 +66,7 @@ var items = {
   name: {
     proto: mixin({
       onChanged: function(network, window) {
-        window.title = this.value;
+        if (this.value) { window.title = this.value; }
       }
     }, textInput.proto),
     props: textInput.props,
