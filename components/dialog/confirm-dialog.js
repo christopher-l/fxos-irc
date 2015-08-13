@@ -11,6 +11,7 @@ props.extends = Dialog.prototype;
 
 props.created = function() {
   Dialog.prototype.created.call(this);
+  this.els.confirmButton = this.shadowRoot.querySelector('.confirm');
 };
 
 var inner = `

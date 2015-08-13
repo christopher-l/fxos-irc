@@ -30,4 +30,8 @@ new MutationObserver(function(mutations) {
 
 var Network = require('irc-network');
 var net = new Network();
-net.openConfig();
+net.name = 'foo';
+net.server = 'bar';
+net.nick = 'baz';
+net.appendListEntry();
+net.updateListEntry();

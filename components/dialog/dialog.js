@@ -139,6 +139,10 @@ var baseStyle = `
     color: white !important;
   }
 
+  ::content p {
+    padding: 0px;
+  }
+
 `;
 
 module.exports = component.register('irc-dialog', props);

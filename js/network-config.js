@@ -3,20 +3,19 @@
 'use strict';
 
 var List = require('irc-list');
+var ConfirmDialog = require('irc-confirm-dialog');
 
 var NetworkConfig = function(network) {
   this.network = network;
   this.window = new List();
   // this.window.theme = 'theme-communications';
-  var isNew = !network.name;
-  this.window.title = isNew ? 'New Network' : network.name;
-  if (isNew) {
-    this.window.els.doneButton.innerHTML = 'Save';
-    this.window.els.header.action = 'close';
-    this.window.els.header.addEventListener('action',
-        this.window.close.bind(this.window));
-  }
-  this.window.buttonAction = this.buttonAction.bind(this, isNew);
+  this.isNew = !network.name;
+  this.window.title = this.isNew ? 'New Network' : network.name;
+  this.window.els.doneButton.innerHTML = 'Save';
+  this.window.els.header.action = 'close';
+  this.window.els.header.addEventListener('action',
+      this.closeButtonAction.bind(this));
+  this.window.buttonAction = this.saveButtonAction.bind(this);
   this.window.innerHTML = HTML;
   this.setupItems();
 };
@@ -62,8 +61,8 @@ var checkbox = {
 var items = {
   name: {
     proto: mixin({
-      onChanged: function(network, window) {
-        if (this.value) { window.title = this.value; }
+      onChanged: function(config) {
+        if (this.value) { config.window.title = this.value; }
       }
     }, textInput.proto),
     props: textInput.props,
@@ -77,10 +76,10 @@ var items = {
   password: textInput,
 };
 
-var onItemChanged = function (network, window) {
-  network[this.name] = this.value;
-  if (this.onChanged) {
-    this.onChanged(network, window);
+var onItemChanged = function(item) {
+  this.changed = true;
+  if (item.onChanged) {
+    item.onChanged(this);
   }
 };
 
@@ -94,10 +93,31 @@ NetworkConfig.prototype.setupItems = function() {
       item.element = this.window.querySelector(
           '#' + toHyphenSeparated(itemName));
       if (this.network[itemName]) { item.value = this.network[itemName]; }
-      item.listen(onItemChanged.bind(item, this.network, this.window));
+      item.listen(onItemChanged.bind(this, item));
       if (item.init) { item.init(); }
     }
   }
+};
+
+NetworkConfig.prototype.saveButtonAction = function () {
+    if (!this.isValid()) { return; }
+    this.save();
+    this.network.updateListEntry();
+    if (this.isNew) { this.network.appendListEntry(); }
+    this.window.close();
+};
+
+NetworkConfig.prototype.closeButtonAction = function () {
+  if (!this.isNew && this.changed) {
+    var dialog = new ConfirmDialog();
+    dialog.innerHTML = `<h1>Discard Changes</h1>
+        <p>The network will not be changed.</p>`;
+    document.body.appendChild(dialog);
+    dialog.els.confirmButton.addEventListener('click',
+        this.window.close.bind(this.window));
+    return;
+  }
+  this.window.close();
 };
 
 NetworkConfig.prototype.isValid = function() {
@@ -112,11 +132,12 @@ NetworkConfig.prototype.isValid = function() {
   return true;
 };
 
-NetworkConfig.prototype.buttonAction = function (isNew) {
-    if (!this.isValid()) { return; }
-    this.network.updateListEntry();
-    if (isNew) { this.network.appendListEntry(); }
-    this.window.close();
+NetworkConfig.prototype.save = function () {
+  for (var itemName in this.items) {
+    if (this.items.hasOwnProperty(itemName)) {
+      this.network[itemName] = this.items[itemName].value;
+    }
+  }
 };
 
 const HTML = `
