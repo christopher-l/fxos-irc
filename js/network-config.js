@@ -11,6 +11,7 @@ var NetworkConfig = function(network) {
   var isNew = !network.name;
   this.window.title = isNew ? 'New Network' : network.name;
   if (isNew) {
+    this.window.els.doneButton.innerHTML = 'Save';
     this.window.els.header.action = 'close';
     this.window.els.header.addEventListener('action',
         this.window.close.bind(this.window));
@@ -24,63 +25,62 @@ NetworkConfig.prototype.open = function () {
 };
 
 var textInput = {
-  get: function() {
-    return this.element.value;
+  props: {
+    value: {
+      get: function() { return this.element.value; },
+      set: function(value) { this.element.value = value; }
+    }
   },
-  listen: function(fun) {
-    this.element.addEventListener('blur', fun);
+  proto: {
+    init: function() {
+      // this.element.els.input.setAttribute('mozactionhint', 'next');
+    },
+    listen: function(fun) { this.element.addEventListener('blur', fun); }
   }
 };
 
 var checkbox = {
-  get: function() {
-    return this.element.checked;
+  props: {
+    value: {
+      get: function() { return this.element.checked; },
+      set: function(value) { this.element.checked = value; }
+    }
   },
-  listen: function(fun) {
-    new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.type === 'attributes' &&
-            mutation.attributeName === 'checked') {
-          fun();
-        }
-      });
-    }).observe(this.element, {attributes: true});
+  proto: {
+    listen: function(fun) {
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes' &&
+              mutation.attributeName === 'checked') {
+            fun();
+          }
+        });
+      }).observe(this.element, {attributes: true});
+    }
   }
 };
 
 
 var items = {
   name: {
-    proto: textInput,
-    onChanged: function(network, window) {
-      window.title = this.get();
-    }
+    proto: mixin({
+      onChanged: function(network, window) {
+        window.title = this.value;
+      }
+    }, textInput.proto),
+    props: textInput.props,
   },
-  server: {
-    proto: textInput,
-  },
-  port: {
-    proto: textInput,
-  },
-  tls: {
-    proto: checkbox,
-  },
-  auto: {
-    proto: checkbox,
-  },
-  nick: {
-    proto: textInput,
-  },
-  user: {
-    proto: textInput,
-  },
-  password: {
-    proto: textInput,
-  },
+  server: textInput,
+  port: textInput,
+  tls: checkbox,
+  autoConnect: checkbox,
+  nick: textInput,
+  user: textInput,
+  password: textInput,
 };
 
 var onItemChanged = function (network, window) {
-  network[this.name] = this.get();
+  network[this.name] = this.value;
   if (this.onChanged) {
     this.onChanged(network, window);
   }
@@ -90,12 +90,13 @@ NetworkConfig.prototype.setupItems = function() {
   this.items = {};
   for (var itemName in items) {
     if (items.hasOwnProperty(itemName)) {
-      var item = Object.create(items[itemName]);
-      mixin(item, item.proto);
+      var item = Object.create(items[itemName].proto, items[itemName].props);
       this.items[itemName] = item;
       item.name = itemName;
-      item.element = this.window.querySelector('#' + itemName);
+      item.element = this.window.querySelector(
+          '#' + toHyphenSeparated(itemName));
       item.listen(onItemChanged.bind(item, this.network, this.window));
+      if (item.init) { item.init(); }
     }
   }
 };
@@ -129,10 +130,10 @@ const HTML = `
       <gaia-checkbox id="tls"></gaia-checkbox>
     </li>
     <li class="ripple">
-      <label flex for="auto">
+      <label flex for="auto-connect">
         <h3>Auto Connect</h3>
       </label>
-      <gaia-checkbox id="auto"></gaia-checkbox>
+      <gaia-checkbox id="auto-connect"></gaia-checkbox>
     </li>
   </gaia-list>
   <h2>Identity</h2>
@@ -174,20 +175,16 @@ const HTML = `
   </style>
 `;
 
-// from gaia-components.js
-function mixin(target, source) {
+function mixin(target, source) { // from gaia-components.js
   for (var key in source) {
     target[key] = source[key];
   }
   return target;
 }
 
-// // from gaia-components.js
-// function toCamelCase(string) {
-//   return string.replace(/-(.)/g, function replacer(string, p1) {
-//     return p1.toUpperCase();
-//   });
-// }
+function toHyphenSeparated(string) {
+  return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
 
 module.exports = NetworkConfig;
 
