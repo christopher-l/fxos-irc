@@ -33,7 +33,11 @@ Network.prototype.delete = function () {
   this.listEntry.remove();
 };
 
-Network.prototype.addChannel = function (name) {
+Network.prototype.addChannel = function() {
+  var prompt = new GaiaDialogPrompt();
+  prompt.innerHTML = 'Add channel';
+  document.body.appendChild(prompt);
+  prompt.open();
   if (this.channels[name]) {
     toast('Channel ' + name + ' already exists.');
     return;

@@ -75,11 +75,14 @@ var baseInner = `
 `;
 
 var baseStyle = `
+  * {
+    box-sizing: border-box;
+  }
+
   :host {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 1rem 1rem 0 1rem;
     z-index: 100;
     background-color: var(--color-alpha);
     opacity: 0;
@@ -92,6 +95,7 @@ var baseStyle = `
   }
 
   .inner {
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -99,15 +103,16 @@ var baseStyle = `
   }
 
   .content {
+    padding: 0px 1rem;
     flex: 1 1 0%;
     overflow-y: auto;
-    border-bottom: solid 1px var(--color-delta);
   }
 
   ::content h1 {
     font-size: 1.6rem;
     color: var(--color-theta);
     padding: 1rem;
+    margin: 0px 1rem;
     border-bottom: solid 1px var(--color-delta);
   }
 
@@ -117,6 +122,7 @@ var baseStyle = `
 
   gaia-button {
     box-shadow: none !important;
+    margin: 0px;
   }
 
   ::content gaia-button[danger] {
@@ -140,7 +146,15 @@ var baseStyle = `
   }
 
   ::content p {
-    padding: 0px;
+    padding: 1rem;
+    color: var(--color-theta);
+    font-size: 1.15rem;
+    line-height: 1.5rem;
+  }
+
+  .buttons {
+    background-color: var(--color-gamma);
+    padding: 1rem;
   }
 
 `;

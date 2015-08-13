@@ -13,7 +13,11 @@ props.created = function() {
   Dialog.prototype.created.call(this);
 };
 
-var inner = '<gaia-button class="cancel">Cancel</gaia-button>';
+var inner = `
+  <div class="buttons">
+    <gaia-button class="cancel">Cancel</gaia-button>
+  </div>
+  `;
 var style = '';
 
 props.template = Dialog.createTemplate(inner, style);
