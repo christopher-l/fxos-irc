@@ -13,7 +13,7 @@ props.created = function() {
   Dialog.prototype.created.call(this);
   this.els.textInput = this.shadowRoot.querySelector('gaia-text-input');
   this.els.okButton = this.shadowRoot.querySelector('.ok');
-  this.els.textInput.focus();
+  window.setTimeout(this.els.textInput.focus.bind(this.els.textInput), 0);
 };
 
 props.attrs = mixin({
