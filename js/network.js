@@ -3,12 +3,12 @@
 'use strict';
 
 var NetworkConfig = require('irc-network-config');
-var NetworkListEntry = require('irc-network-list-entry');
+var NetworkEntry = require('irc-network-entry');
 
 var networkList = document.querySelector('#network-list');
 
 var Network = function() {
-  this.listEntry = new NetworkListEntry();
+  this.listEntry = new NetworkEntry();
   this.listEntry.network = this;
 };
 

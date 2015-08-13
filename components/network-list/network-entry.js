@@ -28,7 +28,7 @@ props.created = function() {
 
   var style = document.createElement('style');
   style.setAttribute('scoped', '');
-  style.innerHTML = '@import url(' + baseUrl + 'network-list-entry.css);';
+  style.innerHTML = '@import url(' + baseUrl + 'network-entry.css);';
   this.shadowRoot.appendChild(style);
 
   this.registerListenerHeight();
@@ -212,8 +212,8 @@ props.template = `
   </div>
 `;
 
-module.exports = component.register('irc-network-list-entry', props);
+module.exports = component.register('irc-network-entry', props);
 
 });})((function(n,w){return typeof define=='function'&&define.amd?
 define:typeof module=='object'?function(c){c(require,exports,module);}:function(c){
-var m={exports:{}},r=function(n){return w[n];};w[n]=c(r,m.exports,m)||m.exports;};})('irc-network-list-entry',this));
+var m={exports:{}},r=function(n){return w[n];};w[n]=c(r,m.exports,m)||m.exports;};})('irc-network-entry',this));

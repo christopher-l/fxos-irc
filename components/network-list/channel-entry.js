@@ -5,7 +5,6 @@
 var proto = Object.create(HTMLElement.prototype);
 
 var baseUrl = '/components/network-list/';
-var component = 'channel';
 
 proto.createdCallback = function() {
   var tmpl = template.content.cloneNode(true);
@@ -14,7 +13,7 @@ proto.createdCallback = function() {
 
   var style = document.createElement('style');
   style.setAttribute('scoped', '');
-  style.innerHTML = '@import url(' + baseUrl + component + '.css);';
+  style.innerHTML = '@import url(' + baseUrl + 'channel-entry.css);';
   shadow.appendChild(style);
 };
 
@@ -26,8 +25,8 @@ template.innerHTML = `
   </div>
 `;
 
-module.exports = document.registerElement('irc-channel', { prototype: proto });
+module.exports = document.registerElement('irc-channel-entry', { prototype: proto });
 
 });})((function(n,w){return typeof define=='function'&&define.amd?
 define:typeof module=='object'?function(c){c(require,exports,module);}:function(c){
-var m={exports:{}},r=function(n){return w[n];};w[n]=c(r,m.exports,m)||m.exports;};})('irc-channel',this));
+var m={exports:{}},r=function(n){return w[n];};w[n]=c(r,m.exports,m)||m.exports;};})('irc-channel-entry',this));

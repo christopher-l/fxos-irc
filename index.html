@@ -33,8 +33,8 @@
     <script src="components/dialog/dialog.js"></script>
     <script src="components/dialog/action-dialog.js"></script>
     <script src="components/dialog/confirm-dialog.js"></script>
-    <script src="components/network-list/channel.js"></script>
-    <script src="components/network-list/network-list-entry.js"></script>
+    <script src="components/network-list/channel-entry.js"></script>
+    <script src="components/network-list/network-entry.js"></script>
     <script src="components/settings/list.js"></script>
 
     <link href="style.css" type="text/css" rel="stylesheet"></link>
@@ -58,15 +58,15 @@
       <gaia-drawer>
         <div id="drawer-main">
           <section data-type="list" id="network-list">
-            <irc-network-list-entry name="Foo">
-              <irc-channel>Channel asdfasdf asdfasdf asdfasdf</irc-channel>
-              <irc-channel>Channel</irc-channel>
-            </irc-network-list-entry>
-            <irc-network-list-entry name="Bar">
-              <irc-channel>Channel 2 1</irc-channel>
-              <irc-channel>Channel 2 2</irc-channel>
-              <irc-channel>Foo-Channel</irc-channel>
-            </irc-network-list-entry>
+            <irc-network-entry name="Foo">
+              <irc-channel-entry>Channel asdfasdf asdfasdf asdfasdf</irc-channel-entry>
+              <irc-channel-entry>Channel</irc-channel-entry>
+            </irc-network-entry>
+            <irc-network-entry name="Bar">
+              <irc-channel-entry>Channel 2 1</irc-channel-entry>
+              <irc-channel-entry>Channel 2 2</irc-channel-entry>
+              <irc-channel-entry>Foo-Channel</irc-channel-entry>
+            </irc-network-entry>
           </section>
           <div id="drawer-buttons">
             <div>
