@@ -112,10 +112,12 @@ NetworkConfig.prototype.saveButtonAction = function () {
 };
 
 NetworkConfig.prototype.closeButtonAction = function () {
-  if (!this.isNew && this.changed) {
+  if (this.changed) {
     var dialog = new ConfirmDialog();
-    dialog.innerHTML = `<h1>Discard Changes</h1>
-        <p>The network will not be changed.</p>`;
+    dialog.innerHTML = this.isNew ?
+        `<h1>Discard Network</h1>
+         <p>The network will <emph>not</emph> be created.</p>` :
+        `<h1>Discard Changes</h1><p>The network will not be changed.</p>`;
     document.body.appendChild(dialog);
     dialog.els.confirmButton.addEventListener('click',
         this.window.close.bind(this.window));

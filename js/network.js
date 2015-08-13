@@ -29,6 +29,11 @@ Network.prototype.delete = function () {
   this.listEntry.remove();
 };
 
+document.querySelector('#add-network-button')
+    .addEventListener('click', function() {
+      var network = new Network();
+      network.openConfig();
+    });
 
 module.exports = Network;
 
