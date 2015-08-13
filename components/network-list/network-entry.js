@@ -36,14 +36,14 @@ props.created = function() {
 };
 
 props.registerListenerHeight = function() {
-  // var self = this;
-  // var observer = new MutationObserver(function(mutations) {
-  //   mutations.forEach(function(mutation) {
-  //     if (mutation.type !== 'childList') { return; }
-  //     self.updateActualHeight.bind(self);
-  //   });
-  // });
-  // observer.observe(this.els.channelWrapper, {childList: true});
+  var self = this;
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type !== 'childList') { return; }
+      self.updateActualHeight();
+    });
+  });
+  observer.observe(this, {childList: true});
   window.addEventListener('load', this.updateActualHeight.bind(this));
 };
 
@@ -158,6 +158,12 @@ props.showDialog = function() {
   showButton.innerHTML = 'Show';
   showButton.addEventListener('click', this.show.bind(this));
   dialog.appendChild(showButton);
+
+  var addChannelButton = new GaiaButton();
+  addChannelButton.innerHTML = 'Add Channel';
+  addChannelButton.addEventListener('click',
+      this.network.addChannel.bind(this.network, 'foo'));
+  dialog.appendChild(addChannelButton);
 
   var editButton = new GaiaButton();
   editButton.innerHTML = 'Edit';
