@@ -143,10 +143,10 @@ props.toggle = function () {
 };
 
 props.showDialog = function() {
+  var self = this;
   var dialog = new ActionDialog();
   var closeDialog = dialog.close.bind(dialog);
-  var closeDialogDelayed = window.setTimeout.bind(window,
-      dialog.close.bind(dialog), 500);
+  var closeDialogDelayed = window.setTimeout.bind(window, closeDialog, 200);
 
   var header = document.createElement('h1');
   header.innerHTML = this.getAttribute('name');
@@ -173,9 +173,11 @@ props.showDialog = function() {
 
   var editButton = new GaiaButton();
   editButton.innerHTML = 'Edit';
-  editButton.addEventListener('click',
-      this.network.openConfig.bind(this.network));
-  editButton.addEventListener('click', closeDialogDelayed);
+  editButton.addEventListener('click', function() {
+    dialog.style.zIndex = 5;
+    self.network.openConfig();
+    closeDialogDelayed();
+  });
   dialog.appendChild(editButton);
 
   var deleteButton = new GaiaButton();
