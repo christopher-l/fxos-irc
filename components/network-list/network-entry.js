@@ -7,9 +7,6 @@ var ActionDialog = require('irc-action-dialog');
 var ConfirmDialog = require('irc-confirm-dialog');
 var GaiaButton = require('gaia-button');
 
-const TOUCH_MOVE_THRESH = 10; // virtual pixels
-const LONG_PRESS_TIME = 200;  // ms
-
 var props = {};
 
 var baseUrl = '/components/network-list/';
@@ -32,7 +29,8 @@ props.created = function() {
   this.shadowRoot.appendChild(style);
 
   this.registerListenerHeight();
-  this.registerListenerTouch();
+  addLongPressListener(this.els.network,
+      this.toggle.bind(this), this.showDialog.bind(this));
 };
 
 props.registerListenerHeight = function() {
@@ -45,65 +43,6 @@ props.registerListenerHeight = function() {
   });
   observer.observe(this, {childList: true});
   window.addEventListener('load', this.updateActualHeight.bind(this));
-};
-
-props.registerListenerTouch = function() {
-  /* hack to get long press events */
-  var self = this;
-  var pressing;
-  var pressTimer;
-  var touchX;
-  var touchY;
-  var mouseDisabled;
-
-  var down = function() {
-    pressing = true;
-    pressTimer = window.setTimeout(function() {
-      pressing = false;
-      self.showDialog();
-    }, LONG_PRESS_TIME);
-  };
-
-  var up = function() {
-    if (pressing) {
-      pressing = false;
-      clearTimeout(pressTimer);
-      self.toggle();
-    }
-  };
-
-  var ignoreMouseEvents = function() {
-    if (!mouseDisabled) {
-      self.els.network.removeEventListener('mousedown', down);
-      self.els.network.removeEventListener('mouseup', up);
-      mouseDisabled = true;
-    }
-  };
-
-  self.els.network.addEventListener('mousedown', down);
-  self.els.network.addEventListener('mouseup', up);
-
-  self.els.network.addEventListener('touchstart', function(evt) {
-    ignoreMouseEvents();
-    touchX = evt.changedTouches[0].screenX;
-    touchY = evt.changedTouches[0].screenY;
-    down();
-  });
-
-  self.els.network.addEventListener('touchend', function(evt) {
-    evt.preventDefault();
-    up();
-  });
-
-  self.els.network.addEventListener('touchmove', function(evt) {
-    if (Math.abs(evt.changedTouches[0].screenX - touchX) >
-          TOUCH_MOVE_THRESH ||
-        Math.abs(evt.changedTouches[0].screenY - touchY) >
-          TOUCH_MOVE_THRESH) {
-      clearTimeout(pressTimer);
-      pressing = false;
-    }
-  });
 };
 
 props.attrs = {
