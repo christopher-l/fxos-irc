@@ -144,6 +144,9 @@ props.toggle = function () {
 
 props.showDialog = function() {
   var dialog = new ActionDialog();
+  var closeDialog = dialog.close.bind(dialog);
+  var closeDialogDelayed = window.setTimeout.bind(window,
+      dialog.close.bind(dialog), 500);
 
   var header = document.createElement('h1');
   header.innerHTML = this.getAttribute('name');
@@ -152,28 +155,34 @@ props.showDialog = function() {
   var connectButton = new GaiaButton();
   connectButton.innerHTML = 'Connect';
   connectButton.setAttribute('recommend', '');
+  connectButton.addEventListener('click', closeDialog);
   dialog.appendChild(connectButton);
 
   var showButton = new GaiaButton();
   showButton.innerHTML = 'Show';
+  showButton.addEventListener('click', closeDialog);
   showButton.addEventListener('click', this.show.bind(this));
   dialog.appendChild(showButton);
 
   var addChannelButton = new GaiaButton();
   addChannelButton.innerHTML = 'Add Channel';
   addChannelButton.addEventListener('click',
-      this.network.addChannel.bind(this.network, 'foo'));
+      this.network.addChannel.bind(this.network));
+  addChannelButton.addEventListener('click', closeDialogDelayed);
   dialog.appendChild(addChannelButton);
 
   var editButton = new GaiaButton();
   editButton.innerHTML = 'Edit';
-  editButton.addEventListener('click', this.network.openConfig.bind(this.network));
+  editButton.addEventListener('click',
+      this.network.openConfig.bind(this.network));
+  editButton.addEventListener('click', closeDialogDelayed);
   dialog.appendChild(editButton);
 
   var deleteButton = new GaiaButton();
   deleteButton.innerHTML = 'Delete';
   deleteButton.setAttribute('danger', '');
   deleteButton.addEventListener('click', this.confirmDeleteNetwork.bind(this));
+  deleteButton.addEventListener('click', closeDialogDelayed);
   dialog.appendChild(deleteButton);
 
   document.body.appendChild(dialog);

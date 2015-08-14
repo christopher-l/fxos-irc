@@ -11,8 +11,13 @@ props.extends = Dialog.prototype;
 
 props.created = function() {
   Dialog.prototype.created.call(this);
+
   this.els.textInput = this.shadowRoot.querySelector('gaia-text-input');
-  this.els.okButton = this.shadowRoot.querySelector('.ok');
+  this.els.cancelButton = this.shadowRoot.querySelector('.cancel-button');
+  this.els.okButton = this.shadowRoot.querySelector('.ok-button');
+
+  this.els.cancelButton.addEventListener('click', this.close.bind(this));
+
   window.setTimeout(this.els.textInput.focus.bind(this.els.textInput), 0);
 };
 
@@ -34,8 +39,8 @@ var inner = `
   </div>
   <gaia-text-input focus placeholder="Channel name"></gaia-text-input>
   <div class="buttons">
-    <gaia-button class="cancel">Cancel</gaia-button>
-    <gaia-button class="ok" recommend>Ok</gaia-button>
+    <gaia-button class="cancel-button">Cancel</gaia-button>
+    <gaia-button class="ok-button" recommend>Ok</gaia-button>
   </div>
 `;
 

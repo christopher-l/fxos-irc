@@ -44,6 +44,7 @@ Network.prototype.addChannel = function() {
 };
 
 Network.prototype.addChannelCB = function (prompt) {
+  // TODO: forbid empty and malformed channel names
   var name = prompt.value;
   if (this.channels[name]) {
     toast('Channel ' + name + ' already exists.');
@@ -54,6 +55,7 @@ Network.prototype.addChannelCB = function (prompt) {
   var entry = new ChannelEntry();
   entry.innerHTML = name;
   this.listEntry.appendChild(entry);
+  prompt.close();
 };
 
 document.querySelector('#add-network-button')

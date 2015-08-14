@@ -14,26 +14,8 @@ props.created = function() {
 
   this.els = {
     inner: this.shadowRoot.querySelector('.inner'),
-    buttons: this.shadowRoot.querySelectorAll('gaia-button'),
     statusBarColor: document.head.querySelector('meta[name=theme-color]')
   };
-
-  Array.prototype.forEach.call(this.els.buttons, function(button) {
-    button.addEventListener('click', self.close.bind(self));
-  });
-
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.type === "childList") {
-        [].forEach.call(mutation.addedNodes, function(node) {
-          if (node.nodeName === 'GAIA-BUTTON') {
-            node.addEventListener('click', self.close.bind(self));
-          }
-        });
-      }
-    });
-  });
-  observer.observe(this, { childList: true });
 };
 
 props.attached = function() {

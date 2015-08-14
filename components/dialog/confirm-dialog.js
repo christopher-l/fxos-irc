@@ -11,7 +11,11 @@ props.extends = Dialog.prototype;
 
 props.created = function() {
   Dialog.prototype.created.call(this);
-  this.els.confirmButton = this.shadowRoot.querySelector('.confirm');
+  this.els.cancelButton = this.shadowRoot.querySelector('.cancel-button');
+  this.els.confirmButton = this.shadowRoot.querySelector('.confirm-button');
+
+  this.els.cancelButton.addEventListener('click', this.close.bind(this));
+  this.els.confirmButton.addEventListener('click', this.close.bind(this));
 };
 
 var inner = `
@@ -19,8 +23,8 @@ var inner = `
     <content></content>
   </div>
   <div class="buttons">
-    <gaia-button class="cancel">Cancel</gaia-button>
-    <gaia-button class="confirm" danger>Confirm</gaia-button>
+    <gaia-button class="cancel-button">Cancel</gaia-button>
+    <gaia-button class="confirm-button" danger>Confirm</gaia-button>
   </div>
 `;
 var style = `
