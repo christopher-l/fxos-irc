@@ -3,6 +3,7 @@
   height: 3.5rem;
   padding-right: 1rem;
   border-bottom: solid 1px var(--border-color);
+  box-sizing: border-box;
 }
 
 .channel-name {
