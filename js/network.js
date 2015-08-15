@@ -2,7 +2,7 @@
 /*jshint esnext:true*/
 'use strict';
 
-var Prompt = require('irc-prompt');
+// var Prompt = require('irc-prompt');
 var NetworkConfig = require('irc-network-config');
 var NetworkEntry = require('irc-network-entry');
 var Channel = require('irc-channel');
