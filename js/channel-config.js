@@ -36,7 +36,7 @@ ChannelConfig.prototype.setupItems = function() {
         set: function(value) { this.element.value = value; }
       }
     }),
-    autoJoin: Object.create(Object.prototype, { //props
+    autoJoin: Object.create(Object.prototype, { // props
       element: {value: self.window.querySelector('#auto-join')},
       value: {
         get: function() { return this.element.checked; },

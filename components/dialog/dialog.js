@@ -29,11 +29,11 @@ props.attrs = {
       value = !!(value === '' || value);
       if (value) {
         this.setAttribute('opened', '');
+        this.prevSBColor = this.els.statusBarColor.getAttribute('content');
         this.els.statusBarColor.setAttribute('content', 'var(--color-alpha)');
       } else {
         this.removeAttribute('opened');
-        this.els.statusBarColor
-            .setAttribute('content', 'var(--header-background)');
+        this.els.statusBarColor.setAttribute('content', this.prevSBColor);
       }
     }
   }

@@ -10,7 +10,7 @@ var NetworkConfig = function(network) {
   this.window = new List();
   // this.window.theme = 'theme-communications';
   this.isNew = !network.name;
-  this.window.title = this.isNew ? 'New Network' : network.name;
+  this.window.title = this.isNew ? 'New network' : network.name;
   this.window.els.doneButton.innerHTML = 'Save';
   this.window.els.header.action = 'close';
   this.window.els.header.addEventListener('action',
@@ -66,7 +66,7 @@ var items = {
     }, textInput.proto),
     props: textInput.props,
   },
-  server: textInput,
+  host: textInput,
   port: textInput,
   tls: checkbox,
   autoConnect: checkbox,
@@ -146,18 +146,26 @@ NetworkConfig.prototype.save = function () {
 };
 
 const HTML = `
-  <h2>Network</h2>
   <gaia-list>
     <li>
       <div flex>
         <h3>Name</h3>
-        <gaia-text-input id="name" placeholder="e.g. Freenode" required></gaia-text-input>
+        <gaia-text-input id="name" placeholder="E.g. Freenode" required></gaia-text-input>
       </div>
     </li>
+    <li class="ripple">
+      <label flex for="auto-connect">
+        <h3>Auto connect</h3>
+      </label>
+      <gaia-checkbox id="auto-connect"></gaia-checkbox>
+    </li>
+  </gaia-list>
+  <h2>Server</h2>
+  <gaia-list>
     <li>
       <div flex>
-        <h3>Server</h3>
-        <gaia-text-input id="server" placeholder="e.g. irc.freenode.net" required></gaia-text-input>
+        <h3>Host</h3>
+        <gaia-text-input id="host" placeholder="E.g. irc.freenode.net" required></gaia-text-input>
       </div>
     </li>
     <li flexbox>
@@ -173,12 +181,6 @@ const HTML = `
       </label>
       <gaia-checkbox id="tls"></gaia-checkbox>
     </li>
-    <li class="ripple">
-      <label flex for="auto-connect">
-        <h3>Auto connect</h3>
-      </label>
-      <gaia-checkbox id="auto-connect"></gaia-checkbox>
-    </li>
   </gaia-list>
   <h2>Identity</h2>
   <gaia-list>
@@ -192,13 +194,13 @@ const HTML = `
       <label flex>
         <h3>User</h3>
       </label>
-      <gaia-text-input id="user" placeholder="Optional"></gaia-text-input>
+      <gaia-text-input id="user" placeholder="(Optional)"></gaia-text-input>
     </li>
     <li>
       <label flex>
         <h3>Password</h3>
       </label>
-      <gaia-text-input id="password" type="password" placeholder="Optional"></gaia-text-input>
+      <gaia-text-input id="password" type="password" placeholder="(Optional)"></gaia-text-input>
     </li>
   </gaia-list>
   <style>
