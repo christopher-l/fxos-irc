@@ -17,7 +17,7 @@ var Config = function(obj, html) {
   this.setupItems();
 };
 
-Config.prototype.open = function () {
+Config.prototype.open = function() {
   document.body.appendChild(this.window);
 };
 
@@ -44,7 +44,7 @@ Config.prototype.setupItems = function() {
   }
 };
 
-Config.prototype.save = function () {
+Config.prototype.save = function() {
   for (var itemName in this.items) {
     if (this.items.hasOwnProperty(itemName)) {
       var item = this.items[itemName];
@@ -53,7 +53,7 @@ Config.prototype.save = function () {
   }
 };
 
-Config.prototype.saveButtonAction = function () {
+Config.prototype.saveButtonAction = function() {
     if (!this.validate()) { return; }
     this.save();
     if (this.isNew) { this.obj.setup(); }
@@ -61,7 +61,7 @@ Config.prototype.saveButtonAction = function () {
     this.window.close();
 };
 
-Config.prototype.closeButtonAction = function () {
+Config.prototype.closeButtonAction = function() {
   this.window.close();
 };
 

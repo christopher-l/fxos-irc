@@ -14,14 +14,21 @@ Channel.prototype.openConfig = function() {
   config.open();
 };
 
-Channel.prototype.updateName = function(name) {
+Object.defineProperty(Channel.prototype, name, {
+  get: function() { return this._name; },
+  set: function(value) {
+    if (this._name) { delete this.network.channels[this._name]; }
+    this._name = value;
+  }
+});
+
+Channel.prototype.update = function() {
   if (this.name) { delete this.network.channels[this.name]; }
-  this.name = name;
   this.network.channels[name] = this;
-  this.entry.name = name;
+  this.entry.name = this.name;
 };
 
-Channel.prototype.appendListEntry = function() {
+Channel.prototype.setup = function() {
   this.entry = new ChannelEntry();
   this.entry.channel = this;
   this.network.listEntry.appendChild(this.entry);

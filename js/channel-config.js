@@ -2,91 +2,57 @@
 /*jshint esnext:true*/
 'use strict';
 
-var List = require('irc-list');
+var Config = require('irc-config');
 var ConfirmDialog = require('irc-confirm-dialog');
 
 var ChannelConfig = function(channel) {
-  this.channel = channel;
-  this.window = new List();
-  this.isNew = !channel.name;
+  Config.call(this, channel, HTML);
   this.window.title = this.isNew ? 'New Channel' : '#' + channel.name;
-  this.window.els.doneButton.innerHTML = this.isNew ? 'Add' : 'Done';
-  this.window.els.header.action = 'close';
-  this.window.els.header.addEventListener('action',
-      this.closeButtonAction.bind(this));
-  this.window.buttonAction = this.saveButtonAction.bind(this);
-  this.window.innerHTML = HTML;
   this.window.querySelector('gaia-sub-header').innerHTML = channel.network.name;
-  this.setupItems();
   var input = this.items.name.element.els.input;
   window.setTimeout(function() { input.focus(); });
 };
 
-ChannelConfig.prototype.open = function () {
-  document.body.appendChild(this.window);
-};
+ChannelConfig.prototype = Object.create(Config.prototype);
+ChannelConfig.prototype.constructor = ChannelConfig;
 
 ChannelConfig.prototype.setupItems = function() {
   var self = this;
+  var textInput = Config.itemBases.textInput;
+  var checkbox = Config.itemBases.checkbox;
   this.items = {
-    name: Object.create(Object.prototype, { // props
-      element: {value: self.window.querySelector('#name')},
-      value: {
-        get: function() { return processName(this.element.value); },
-        set: function(value) { this.element.value = value; }
+    name: {
+      base: textInput,
+      get value() { return processName(this.element.value); },
+      set value(value) { this.element.value = value; },
+      onChanged: function() {
+        if (this.value) { self.window.title = '#' + this.value; }
       }
-    }),
-    autoJoin: Object.create(Object.prototype, { // props
-      element: {value: self.window.querySelector('#auto-join')},
-      value: {
-        get: function() { return this.element.checked; },
-        set: function(value) { this.element.checked = value; }
-      }
-    })
+    },
+    autoJoin: {base: checkbox},
   };
-  if (this.channel.name) {
-    this.items.name.value = this.channel.name;
-  }
-  if (this.channel.autoJoin) {
-    this.items.autoJoin.value = this.channel.autoJoin;
-  }
-  this.items.name.element.addEventListener('blur', function() {
-    if (self.items.name.value) {
-      self.window.title = '#' + self.items.name.value;
-    }
-    self.changed = self.items.name.value !== self.channel.name;
-  });
-  this.items.name.element.addEventListener('input', function() {
-    if (!self.isNew) { self.window.els.doneButton.innerHTML = 'Save'; }
-  });
-  this.items.autoJoin.element.addEventListener('change', function() {
-    self.channel.autoJoin = self.items.autoJoin.value;
-  });
+  Config.prototype.setupItems.apply(this);
 };
 
-ChannelConfig.prototype.saveButtonAction = function () {
-  if (this.changed) {
-    if (!this.items.name.value) {
-      toast('The channel name cannot be empty.', this.window);
-      return;
-    } else if (this.isNew &&
-        this.channel.network.channels[this.items.name.value]) {
-      toast('The channel already exists.', this.window);
-      return;
-    }
-    if (this.isNew) { this.channel.appendListEntry(); }
-    this.channel.updateName(this.items.name.value);
+ChannelConfig.prototype.validate = function() {
+  if (!this.items.name.value) {
+    toast('The channel name cannot be empty.', this.window);
+    return false;
+  } else if (this.isNew &&
+      this.obj.network.channels[this.items.name.value]) {
+    toast('The channel already exists.', this.window);
+    return false;
   }
-  this.window.close();
+  return true;
 };
 
-ChannelConfig.prototype.closeButtonAction = function() {
+ChannelConfig.prototype.closeButtonAction = function() { // override
   if (this.changed) {
     var dialog = new ConfirmDialog();
     dialog.innerHTML = this.isNew ?
-        `<h1>Discard channel</h1>
+        `<h1>Discard Channel</h1>
          <p>The channel will <emph>not</emph> be added.</p>` :
-        `<h1>Discard changes</h1>
+        `<h1>Discard Changes</h1>
          <p>The channel will <emph>not</emph> be changed.</p>`;
     document.body.appendChild(dialog);
     dialog.els.confirmButton.addEventListener('click',
@@ -100,7 +66,7 @@ var processName = function(name) {
   return name[0] === '#' ? name.substr(1) : name;
 };
 
-const HTML = `
+var HTML = `
   <gaia-sub-header></gaia-sub-header>
   <gaia-list>
     <li>
@@ -111,9 +77,9 @@ const HTML = `
     </li>
     <li class="ripple">
       <label flex for="auto-join">
-        <h3>Auto join</h3>
+        <h3>Auto Join</h3>
       </label>
-      <gaia-switch id="auto-join"></gaia-switch>
+      <gaia-checkbox id="auto-join"></gaia-checkbox>
     </li>
   </gaia-list>
   <style>

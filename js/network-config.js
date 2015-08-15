@@ -7,7 +7,7 @@ var ConfirmDialog = require('irc-confirm-dialog');
 
 var NetworkConfig = function(network) {
   Config.call(this, network, HTML);
-  this.window.title = this.isNew ? 'New network' : network.name;
+  this.window.title = this.isNew ? 'New Network' : network.name;
 };
 
 NetworkConfig.prototype = Object.create(Config.prototype);
@@ -49,6 +49,9 @@ NetworkConfig.prototype.validate = function() {
   if (!this.items.host.value) {
     toast('Host cannot be empty.', this.window);
     return false;
+  } else if (!this.items.nick.value) {
+    toast('Nick cannot be empty.', this.window);
+    return false;
   }
   return true;
 };
@@ -57,9 +60,9 @@ NetworkConfig.prototype.closeButtonAction = function () { // override
   if (this.changed) {
     var dialog = new ConfirmDialog();
     dialog.innerHTML = this.isNew ?
-        `<h1>Discard network</h1>
+        `<h1>Discard Network</h1>
          <p>The network will <emph>not</emph> be created.</p>` :
-        `<h1>Discard changes</h1><p>The network will not be changed.</p>`;
+        `<h1>Discard Changes</h1><p>The network will not be changed.</p>`;
     document.body.appendChild(dialog);
     dialog.els.confirmButton.addEventListener('click',
         this.window.close.bind(this.window));
@@ -73,12 +76,12 @@ var HTML = `
     <li>
       <div flex>
         <h3>Name</h3>
-        <gaia-text-input id="name" placeholder="E.g. Freenode (optional)"></gaia-text-input>
+        <gaia-text-input id="name" placeholder="e.g. Freenode (Optional)"></gaia-text-input>
       </div>
     </li>
     <li class="ripple">
       <label flex for="auto-connect">
-        <h3>Auto connect</h3>
+        <h3>Auto Connect</h3>
       </label>
       <gaia-checkbox id="auto-connect"></gaia-checkbox>
     </li>
@@ -88,7 +91,7 @@ var HTML = `
     <li>
       <div flex>
         <h3>Host</h3>
-        <gaia-text-input id="host" placeholder="E.g. irc.freenode.net" required></gaia-text-input>
+        <gaia-text-input id="host" placeholder="e.g. irc.freenode.net" required></gaia-text-input>
       </div>
     </li>
     <li flexbox>
