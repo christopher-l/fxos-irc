@@ -9,7 +9,7 @@ var ChannelConfig = function(channel) {
   this.channel = channel;
   this.window = new List();
   this.isNew = !channel.name;
-  this.window.title = this.isNew ? 'New Channel' : network.name;
+  this.window.title = this.isNew ? 'New Channel' : channel.name;
   this.window.els.doneButton.innerHTML = this.isNew ? 'Add' : 'Done';
   this.window.els.header.action = 'close';
   this.window.els.header.addEventListener('action',
@@ -44,17 +44,27 @@ ChannelConfig.prototype.setupItems = function() {
       }
     })
   };
+  if (this.channel.name) {
+    this.items.name.value = this.channel.name;
+  }
+  if (this.channel.autoJoin) {
+    this.items.autoJoin.value = this.channel.autoJoin;
+  }
   this.items.name.element.addEventListener('blur', function() {
-    self.onChangedName();
+    if (self.items.name.value !== self.channel.name) {
+      self.onChangedName();
+    }
   });
-  this.items.autoJoin.element.addEventListener('changed', function() {
+  this.items.name.element.addEventListener('input', function() {
+    if (!self.isNew) { self.window.els.doneButton.innerHTML = 'Save'; }
+  });
+  this.items.autoJoin.element.addEventListener('change', function() {
     self.channel.autoJoin = self.items.autoJoin.value;
   });
 };
 
 ChannelConfig.prototype.onChangedName = function () {
   if (this.items.name.value) { this.window.title = this.items.name.value; }
-  if (!this.isNew) { this.window.els.doneButton.innerHTML = 'Save'; }
   this.changed = true;
 };
 
@@ -63,7 +73,8 @@ ChannelConfig.prototype.saveButtonAction = function () {
     if (!this.items.name.value) {
       toast('The channel name cannot be empty.', this.window);
       return;
-    } else if (this.channel.network.channels[this.items.name.value]) {
+    } else if (this.isNew &&
+        this.channel.network.channels[this.items.name.value]) {
       toast('The channel already exists.', this.window);
       return;
     }

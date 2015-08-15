@@ -18,12 +18,18 @@ Channel.prototype.updateName = function(name) {
   if (this.name) { delete this.network.channels[this.name]; }
   this.name = name;
   this.network.channels[name] = this;
-  this.entry.innerHTML = name;
+  this.entry.name = name;
 };
 
 Channel.prototype.appendListEntry = function() {
   this.entry = new ChannelEntry();
+  this.entry.channel = this;
   this.network.listEntry.appendChild(this.entry);
+};
+
+Channel.prototype.remove = function() {
+  delete this.network.channels[this.name];
+  this.entry.remove();
 };
 
 module.exports = Channel;

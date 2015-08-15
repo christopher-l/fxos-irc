@@ -6,6 +6,7 @@
   font-size: 1.2rem;
   text-overflow: ellipsis;
   -moz-user-select: none;
+  cursor: pointer;
 }
 
 .network {
@@ -16,7 +17,6 @@
   padding-right: 1rem;
   border-bottom: solid 1px var(--border-color);
   background-color: var(--background-minus-minus, var(--color-iota));
-  cursor: pointer;
   z-index: 2;
 }
 
