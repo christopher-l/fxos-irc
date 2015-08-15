@@ -14,7 +14,7 @@ Channel.prototype.openConfig = function() {
   config.open();
 };
 
-Object.defineProperty(Channel.prototype, name, {
+Object.defineProperty(Channel.prototype, 'name', {
   get: function() { return this._name; },
   set: function(value) {
     if (this._name) { delete this.network.channels[this._name]; }
@@ -24,7 +24,7 @@ Object.defineProperty(Channel.prototype, name, {
 
 Channel.prototype.update = function() {
   if (this.name) { delete this.network.channels[this.name]; }
-  this.network.channels[name] = this;
+  this.network.channels[this.name] = this;
   this.entry.name = this.name;
 };
 
