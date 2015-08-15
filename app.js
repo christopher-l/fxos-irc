@@ -33,5 +33,5 @@ var net = new Network();
 net.name = 'foo';
 net.server = 'bar';
 net.nick = 'baz';
-net.appendListEntry();
-net.updateListEntry();
+net.setup();
+net.update();

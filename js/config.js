@@ -32,8 +32,7 @@ Config.prototype.setupItems = function() {
   for (var itemName in this.items) {
     if (this.items.hasOwnProperty(itemName)) {
       var item = this.items[itemName];
-      Object.defineProperty(item, 'value', item.base.value);
-      item.listen = item.base.listen;
+      mixin(item, item.base);
       delete item.base;
       item.name = itemName;
       item.element = this.window.querySelector(
@@ -48,14 +47,18 @@ Config.prototype.setupItems = function() {
 Config.prototype.save = function () {
   for (var itemName in this.items) {
     if (this.items.hasOwnProperty(itemName)) {
-      this.obj[itemName] = this.items[itemName].value;
+      var item = this.items[itemName];
+      this.obj[itemName] = item.value ? item.value : item.default;
     }
   }
 };
 
 Config.prototype.saveButtonAction = function () {
-  this.save();
-  this.window.close();
+    if (!this.validate()) { return; }
+    this.save();
+    if (this.isNew) { this.obj.setup(); }
+    this.obj.update();
+    this.window.close();
 };
 
 Config.prototype.closeButtonAction = function () {
@@ -64,17 +67,13 @@ Config.prototype.closeButtonAction = function () {
 
 Config.itemBases = {
   textInput: {
-    value: {
-      get: function() { return this.element.value; },
-      set: function(value) { this.element.value = value; }
-    },
+    get value() { return this.element.value; },
+    set value(value) { this.element.value = value; },
     listen: function(fun) { this.element.addEventListener('blur', fun); }
   },
   checkbox: {
-    value: {
-      get: function() { return this.element.checked; },
-      set: function(value) { this.element.checked = value; }
-    },
+    get value() { return this.element.checked; },
+    set value(value) { this.element.checked = value; },
     listen: function(fun) {
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {

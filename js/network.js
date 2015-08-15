@@ -20,11 +20,11 @@ Network.prototype.openConfig = function () {
   config.open();
 };
 
-Network.prototype.updateListEntry = function () {
+Network.prototype.update = function () {
   this.listEntry.name = this.name;
 };
 
-Network.prototype.appendListEntry = function () {
+Network.prototype.setup = function () {
   networkList.appendChild(this.listEntry);
 };
 

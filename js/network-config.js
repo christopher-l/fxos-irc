@@ -13,36 +13,6 @@ var NetworkConfig = function(network) {
 NetworkConfig.prototype = Object.create(Config.prototype);
 NetworkConfig.prototype.constructor = NetworkConfig;
 
-NetworkConfig.prototype.saveButtonAction = function () {
-    if (!this.isValid()) {
-      toast('Host cannot be empty.', this.window);
-      return;
-    }
-    this.save();
-    this.obj.updateListEntry();
-    if (this.isNew) { this.obj.appendListEntry(); }
-    this.window.close();
-};
-
-NetworkConfig.prototype.closeButtonAction = function () {
-  if (this.changed) {
-    var dialog = new ConfirmDialog();
-    dialog.innerHTML = this.isNew ?
-        `<h1>Discard network</h1>
-         <p>The network will <emph>not</emph> be created.</p>` :
-        `<h1>Discard changes</h1><p>The network will not be changed.</p>`;
-    document.body.appendChild(dialog);
-    dialog.els.confirmButton.addEventListener('click',
-        this.window.close.bind(this.window));
-    return;
-  }
-  this.window.close();
-};
-
-NetworkConfig.prototype.isValid = function() {
-  return !!this.items.host.value;
-};
-
 NetworkConfig.prototype.setupItems = function() {
   var self = this;
   var textInput = Config.itemBases.textInput;
@@ -64,6 +34,29 @@ NetworkConfig.prototype.setupItems = function() {
     password: {base: textInput},
   };
   Config.prototype.setupItems.apply(this);
+};
+
+NetworkConfig.prototype.validate = function() {
+  if (!this.items.host.value) {
+    toast('Host cannot be empty.', this.window);
+    return false;
+  }
+  return true;
+};
+
+NetworkConfig.prototype.closeButtonAction = function () { // override
+  if (this.changed) {
+    var dialog = new ConfirmDialog();
+    dialog.innerHTML = this.isNew ?
+        `<h1>Discard network</h1>
+         <p>The network will <emph>not</emph> be created.</p>` :
+        `<h1>Discard changes</h1><p>The network will not be changed.</p>`;
+    document.body.appendChild(dialog);
+    dialog.els.confirmButton.addEventListener('click',
+        this.window.close.bind(this.window));
+    return;
+  }
+  this.window.close();
 };
 
 var HTML = `

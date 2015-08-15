@@ -1,8 +1,13 @@
 /*jshint esnext:true*/
 
-function mixin(target, source) { // from gaia-components.js
+function mixin(target, source) {
   for (var key in source) {
-    target[key] = source[key];
+    if (typeof target[key] === 'function') {
+      target[key] = source[key];
+    } else {
+      Object.defineProperty(target, key,
+          Object.getOwnPropertyDescriptor(source, key));
+    }
   }
   return target;
 }
