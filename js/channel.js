@@ -19,12 +19,11 @@ Object.defineProperty(Channel.prototype, 'name', {
   set: function(value) {
     if (this._name) { delete this.network.channels[this._name]; }
     this._name = value;
+    this.network.channels[value] = this;
   }
 });
 
 Channel.prototype.update = function() {
-  if (this.name) { delete this.network.channels[this.name]; }
-  this.network.channels[this.name] = this;
   this.entry.name = this.name;
 };
 
