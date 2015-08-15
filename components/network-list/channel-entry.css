@@ -14,6 +14,10 @@
   white-space: nowrap;
 }
 
+.channel-name::before {
+  content: '#';
+}
+
 .counter {
   /*display: none;*/
   border-radius: 1rem;

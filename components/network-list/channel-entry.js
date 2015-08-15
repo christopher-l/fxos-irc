@@ -42,7 +42,7 @@ props.showDialog = function() {
   var closeDialogDelayed = window.setTimeout.bind(window, closeDialog, 200);
 
   var header = document.createElement('h1');
-  header.innerHTML = this.name;
+  header.innerHTML = '#' + this.name;
   dialog.appendChild(header);
 
   var joinButton = new GaiaButton();

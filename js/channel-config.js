@@ -9,7 +9,7 @@ var ChannelConfig = function(channel) {
   this.channel = channel;
   this.window = new List();
   this.isNew = !channel.name;
-  this.window.title = this.isNew ? 'New Channel' : channel.name;
+  this.window.title = this.isNew ? 'New Channel' : '#' + channel.name;
   this.window.els.doneButton.innerHTML = this.isNew ? 'Add' : 'Done';
   this.window.els.header.action = 'close';
   this.window.els.header.addEventListener('action',
@@ -32,7 +32,7 @@ ChannelConfig.prototype.setupItems = function() {
     name: Object.create(Object.prototype, { // props
       element: {value: self.window.querySelector('#name')},
       value: {
-        get: function() { return this.element.value; },
+        get: function() { return processName(this.element.value); },
         set: function(value) { this.element.value = value; }
       }
     }),
@@ -51,9 +51,10 @@ ChannelConfig.prototype.setupItems = function() {
     this.items.autoJoin.value = this.channel.autoJoin;
   }
   this.items.name.element.addEventListener('blur', function() {
-    if (self.items.name.value !== self.channel.name) {
-      self.onChangedName();
+    if (self.items.name.value) {
+      self.window.title = '#' + self.items.name.value;
     }
+    self.changed = self.items.name.value !== self.channel.name;
   });
   this.items.name.element.addEventListener('input', function() {
     if (!self.isNew) { self.window.els.doneButton.innerHTML = 'Save'; }
@@ -61,11 +62,6 @@ ChannelConfig.prototype.setupItems = function() {
   this.items.autoJoin.element.addEventListener('change', function() {
     self.channel.autoJoin = self.items.autoJoin.value;
   });
-};
-
-ChannelConfig.prototype.onChangedName = function () {
-  if (this.items.name.value) { this.window.title = this.items.name.value; }
-  this.changed = true;
 };
 
 ChannelConfig.prototype.saveButtonAction = function () {
@@ -84,7 +80,7 @@ ChannelConfig.prototype.saveButtonAction = function () {
   this.window.close();
 };
 
-ChannelConfig.prototype.closeButtonAction = function () {
+ChannelConfig.prototype.closeButtonAction = function() {
   if (this.changed) {
     var dialog = new ConfirmDialog();
     dialog.innerHTML = this.isNew ?
@@ -100,13 +96,17 @@ ChannelConfig.prototype.closeButtonAction = function () {
   this.window.close();
 };
 
+var processName = function(name) {
+  return name[0] === '#' ? name.substr(1) : name;
+};
+
 const HTML = `
   <gaia-sub-header></gaia-sub-header>
   <gaia-list>
     <li>
       <div flex>
         <h3>Name</h3>
-        <gaia-text-input id="name" placeholder="#channel" required></gaia-text-input>
+        <gaia-text-input id="name" required></gaia-text-input>
       </div>
     </li>
     <li class="ripple">
