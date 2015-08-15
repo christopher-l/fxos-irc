@@ -27,13 +27,16 @@ props.attrs = {
     get: function() { return this.getAttribute('opened'); },
     set: function(value) {
       value = !!(value === '' || value);
+      var newSBColor = 'var(--color-alpha)';
       if (value) {
         this.setAttribute('opened', '');
         this.prevSBColor = this.els.statusBarColor.getAttribute('content');
-        this.els.statusBarColor.setAttribute('content', 'var(--color-alpha)');
+        this.els.statusBarColor.setAttribute('content', newSBColor);
       } else {
         this.removeAttribute('opened');
-        this.els.statusBarColor.setAttribute('content', this.prevSBColor);
+        if (this.els.statusBarColor.getAttribute('content') === newSBColor) {
+          this.els.statusBarColor.setAttribute('content', this.prevSBColor);
+        }
       }
     }
   }
