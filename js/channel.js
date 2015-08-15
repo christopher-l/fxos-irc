@@ -2,8 +2,28 @@
 /*jshint esnext:true*/
 'use strict';
 
-var Channel = function(name) {
+var ChannelConfig = require('irc-channel-config');
+var ChannelEntry = require('irc-channel-entry');
+
+var Channel = function(network) {
+  this.network = network;
+};
+
+Channel.prototype.openConfig = function() {
+  var config = new ChannelConfig(this);
+  config.open();
+};
+
+Channel.prototype.updateName = function(name) {
+  if (this.name) { delete this.network.channels[this.name]; }
   this.name = name;
+  this.network.channels[name] = this;
+  this.entry.innerHTML = name;
+};
+
+Channel.prototype.appendListEntry = function() {
+  this.entry = new ChannelEntry();
+  this.network.listEntry.appendChild(this.entry);
 };
 
 module.exports = Channel;

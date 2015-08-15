@@ -2,12 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
-var GaiaToast = require('gaia-toast');
 var Prompt = require('irc-prompt');
 var NetworkConfig = require('irc-network-config');
 var NetworkEntry = require('irc-network-entry');
 var Channel = require('irc-channel');
-var ChannelEntry = require('irc-channel-entry');
 
 var networkList = document.querySelector('#network-list');
 
@@ -35,27 +33,8 @@ Network.prototype.delete = function () {
 };
 
 Network.prototype.addChannel = function() {
-  var prompt = new Prompt();
-  prompt.innerHTML = '<h1>Add a channel</h1>' +
-      '<p>Add a channel to network ' + this.name + '.';
-  document.body.appendChild(prompt);
-  prompt.els.okButton.addEventListener('click',
-      this.addChannelCB.bind(this, prompt));
-};
-
-Network.prototype.addChannelCB = function (prompt) {
-  // TODO: forbid empty and malformed channel names
-  var name = prompt.value;
-  if (this.channels[name]) {
-    toast('Channel ' + name + ' already exists.');
-    return;
-  }
-  var channel = new Channel(name);
-  this.channels[name] = channel;
-  var entry = new ChannelEntry();
-  entry.innerHTML = name;
-  this.listEntry.appendChild(entry);
-  prompt.close();
+  var channel = new Channel(this);
+  channel.openConfig();
 };
 
 document.querySelector('#add-network-button')
@@ -64,15 +43,6 @@ document.querySelector('#add-network-button')
       network.openConfig();
     });
 
-
-var toast = function (text) {
-  var toast = new GaiaToast();
-  toast.innerHTML = text;
-  toast.timeout = 2000;
-  document.body.appendChild(toast);
-  toast.show();
-  window.setTimeout(toast.remove.bind(toast), 3000);
-};
 
 module.exports = Network;
 

@@ -4,7 +4,6 @@
 
 var List = require('irc-list');
 var ConfirmDialog = require('irc-confirm-dialog');
-var GaiaToast = require('gaia-toast');
 
 var NetworkConfig = function(network) {
   this.network = network;
@@ -58,7 +57,6 @@ var checkbox = {
   }
 };
 
-
 var items = {
   name: {
     proto: mixin({
@@ -102,7 +100,7 @@ NetworkConfig.prototype.setupItems = function() {
 
 NetworkConfig.prototype.saveButtonAction = function () {
     if (!this.isValid()) {
-      this.showToast();
+      toast('Cannot leave field "' + this.missing + '" empty.', this.window);
       return;
     }
     this.save();
@@ -115,9 +113,9 @@ NetworkConfig.prototype.closeButtonAction = function () {
   if (this.changed) {
     var dialog = new ConfirmDialog();
     dialog.innerHTML = this.isNew ?
-        `<h1>Discard Network</h1>
+        `<h1>Discard network</h1>
          <p>The network will <emph>not</emph> be created.</p>` :
-        `<h1>Discard Changes</h1><p>The network will not be changed.</p>`;
+        `<h1>Discard changes</h1><p>The network will not be changed.</p>`;
     document.body.appendChild(dialog);
     dialog.els.confirmButton.addEventListener('click',
         this.window.close.bind(this.window));
@@ -145,14 +143,6 @@ NetworkConfig.prototype.save = function () {
       this.network[itemName] = this.items[itemName].value;
     }
   }
-};
-
-NetworkConfig.prototype.showToast = function () {
-  var toast = new GaiaToast();
-  toast.innerHTML = 'Cannot leave field "' + this.missing + '" empty.';
-  this.window.appendChild(toast);
-  toast.show();
-  window.setTimeout(toast.remove.bind(toast), 2000);
 };
 
 const HTML = `
@@ -215,6 +205,9 @@ const HTML = `
     h3, p {
       padding-left: 1rem;
     }
+    emph {
+      font-weight: bold;
+    }
     gaia-text-input {
       margin: .5rem 0px !important;
     }
@@ -228,10 +221,6 @@ const HTML = `
     }
   </style>
 `;
-
-function toHyphenSeparated(string) {
-  return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-}
 
 module.exports = NetworkConfig;
 

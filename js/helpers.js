@@ -7,6 +7,20 @@ function mixin(target, source) { // from gaia-components.js
   return target;
 }
 
+function toHyphenSeparated(string) {
+  return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+var toast = function (text, parent) {
+  var toast = new this['gaia-toast']();
+  toast.innerHTML = text;
+  toast.timeout = 2000;
+  if (!parent) { parent = document.body; }
+  parent.appendChild(toast);
+  toast.show();
+  window.setTimeout(toast.remove.bind(toast), 3000);
+};
+
 function addLongPressListener(element, clickAction, longPressAction) {
   const TOUCH_MOVE_THRESH = 10; // virtual pixels
   const LONG_PRESS_TIME = 200;  // ms
