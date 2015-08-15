@@ -21,14 +21,23 @@ NetworkConfig.prototype.setupItems = function() {
     name: {
       base: textInput,
       get default() { return self.items.host.value; },
-      onChanged: function(config) {
-        if (this.value) { config.window.title = this.value; }
+      onChanged: function() {
+        if (this.value) { self.window.title = this.value; }
       }
     },
     autoConnect: {base: checkbox},
     host: {base: textInput},
-    port: {base: textInput},
-    tls: {base: checkbox},
+    port: {
+      base: textInput,
+      get default() { return self.items.tls.value ? 6697 : 6667; },
+      updatePlaceholder: function() {
+        this.element.setAttribute('placeholder', this.default);
+      }
+    },
+    tls: {
+      base: checkbox,
+      onChanged: function() { self.items.port.updatePlaceholder(); }
+    },
     nick: {base: textInput},
     user: {base: textInput},
     password: {base: textInput},

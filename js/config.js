@@ -24,7 +24,7 @@ Config.prototype.open = function () {
 Config.prototype.onItemChanged = function(item) {
   this.changed = true;
   if (item.onChanged) {
-    item.onChanged(this);
+    item.onChanged();
   }
 };
 
