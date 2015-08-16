@@ -31,7 +31,12 @@ new MutationObserver(function(mutations) {
 var Network = require('irc-network');
 var net = new Network();
 net.name = 'foo';
-net.server = 'bar';
+net.host = 'bar';
 net.nick = 'baz';
 net.setup();
 net.update();
+var Channel = require('irc-channel');
+var chan = new Channel(net);
+chan.name = 'bar';
+chan.setup();
+chan.update();

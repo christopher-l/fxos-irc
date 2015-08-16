@@ -17,24 +17,37 @@ Channel.prototype.openConfig = function() {
 Object.defineProperty(Channel.prototype, 'name', {
   get: function() { return this._name; },
   set: function(value) {
-    if (this._name) { delete this.network.channels[this._name]; }
     this._name = value;
-    this.network.channels[value] = this;
   }
 });
 
 Channel.prototype.update = function() {
+  this.entry.remove();
   this.entry.name = this.name;
+  var channels = this.network.channels;
+  channels.sort(function(a, b) {
+    if (a.name < b.name) { return -1; }
+    else if (a.name > b.name) { return 1; }
+    else { return 0; }
+  });
+  var pos = channels.indexOf(this);
+  if (pos + 1 === channels.length) {
+    this.network.listEntry.appendChild(this.entry);
+  } else {
+    this.network.listEntry.insertBefore(this.entry, channels[pos+1].entry);
+  }
 };
 
 Channel.prototype.setup = function() {
+  this.network.channels.push(this);
   this.entry = new ChannelEntry();
   this.entry.channel = this;
   this.network.listEntry.appendChild(this.entry);
 };
 
 Channel.prototype.remove = function() {
-  delete this.network.channels[this.name];
+  var pos = this.network.channels.indexOf(this);
+  this.network.channels.splice(pos, 1);
   this.entry.remove();
 };
 

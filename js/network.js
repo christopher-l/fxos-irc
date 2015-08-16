@@ -12,23 +12,23 @@ var networkList = document.querySelector('#network-list');
 var Network = function() {
   this.listEntry = new NetworkEntry();
   this.listEntry.network = this;
-  this.channels = {};
+  this.channels = [];
 };
 
-Network.prototype.openConfig = function () {
+Network.prototype.openConfig = function() {
   var config = new NetworkConfig(this);
   config.open();
 };
 
-Network.prototype.update = function () {
+Network.prototype.update = function() {
   this.listEntry.name = this.name;
 };
 
-Network.prototype.setup = function () {
+Network.prototype.setup = function() {
   networkList.appendChild(this.listEntry);
 };
 
-Network.prototype.delete = function () {
+Network.prototype.delete = function() {
   this.listEntry.remove();
 };
 
@@ -37,11 +37,12 @@ Network.prototype.addChannel = function() {
   channel.openConfig();
 };
 
+
 document.querySelector('#add-network-button')
     .addEventListener('click', function() {
-      var network = new Network();
-      network.openConfig();
-    });
+  var network = new Network();
+  network.openConfig();
+});
 
 
 module.exports = Network;

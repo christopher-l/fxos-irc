@@ -125,8 +125,8 @@ registerItems();
 
 document.querySelector('#settings-button')
     .addEventListener('click', function() {
-      document.body.appendChild(settings);
-    });
+  document.body.appendChild(settings);
+});
 
 });})(typeof define=='function'&&define.amd?define
 :(function(n,w){'use strict';return typeof module=='object'?function(c){
