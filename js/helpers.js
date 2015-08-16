@@ -2,7 +2,7 @@
 
 function mixin(target, source) {
   for (var key in source) {
-    if (!target.hasOwnProperty(key)) {
+    if (source.hasOwnProperty(key) && !target.hasOwnProperty(key)) {
       Object.defineProperty(target, key,
           Object.getOwnPropertyDescriptor(source, key));
     }

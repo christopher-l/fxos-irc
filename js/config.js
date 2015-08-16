@@ -22,7 +22,12 @@ Config.prototype.open = function() {
 };
 
 Config.prototype.onItemChanged = function(item) {
-  this.changed = true;
+  if (this.obj.hasOwnProperty(item.name)) {
+    if (item.value !== this.obj[item.name]) { this.changed = true; }
+  } else {
+    if (item.value) { this.changed = true; }
+  }
+
   if (item.onChanged) {
     item.onChanged();
   }
