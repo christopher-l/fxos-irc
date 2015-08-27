@@ -2,6 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * A Dialog that lets the user confirm or cancel an action.
+ */
+
 var component = require('gaia-component');
 var Dialog = require('irc-dialog');
 

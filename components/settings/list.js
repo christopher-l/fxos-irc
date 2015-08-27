@@ -2,6 +2,12 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * Provides a window with a header intended to be used as wrapper around
+ * gaia-list.  It will open when added to the DOM covering the hole
+ * screen.  When close() is called, it removes itself from the DOM.
+ */
+
 var component = require('gaia-component');
 
 var props = {};

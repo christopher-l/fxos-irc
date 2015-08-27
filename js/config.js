@@ -2,6 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * The baseclass to irc-channel-config and irc-network-config.
+ */
+
 var List = require('irc-list');
 
 var Config = function(obj, html) {

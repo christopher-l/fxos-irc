@@ -2,6 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * A Dialog that asks the user to enter a string.
+ */
+
 var component = require('gaia-component');
 var Dialog = require('irc-dialog');
 

@@ -2,6 +2,11 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * A collapsable entry representing a network in the main drawer.
+ * Channels added as irc-channel-entry to this element's content.
+ */
+
 var component = require('gaia-component');
 var ActionDialog = require('irc-action-dialog');
 var ConfirmDialog = require('irc-confirm-dialog');

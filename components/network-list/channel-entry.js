@@ -2,6 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * To be used inside irc-network-entry.
+ */
+
 var component = require('gaia-component');
 var ActionDialog = require('irc-action-dialog');
 var ConfirmDialog = require('irc-confirm-dialog');

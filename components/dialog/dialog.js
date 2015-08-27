@@ -2,6 +2,12 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * Baseclass to various forms of dialogs.  It will open when added to
+ * the DOM covering the hole screen.  When close() is called, it removes
+ * itself from the DOM.
+ */
+
 var component = require('gaia-component');
 
 var props = {};

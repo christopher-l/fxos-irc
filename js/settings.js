@@ -2,9 +2,17 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * The object representing the settings screen.  It is not a class
+ * definition but a single object that exists over the the lifetime of
+ * the app.  It is added to the DOM when the settings button is pressed
+ * and removed again when closed.
+ */
+
 var List = require('irc-list');
 
 var settings = new List();
+
 settings.title = "IRC Settings";
 settings.innerHTML = `
   <h2>Interface</h2>

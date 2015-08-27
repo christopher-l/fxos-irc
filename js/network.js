@@ -2,7 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
-// var Prompt = require('irc-prompt');
+/*
+ * The object representing a network is defined here.
+ */
+
 var NetworkConfig = require('irc-network-config');
 var NetworkEntry = require('irc-network-entry');
 var Channel = require('irc-channel');

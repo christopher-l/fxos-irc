@@ -2,6 +2,12 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * The config of a network is encapsulated in the object defined here.
+ * It is not a web component itself but uses irc-list.  It is derived
+ * from irc-config and closely interacts with its baseclass.
+ */
+
 var Config = require('irc-config');
 var ConfirmDialog = require('irc-confirm-dialog');
 

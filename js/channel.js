@@ -2,6 +2,10 @@
 /*jshint esnext:true*/
 'use strict';
 
+/*
+ * The object representing a channel is defined here.
+ */
+
 var ChannelConfig = require('irc-channel-config');
 var ChannelEntry = require('irc-channel-entry');
 

@@ -1,5 +1,9 @@
 /*jshint esnext:true*/
 
+/*
+ * Some glabally visible helper functions.
+ */
+
 function mixin(target, source) {
   for (var key in source) {
     if (source.hasOwnProperty(key) && !target.hasOwnProperty(key)) {
