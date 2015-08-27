@@ -15,7 +15,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      // 'index.html',
+      {
+        pattern: '**/*.css',
+        included: false
+      },
       'test/setupHTML.js',
       'js/helpers.js',
       'bower_components/gaia-component/gaia-component.js',
