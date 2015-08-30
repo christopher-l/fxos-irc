@@ -22,5 +22,3 @@ describe("Channel", function() {
     expect(this.net.channels.length).toEqual(1);
   });
 });
-
-

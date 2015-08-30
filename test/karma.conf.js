@@ -1,6 +1,3 @@
-// Karma configuration
-// Generated on Sun Aug 16 2015 17:44:29 GMT+0200 (CEST)
-
 module.exports = function(config) {
   config.set({
     basePath: '../',
@@ -16,6 +13,14 @@ module.exports = function(config) {
       'js/config.js',
       'js/*.js',
       'test/*test.js',
+      {
+        pattern: '**/*.css',
+        included: false
+      },
+      {
+        pattern: 'bower_components/gaia-icons/fonts/gaia-icons.ttf',
+        included: false
+      }
     ],
 
     browsers: ['firefox_with_web_components'],
@@ -26,9 +31,9 @@ module.exports = function(config) {
       }
     },
 
-    urlRoot: '/_karma_/',
     proxies: {
-      '/': 'http://localhost:9876/base/',
+      '/bower_components/': 'http://localhost:9876/base/bower_components/',
+      '/components/': 'http://localhost:9876/base/components/',
     }
   });
 };
