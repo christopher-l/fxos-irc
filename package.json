@@ -1,11 +1,6 @@
 {
   "name": "irc",
-  "version": "0.0.1",
-  "description": "An app that doesn't do anything yet",
-  "main": "app.js",
-  "directories": {
-    "test": "test"
-  },
+  "description": "See manifest.webapp",
   "dependencies": {
   },
   "devDependencies": {
@@ -15,6 +10,7 @@
     "karma-firefox-launcher": "^0.1.6"
   },
   "scripts": {
+    "install": "bower install",
     "test": "./node_modules/karma/bin/karma start test/karma.conf.js --single-run",
     "test-dev": "./node_modules/karma/bin/karma start test/karma.conf.js"
   },
@@ -22,6 +18,5 @@
     "type": "git",
     "url": "ssh://gitolite@nerd-wg.duckdns.org:10710/fxos_irc"
   },
-  "author": "Christopher Lübbemeier",
   "license": "GPL-3.0"
 }

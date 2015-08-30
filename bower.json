@@ -1,0 +1,19 @@
+{
+  "name": "irc",
+  "description": "See manifest.webapp",
+  "dependencies": {
+    "base": "gaia-components/base",
+    "gaia-button": "gaia-components/gaia-button#~0.0.5",
+    "gaia-checkbox": "gaia-components/gaia-checkbox#~0.1.0",
+    "gaia-fonts": "gaia-components/gaia-fonts#~0.2.1",
+    "gaia-drawer": "gaia-components/gaia-drawer#~0.3.0",
+    "gaia-header": "gaia-components/gaia-header#~0.8.4",
+    "gaia-list": "gaia-components/gaia-list#~0.2.1",
+    "gaia-slider": "gaia-components/gaia-slider",
+    "gaia-sub-header": "gaia-components/gaia-sub-header#~0.4.0",
+    "gaia-switch": "gaia-components/gaia-switch#~0.2.1",
+    "gaia-text-input": "gaia-components/gaia-text-input#~0.1.2",
+    "gaia-theme": "gaia-components/gaia-theme#~0.5.0",
+    "gaia-toast": "gaia-components/gaia-toast"
+  }
+}
