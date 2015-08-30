@@ -15,5 +15,9 @@
     "gaia-text-input": "gaia-components/gaia-text-input#~0.1.2",
     "gaia-theme": "gaia-components/gaia-theme#~0.5.0",
     "gaia-toast": "gaia-components/gaia-toast"
+  },
+  "resolutions": {
+    "gaia-component": "0.3.8",
+    "gaia-icons": "~0.8.0"
   }
 }
