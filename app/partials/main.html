@@ -1,0 +1,29 @@
+<gaia-header action="menu" irc-action="drawerOpen = !drawerOpen">
+  <h1>IRC</h1>
+  <button data-icon="contacts"></button>
+</gaia-header>
+
+<gaia-drawer open="{{drawerOpen ? '' : 'false'}}">
+  <div id="drawer-main">
+    <section data-type="list" id="network-list">
+      <!-- <irc-network-entry name="Foo">
+        <irc-channel-entry>Channel asdfasdf asdfasdf asdfasdf</irc-channel-entry>
+        <irc-channel-entry>Channel</irc-channel-entry>
+      </irc-network-entry>
+      <irc-network-entry name="Bar">
+        <irc-channel-entry>Channel 2 1</irc-channel-entry>
+        <irc-channel-entry>Channel 2 2</irc-channel-entry>
+        <irc-channel-entry>Foo-Channel</irc-channel-entry>
+      </irc-network-entry> -->
+    </section>
+    <div id="drawer-buttons">
+      <gaia-button id="add-network-button"><i data-icon="add"></i></gaia-button>
+      <gaia-button id="settings-button"><i data-icon="settings"></i></gaia-button>
+    </div>
+  </div>
+</gaia-drawer>
+
+<button ng-click="drawer.open = !drawer.open">Open</button>
+{{drawerOpen}}
+
+<div ui-view></div>

@@ -1,12 +1,15 @@
 {
-  "name": "irc",
-  "description": "See manifest.webapp",
+  "name": "IRC",
+  "description": "A Firefox OS Webapp, see manifest.webapp",
+  "private": true,
   "dependencies": {
+    "angular": "~1.4.0",
+    "angular-ui-router": "~0.2.15",
     "base": "gaia-components/base",
     "gaia-button": "gaia-components/gaia-button#~0.0.5",
     "gaia-checkbox": "gaia-components/gaia-checkbox#~0.1.0",
-    "gaia-fonts": "gaia-components/gaia-fonts#~0.2.1",
     "gaia-drawer": "gaia-components/gaia-drawer#~0.3.0",
+    "gaia-fonts": "gaia-components/gaia-fonts#~0.2.1",
     "gaia-header": "gaia-components/gaia-header#~0.8.4",
     "gaia-list": "gaia-components/gaia-list#~0.2.1",
     "gaia-slider": "gaia-components/gaia-slider",

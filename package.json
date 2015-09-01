@@ -1,22 +1,28 @@
 {
-  "name": "irc",
-  "description": "See manifest.webapp",
-  "dependencies": {
-  },
+  "name": "IRC",
+  "description": "A Firefox OS Webapp, see manifest.webapp",
+  "private": true,
+  "license": "GPL-3.0",
   "devDependencies": {
+    "bower": "^1.3.1",
+    "http-server": "^0.6.1",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.9",
     "karma-jasmine": "^0.3.6",
-    "karma-firefox-launcher": "^0.1.6"
+    "protractor": "^2.1.0"
   },
   "scripts": {
-    "install": "bower install",
-    "test": "./node_modules/karma/bin/karma start test/karma.conf.js --single-run",
-    "test-dev": "./node_modules/karma/bin/karma start test/karma.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://gitolite@nerd-wg.duckdns.org:10710/fxos_irc"
-  },
-  "license": "GPL-3.0"
+    "postinstall": "bower install",
+
+    "start": "http-server -a localhost -p 8000 -c-1",
+
+    "test": "karma start test/karma.conf.js",
+    "test-single-run": "karma start test/karma.conf.js  --single-run",
+
+    "preupdate-webdriver": "npm install",
+    "update-webdriver": "webdriver-manager update",
+
+    "preprotractor": "npm run update-webdriver",
+    "protractor": "protractor test/protractor.conf.js"
+  }
 }

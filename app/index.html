@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="irc" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+
+  <meta name="theme-group" content="theme-communications">
+  <meta name="theme-color" content="var(--header-background)">
+
+  <title>IRC</title>
+
+  <!-- Angular -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+  <!-- Gaia components -->
+  <link href="bower_components/base/base.css" type="text/css" rel="stylesheet"></link>
+  <link href="bower_components/gaia-theme/gaia-theme.css" type="text/css" rel="stylesheet"></link>
+  <link rel="stylesheet" type="text/css" href="app://theme.gaiamobile.org/shared/elements/gaia-theme/gaia-theme.css">
+  <link href="bower_components/gaia-fonts/style.css" type="text/css" rel="stylesheet"></link>
+
+  <script src="bower_components/gaia-icons/gaia-icons.js"></script>
+  <script src="bower_components/gaia-component/gaia-component.js"></script>
+  <script src="bower_components/font-fit/font-fit.js"></script>
+  <script src="bower_components/gaia-header/gaia-header.js"></script>
+  <script src="bower_components/gaia-sub-header/gaia-sub-header.js"></script>
+  <script src="bower_components/gaia-text-input/gaia-text-input.js"></script>
+  <script src="bower_components/gaia-button/gaia-button.js"></script>
+  <script src="bower_components/gaia-drawer/script.js"></script>
+  <script src="bower_components/gaia-list/gaia-list.js"></script>
+  <script src="bower_components/drag/drag.js"></script>
+  <script src="bower_components/gaia-switch/gaia-switch.js"></script>
+  <script src="bower_components/gaia-checkbox/gaia-checkbox.js"></script>
+  <script src="bower_components/gaia-slider/gaia-slider.js"></script>
+  <script src="bower_components/gaia-toast/gaia-toast.js"></script>
+
+  <!-- App -->
+  <!-- <script src="js/helpers.js"></script>
+  <script src="components/dialog/dialog.js"></script>
+  <script src="components/dialog/action-dialog.js"></script>
+  <script src="components/dialog/confirm-dialog.js"></script>
+  <script src="components/network-list/channel-entry.js"></script>
+  <script src="components/network-list/network-entry.js"></script>
+  <script src="components/settings/list.js"></script>
+
+  <link href="style.css" type="text/css" rel="stylesheet"></link>
+
+  <script src="js/config.js" defer></script>
+  <script src="js/network-config.js" defer></script>
+  <script src="js/channel-config.js" defer></script>
+  <script src="js/channel.js" defer></script>
+  <script src="js/network.js" defer></script>
+  <script src="js/settings.js" defer></script> -->
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/directives.js"></script>
+</head>
+
+<body>
+
+  <div ui-view class="{{theme}}"></div>
+
+</body>
+</html>
