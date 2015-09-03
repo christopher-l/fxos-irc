@@ -25,11 +25,19 @@ irc.directive('ircOpen', function() {
           element[0].removeAttribute('open');
         }
       });
-      // scope.$watch(function() {
-      //   return element.attr('open');
-      // }, function(value) {
-      //   attrs.$set('ircOpen', value);
-      // });
+      scope.$watch(function() {
+        return element[0].hasAttribute('open');
+      }, function(value) {
+        scope[attrs.ircOpen] = value;
+      });
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes' &&
+              mutation.attributeName === 'open') {
+            scope.$digest();
+          }
+        });
+      }).observe(element[0], {attributes: true});
     }
   };
 });
