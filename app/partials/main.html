@@ -3,27 +3,42 @@
   <button data-icon="contacts"></button>
 </gaia-header>
 
-<!-- <gaia-drawer ng-attr-open="{{drawerOpen ? '' : undefined}}"> -->
 <gaia-drawer irc-open="drawerOpen">
-  <div id="drawer-main">
+  <div>
+
     <section data-type="list" id="network-list">
-      <!-- <irc-network-entry name="Foo">
-        <irc-channel-entry>Channel asdfasdf asdfasdf asdfasdf</irc-channel-entry>
-        <irc-channel-entry>Channel</irc-channel-entry>
-      </irc-network-entry>
-      <irc-network-entry name="Bar">
-        <irc-channel-entry>Channel 2 1</irc-channel-entry>
-        <irc-channel-entry>Channel 2 2</irc-channel-entry>
-        <irc-channel-entry>Foo-Channel</irc-channel-entry>
-      </irc-network-entry> -->
+      <li ng-repeat="network in networks">
+        <p>
+          <span class="collapse-indicator">&#9660;</span>
+          <span class="network-name">{{network.name}}</span>
+          <span class="counter" is-null="{{network.unreadCount == 0}}">
+            <!-- {{network.unreadCount}} -->
+            {{network.chanListHeight}}
+          </span>
+        </p>
+        <ul class="channel-list" style="--actual-height: {{chanListHeight}}">
+          <div class="channel-wrapper" irc-client-height="chanListHeight">
+            <li ng-repeat="channel in network.channels">
+              <span class="channel-name" ng-click="network.channels.splice($index, 1)">{{channel.name}}</span>
+              <span class="counter" is-null="{{channel.unreadCount == 0}}">
+                {{channel.unreadCount}}
+              </span>
+            </li>
+          </div>
+        </ul>
+      </li>
     </section>
+
     <div id="drawer-buttons">
-      <gaia-button id="add-network-button"><i data-icon="add"></i></gaia-button>
-      <gaia-button id="settings-button"><i data-icon="settings"></i></gaia-button>
+      <gaia-button id="add-network-button">
+        <i data-icon="add"></i>
+      </gaia-button>
+      <gaia-button id="settings-button">
+        <i data-icon="settings"></i>
+      </gaia-button>
     </div>
+
   </div>
 </gaia-drawer>
-
-{{drawerOpen}}
 
 <div ui-view></div>

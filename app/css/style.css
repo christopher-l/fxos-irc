@@ -1,6 +1,11 @@
+/*
+ * Main Window
+ */
 body {
   overflow-x: hidden;
   overflow-y: hidden;
+  font-family: fira sans, droid sans fallback;
+  font-weight: normal;
 }
 
 body > div {
@@ -11,6 +16,9 @@ body > div {
   flex-direction: column;
 }
 
+/*
+ * Drawer
+ */
 gaia-drawer {
   position: absolute;
   width: 100%;
@@ -20,4 +28,119 @@ gaia-drawer {
 
 gaia-drawer[open] {
   pointer-events: auto !important;
+}
+
+gaia-drawer > div {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 200px);
+  max-height: calc(100vh - 95px);
+}
+
+#network-list {
+  flex: 1 1 0%;
+  overflow-y: scroll;
+}
+
+#drawer-buttons {
+  position: relative;
+  display: flex;
+  margin-top: -1px;
+  border-top: solid 1px var(--border-color);
+  z-index: 3;
+}
+
+#drawer-buttons gaia-button {
+  flex: 1 1 0%;
+  margin: 0px !important;
+  border-radius: 0px !important;
+  background-color: var(--background) !important;
+  box-shadow: none !important;
+}
+
+#drawer-buttons gaia-button:not(:last-of-type) {
+  border-right: solid 1px var(--border-color);
+}
+
+/*
+ * Network
+ */
+#network-list > li {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  line-height: 3.5rem;
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+  -moz-user-select: none;
+  cursor: pointer;
+}
+
+#network-list > li > p,
+.channel-list li {
+  position: relative;
+  display: flex;
+  height: 3.5rem;
+  margin: 0;
+  padding-right: 1rem;
+  border-bottom: solid 1px var(--border-color);
+}
+
+#network-list > li > p {
+  background-color: var(--background-minus-minus, var(--color-iota));
+  z-index: 2;
+}
+
+.collapse-indicator {
+  position: absolute;
+  font-size: 1.5rem;
+  left: 1rem;
+  transition: transform 200ms 0ms;
+}
+
+.network-name,
+.channel-name {
+  flex-grow: 1;
+  text-indent: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.channel-name::before {
+  content: '#';
+}
+
+.counter {
+  /*display: none;*/
+  border-radius: 1rem;
+  height: 1.5rem;
+  margin: 1rem 0 1rem .5rem;
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  color: var(--text-color);
+  background-color: var(--background-plus);
+  text-indent: 0;
+}
+
+.counter[is-null=true] {
+  display: none;
+}
+
+.channel-list {
+  padding: 0;
+  margin: 0;
+  transition: height 200ms 0ms ease, transform 200ms 0ms ease;
+  z-index: 1;
+  height: calc(var(--actual-height) * 1px);
+  background-color: var(--text-input-background, var(--background));
+}
+
+#network-list > li[collapsed=true] .channel-list {
+  height: 0;
+  transform: translateY( calc(var(--actual-height) * -1px) );
+}
+
+#network-list > li[collapsed=true] .collapse-indicator {
+  transform: rotate(-90deg);
 }

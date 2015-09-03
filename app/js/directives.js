@@ -41,3 +41,17 @@ irc.directive('ircOpen', function() {
     }
   };
 });
+
+irc.directive('ircClientHeight', function($log) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      scope.$watch(function() {
+        return element.prop('clientHeight');
+      }, function(value) {
+        scope[attrs.ircClientHeight] = value;
+        $log.log(value);
+      });
+    }
+  };
+});
