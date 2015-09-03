@@ -2,10 +2,10 @@
 
 var irc = angular.module('irc');
 
-irc.controller('MainCtrl', function($scope) {
+irc.controller('MainCtrl', ['$scope', function($scope) {
   $scope.theme = 'theme-communications';
   $scope.drawerOpen = false;
-});
+}]);
 
-irc.controller('ConversationCtrl', function($scope) {
-});
+irc.controller('ConversationCtrl', ['$scope', function($scope) {
+}]);

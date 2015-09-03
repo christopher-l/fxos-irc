@@ -4,7 +4,8 @@ var irc = angular.module('irc', [
   'ui.router',
 ]);
 
-irc.config(function($stateProvider, $urlRouterProvider) {
+irc.config(['$stateProvider', '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/");
 
   $stateProvider
@@ -18,4 +19,4 @@ irc.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "partials/conversation.html",
       controller: 'ConversationCtrl'
     });
-});
+}]);

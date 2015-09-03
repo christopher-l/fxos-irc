@@ -22,7 +22,7 @@ exports.config = {
   allScriptsTimeout: 11000,
 
   specs: [
-    'e2e/*.js'
+    'e2e/*.test.js'
   ],
 
   baseUrl: 'http://localhost:8000/app/',

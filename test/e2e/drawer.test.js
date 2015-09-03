@@ -61,7 +61,7 @@ describe('drawer', function() {
     expect(drawer.getAttribute('open')).toBeFalsy();
   });
 
-  it('should open with menu button after closing by clicking beneath', function() {
+  it('should still open after closing by clicking beneath', function() {
     clickMenuButton();
     clickBottom();
     expect(drawer.getAttribute('open')).toBeFalsy();

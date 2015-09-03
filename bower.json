@@ -22,5 +22,8 @@
   "resolutions": {
     "gaia-component": "0.3.8",
     "gaia-icons": "~0.8.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.4.5"
   }
 }
