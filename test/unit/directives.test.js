@@ -1,5 +1,29 @@
 'use strict';
 
+describe('irc-action', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    scope.fun = function() {};
+    spyOn(scope, 'fun');
+    element = $compile('<div irc-action="fun()"></div>')(scope);
+  }));
+
+  it('should not do anything when no event is fired', function() {
+    expect(scope.fun).not.toHaveBeenCalled();
+  });
+
+  it('should evaluate its value when action event is fired', function() {
+    element.triggerHandler('action');
+    expect(scope.fun).toHaveBeenCalled();
+  });
+});
+
 describe('irc-open', function() {
 
   var scope;

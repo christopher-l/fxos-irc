@@ -11,6 +11,7 @@
     "beforeAll": false,
     "afterEach": false,
     "afterAll": false,
+    "spyOn": false,
     "module": false,
     "inject": false,
     "browser": false,
