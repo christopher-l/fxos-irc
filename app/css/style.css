@@ -149,12 +149,7 @@ gaia-drawer > div {
   color: var(--background-plus);
 }
 
-.channel-name::before {
-  content: '#';
-}
-
 .counter {
-  /*display: none;*/
   border-radius: 1rem;
   height: 1.5rem;
   margin: 1rem 0 1rem .5rem;

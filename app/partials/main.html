@@ -37,7 +37,7 @@
                     <!-- ng-click="network.channels.splice($index, 1)" -->
               <span class="channel-name"
                     ng-click="focus(channel)">
-                {{channel.name}}
+                #{{channel.name}}
               </span>
               <span class="counter"
                     ng-attr-hidden="{{channel.unreadCount == 0 || undefined}}">

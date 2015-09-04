@@ -6,12 +6,6 @@ describe('drawer', function() {
   var drawer = element(by.css('gaia-drawer'));
   var header = element(by.css('gaia-header'));
 
-  beforeAll(function() {
-    var width = 360;
-    var height = 640;
-    browser.driver.manage().window().setSize(width, height);
-  });
-
   beforeEach(function() {
     browser.get('');
   });
