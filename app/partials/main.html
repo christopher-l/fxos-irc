@@ -7,23 +7,32 @@
   <div>
 
     <section data-type="list" id="network-list">
-      <li ng-repeat="network in networks">
+      <li ng-repeat="network in networks"
+          ng-attr-collapsed="{{network.collapsed || undefined}}">
         <p>
-          <span class="collapse-indicator">&#9660;</span>
+          <span class="collapse-indicator"
+                ng-click="network.collapsed = !network.collapsed">
+            &#9660;
+          </span>
           <span class="network-name">{{network.name}}</span>
           <span class="counter" is-null="{{network.unreadCount == 0}}">
-            <!-- {{network.unreadCount}} -->
-            {{network.chanListHeight}}
+            {{network.unreadCount}}
           </span>
         </p>
+
         <ul class="channel-list" style="--actual-height: {{chanListHeight}}">
           <div class="channel-wrapper" irc-client-height="chanListHeight">
+
             <li ng-repeat="channel in network.channels">
-              <span class="channel-name" ng-click="network.channels.splice($index, 1)">{{channel.name}}</span>
+              <span class="channel-name"
+                    ng-click="network.channels.splice($index, 1)">
+                {{channel.name}}
+              </span>
               <span class="counter" is-null="{{channel.unreadCount == 0}}">
                 {{channel.unreadCount}}
               </span>
             </li>
+
           </div>
         </ul>
       </li>

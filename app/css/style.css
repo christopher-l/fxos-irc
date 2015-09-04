@@ -94,7 +94,8 @@ gaia-drawer > div {
 .collapse-indicator {
   position: absolute;
   font-size: 1.5rem;
-  left: 1rem;
+  width: 3rem;
+  text-indent: 1rem;
   transition: transform 200ms 0ms;
 }
 
@@ -136,11 +137,11 @@ gaia-drawer > div {
   background-color: var(--text-input-background, var(--background));
 }
 
-#network-list > li[collapsed=true] .channel-list {
+#network-list > li[collapsed] .channel-list {
   height: 0;
   transform: translateY( calc(var(--actual-height) * -1px) );
 }
 
-#network-list > li[collapsed=true] .collapse-indicator {
+#network-list > li[collapsed] .collapse-indicator {
   transform: rotate(-90deg);
 }
