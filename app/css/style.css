@@ -35,6 +35,7 @@ gaia-drawer > div {
   flex-direction: column;
   min-height: calc(100vh - 200px);
   max-height: calc(100vh - 95px);
+  color: var(--text-color);
 }
 
 #network-list {
@@ -99,6 +100,27 @@ gaia-drawer > div {
   transition: transform 200ms 0ms;
 }
 
+.status-indicator {
+  position: absolute;
+  border-radius: .5rem;
+  width: .5rem;
+  height: .5rem;
+  margin: 1.5rem;
+}
+
+#network-list > li > p > .status-indicator {
+  margin-left: 3rem;
+}
+
+[focused] > p > .network-name {
+  text-indent: 4.5rem;
+}
+
+[focused] > p > .status-indicator,
+[focused] > .status-indicator {
+  background-color: var(--highlight-color);
+}
+
 .network-name,
 .channel-name {
   flex-grow: 1;
@@ -106,6 +128,25 @@ gaia-drawer > div {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.network-name::after {
+  margin-left: 1rem;
+  font-size: .8rem;
+  font-style: italic;
+}
+
+[status=connected] .network-name::after {
+  content: "(connected)";
+  color: var(--color-preffered);
+}
+
+[status=disconnected] .network-name::after {
+  content: "(disconnected)";
+}
+
+:not([active]) > .channel-name {
+  color: var(--background-plus);
 }
 
 .channel-name::before {
@@ -124,7 +165,7 @@ gaia-drawer > div {
   text-indent: 0;
 }
 
-.counter[is-null=true] {
+.counter[hiudden] {
   display: none;
 }
 
