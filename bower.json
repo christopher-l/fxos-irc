@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "angular": "~1.4.0",
+    "angular-animate": "~1.4.5",
     "angular-ui-router": "~0.2.15",
     "base": "gaia-components/base",
     "gaia-button": "gaia-components/gaia-button#~0.0.5",

@@ -9,15 +9,11 @@
 
   <title>IRC</title>
 
-  <!-- Angular -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-
   <!-- Gaia components -->
-  <link href="bower_components/base/base.css" type="text/css" rel="stylesheet"></link>
-  <link href="bower_components/gaia-theme/gaia-theme.css" type="text/css" rel="stylesheet"></link>
+  <link href="bower_components/base/base.css" type="text/css" rel="stylesheet">
+  <link href="bower_components/gaia-theme/gaia-theme.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="app://theme.gaiamobile.org/shared/elements/gaia-theme/gaia-theme.css">
-  <link href="bower_components/gaia-fonts/style.css" type="text/css" rel="stylesheet"></link>
+  <link href="bower_components/gaia-fonts/style.css" type="text/css" rel="stylesheet">
 
   <script src="bower_components/gaia-icons/gaia-icons.js"></script>
   <script src="bower_components/gaia-component/gaia-component.js"></script>
@@ -34,8 +30,13 @@
   <script src="bower_components/gaia-slider/gaia-slider.js"></script>
   <script src="bower_components/gaia-toast/gaia-toast.js"></script>
 
+  <!-- Angular -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
   <!-- App -->
-  <link href="css/style.css" type="text/css" rel="stylesheet"></link>
+  <link href="css/style.css" type="text/css" rel="stylesheet">
   <!-- <script src="js/helpers.js"></script>
   <script src="components/dialog/dialog.js"></script>
   <script src="components/dialog/action-dialog.js"></script>
@@ -59,7 +60,7 @@
 
 <body>
 
-  <div ui-view class="{{theme}}"></div>
+  <div ui-view class="{{theme}}" type="{{type}}"></div>
 
 </body>
 </html>

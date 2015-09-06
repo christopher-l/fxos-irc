@@ -2,6 +2,7 @@
 
 var irc = angular.module('irc', [
   'ui.router',
+  'ngAnimate',
 ]);
 
 irc.config(['$stateProvider', '$urlRouterProvider',
@@ -14,15 +15,15 @@ irc.config(['$stateProvider', '$urlRouterProvider',
       templateUrl: "partials/main.html",
       controller: 'MainCtrl'
     })
+    .state('main.conversation', {
+      url: "show/:network/:channel",
+      templateUrl: "partials/conversation.html",
+      controller: 'ConversationCtrl'
+    })
     .state('settings', {
       url: "/settings",
       templateUrl: "partials/settings.html",
       controller: 'SettingsCtrl'
-    })
-    .state('main.conversation', {
-      url: ":network/:channel",
-      templateUrl: "partials/conversation.html",
-      controller: 'ConversationCtrl'
     });
 }]);
 
@@ -33,6 +34,10 @@ irc.run(['$rootScope', '$state', function($rootScope, $state) {
     $rootScope.prevParams = fromParams;
   });
   $rootScope.back = function() {
-    $state.go($rootScope.prevState, $rootScope.prevParams);
+    if (!$rootScope.prevState.abstract) {
+      $state.go($rootScope.prevState, $rootScope.prevParams);
+    } else {
+      $state.go('main');
+    }
   };
 }]);

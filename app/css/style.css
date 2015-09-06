@@ -14,6 +14,7 @@ body > div {
   width: 100%;
   display: flex;
   flex-direction: column;
+  transition-duration: 200ms;
 }
 
 /*
@@ -184,4 +185,53 @@ gaia-drawer > div {
 
 #network-list > li[collapsed] .collapse-indicator {
   transform: rotate(-90deg);
+}
+
+/*
+ * Settings
+ */
+[ui-view][type=settings] {
+  z-index: 10;
+  transition-property: opacity;
+}
+
+[ui-view][type=settings].ng-enter,
+[ui-view][type=settings].ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+[ui-view][type=settings].ng-enter.ng-enter-active,
+[ui-view][type=settings].ng-leave {
+  opacity: 1;
+}
+
+gaia-list {
+  flex-grow: 1;
+  background-color: var(--background);
+  -moz-user-select: none;
+  overflow-y: auto;
+  z-index: 1; /* needed for ripple effect */
+}
+
+gaia-list h2 {
+  margin: 0px;
+  padding: 0.3rem 2rem;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: var(--border-color, #E7E7E7);
+  color: var(--text-color);
+}
+
+gaia-list label {
+  background: none;
+}
+
+gaia-list li > label {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  }
+
+gaia-list gaia-slider {
+  margin: 0px !important;
 }

@@ -4,6 +4,7 @@ var irc = angular.module('irc');
 
 irc.controller('MainCtrl', ['$scope', function($scope) {
   $scope.theme = 'theme-communications';
+  $scope.type = 'main';
   $scope.drawerOpen = false;
 
   $scope.networks = [
@@ -41,4 +42,9 @@ irc.controller('ConversationCtrl', ['$scope', function($scope) {
 
 irc.controller('SettingsCtrl', ['$scope', function($scope) {
   $scope.theme = 'theme-settings';
+  $scope.type = 'settings';
+
+  $scope.settings = {
+    fontSize: 12
+  };
 }]);

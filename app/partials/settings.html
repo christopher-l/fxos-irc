@@ -2,3 +2,22 @@
   <h1>IRC Settings</h1>
   <button ng-click="back()">Done</button>
 </gaia-header>
+
+<gaia-list>
+  <li class="ripple">
+    <i data-icon="themes"></i>
+    <label flex flexbox for="theme-switch">
+      <div class=gaia-item-title>
+        Dark Theme
+      </div>
+    </label>
+    <gaia-switch id="theme-switch"></gaia-switch>
+  </li>
+  <li>
+    <irc-slider id="font-size-slider" flex
+        min="6" max="20" unit="pt"
+        model="settings.fontSize">
+      Font Size
+    </irc-slider>
+  </li>
+</gaia-list>

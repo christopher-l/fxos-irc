@@ -56,3 +56,54 @@ irc.directive('ircClientHeight', ['$parse', function($parse) {
     }
   };
 }]);
+
+irc.directive('ircMin', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      element[0].els.input.min = attrs.ircMin;
+    }
+  };
+});
+
+irc.directive('ircMax', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      element[0].els.input.max = attrs.ircMax;
+    }
+  };
+});
+
+irc.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      unit: '@'
+    },
+    template: `
+      <gaia-slider>
+        <label ng-transclude></label>
+        <output unit="{{unit}}"></output>
+      </gaia-slider>
+      <style>
+        output[unit={{unit}}]::after {
+          content: '{{unit}}' !important;
+        }
+      </style>`,
+    link: function(scope, element, attrs) {
+      var slider = element.children('gaia-slider')[0];
+      var input = angular.element(slider.els.input);
+      input[0].min = attrs.min;
+      input[0].max = attrs.max;
+      input.attr('ng-model', attrs.model);
+      $compile(input)(scope.$parent);
+
+      var model = $parse(attrs.model);
+      scope.$parent.$watch(model, function() {
+        slider.updateOutput();
+      });
+    }
+  };
+}]);
