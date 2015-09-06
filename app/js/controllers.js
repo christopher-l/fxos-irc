@@ -10,7 +10,7 @@ irc.controller('MainCtrl', ['$scope', function($scope) {
     {
       name: 'Foo',
       unreadCount: 0,
-      status: 'connected',
+      status: 'connection-lost',
       channels: [
         {name: 'channel1', unreadCount: 32, focused: true, joined: true},
         {name: 'channel2', unreadCount: 0, joined: true}
@@ -19,7 +19,7 @@ irc.controller('MainCtrl', ['$scope', function($scope) {
     {
       name: 'Bar',
       unreadCount: 32,
-      status: 'disconnected',
+      status: 'connecting',
       channels: [
         {name: 'channel3', unreadCount: 0, autoJoin: true},
         {name: 'channel4', unreadCount: 32}

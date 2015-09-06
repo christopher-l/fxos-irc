@@ -145,8 +145,20 @@ gaia-drawer > div {
   content: "(disconnected)";
 }
 
+[status=connecting] .network-name::after {
+  content: "(connecting...)";
+  color: var(--color-warning);
+}
+
+
+[status=connection-lost] .network-name::after {
+  content: "(connection lost)";
+  color: var(--color-destructive);
+}
+
+
 :not([active]) > .channel-name {
-  color: var(--background-plus);
+  color: var(--text-color-minus);
 }
 
 .counter {
