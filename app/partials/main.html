@@ -8,36 +8,42 @@
 
     <section data-type="list" id="network-list">
       <li ng-repeat="network in networks"
-          ng-attr-collapsed="{{network.collapsed || undefined}}"
-          ng-attr-status="{{network.status}}"
-          ng-attr-focused="{{network.focused || undefined}}">
-        <p ng-click="focus(network); network.collapsed = false;">
+          ng-attr-collapsed="{{network.collapsed || undefined}}">
+        <div class="network-entry"
+            ng-attr-status="{{network.status}}"
+            ng-attr-focused="{{network.focused || undefined}}"
+            ng-click="focus(network); network.collapsed = false;">
           <span class="collapse-indicator"
                 ng-click="network.collapsed = !network.collapsed;
                           $event.stopPropagation();">
             &#9660;
           </span>
           <span class="status-indicator"></span>
-          <span class="network-name">{{network.name}}</span>
+          <span class="network-text">
+            <div class="network-name">{{network.name}}</div>
+            <div class="network-info">{{network.status}}</div>
+          </span>
           <span class="counter"
                 ng-attr-hidden="{{network.unreadCount == 0 || undefined}}">
             {{network.unreadCount}}
           </span>
-        </p>
+        </div>
 
         <!-- Keep a wrapper div with unchanged height, so we can collapse and
              restore the outer channel-list element. -->
         <ul class="channel-list" style="--actual-height: {{chanListHeight}}">
           <div irc-client-height="chanListHeight">
 
-            <li ng-repeat="channel in network.channels"
+            <li class="channel-entry"
+                ng-repeat="channel in network.channels"
                 ng-attr-active="{{channel.joined || undefined}}"
                 ng-attr-focused="{{channel.focused || undefined}}">
               <span class="status-indicator"></span>
                     <!-- ng-click="network.channels.splice($index, 1)" -->
-              <span class="channel-name"
+              <span class="channel-text"
                     ng-click="focus(channel)">
-                #{{channel.name}}
+                <div class="channel-name">#{{channel.name}}</div>
+                <div class="channel-info"></div>
               </span>
               <span class="counter"
                     ng-attr-hidden="{{channel.unreadCount == 0 || undefined}}">

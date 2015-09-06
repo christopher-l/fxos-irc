@@ -70,15 +70,15 @@ gaia-drawer > div {
   position: relative;
   overflow: hidden;
   margin: 0;
-  line-height: 3.5rem;
+  /*line-height: 3.5rem;*/
   font-size: 1.2rem;
   text-overflow: ellipsis;
   -moz-user-select: none;
   cursor: pointer;
 }
 
-#network-list > li > p,
-.channel-list li {
+.network-entry,
+.channel-entry {
   position: relative;
   display: flex;
   height: 3.5rem;
@@ -87,7 +87,7 @@ gaia-drawer > div {
   border-bottom: solid 1px var(--border-color);
 }
 
-#network-list > li > p {
+.network-entry {
   background-color: var(--background-minus-minus, var(--color-iota));
   z-index: 2;
 }
@@ -97,67 +97,59 @@ gaia-drawer > div {
   font-size: 1.5rem;
   width: 3rem;
   text-indent: 1rem;
+  line-height: 3.5rem;
   transition: transform 200ms 0ms;
 }
 
 .status-indicator {
-  position: absolute;
   border-radius: .5rem;
   width: .5rem;
   height: .5rem;
   margin: 1.5rem;
+  margin-left: 2.5rem;
+  margin-right: .5rem;
 }
 
-#network-list > li > p > .status-indicator {
-  margin-left: 3rem;
-}
-
-[focused] > p > .network-name {
-  text-indent: 4.5rem;
-}
-
-[focused] > p > .status-indicator,
-[focused] > .status-indicator {
+.network-entry[focused] > .status-indicator,
+.channel-entry[focused] > .status-indicator {
   background-color: var(--highlight-color);
 }
 
-.network-name,
-.channel-name {
+.network-text,
+.channel-text {
   flex-grow: 1;
-  text-indent: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow: hidden;
+}
+
+.network-name,
+.channel.name {
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
 }
 
-.network-name::after {
-  margin-left: 1rem;
+.network-info,
+.channel-info {
   font-size: .8rem;
-  font-style: italic;
 }
 
-[status=connected] .network-name::after {
-  content: "(connected)";
+[status=connected] .network-info {
   color: var(--color-preffered);
 }
 
-[status=disconnected] .network-name::after {
-  content: "(disconnected)";
-}
-
-[status=connecting] .network-name::after {
-  content: "(connecting...)";
+[status=connecting] .network-info {
   color: var(--color-warning);
 }
 
-
-[status=connection-lost] .network-name::after {
-  content: "(connection lost)";
+[status=connection-lost] .network-info {
   color: var(--color-destructive);
 }
 
 
-:not([active]) > .channel-name {
+:not([active]) > .channel-text {
   color: var(--text-color-minus);
 }
 
