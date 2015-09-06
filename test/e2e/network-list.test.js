@@ -2,34 +2,31 @@
 
 describe('network-list', function() {
 
+  var uiView = element(by.css('body > div'));
   var header = element(by.css('gaia-header'));
   var networkList = element(by.css('#network-list'));
-  var networkEntry = networkList.all(by.css('li')).first();
-
-  var clickMenuButton = function() {
-    browser.actions()
-      .mouseMove(header, {x: 20, y: 20})
-      .mouseDown()
-      .mouseUp()
-      .perform();
-  };
+  var networkItem= networkList.all(by.css('li')).first();
 
   beforeEach(function() {
     browser.get('');
-    clickMenuButton();
+    uiView.evaluate('drawerOpen = true; $digest();');
   });
 
   it('should have an entry', function() {
-    expect(networkEntry.isPresent).toBeTruthy();
+    expect(networkItem.isPresent).toBeTruthy();
   });
 
   describe('entry', function() {
 
-    var collapseIndicator = networkEntry.element(by.css('.collapse-indicator'));
-    var channelList = networkEntry.element(by.css('.channel-list'));
+    var collapseIndicator = networkItem.element(by.css('.collapse-indicator'));
+    var channelList = networkItem.element(by.css('.channel-list'));
 
     it('should have a channel list', function() {
       expect(channelList.isPresent).toBeTruthy();
+    });
+
+    it('should have a collapse indeicator', function() {
+      expect(collapseIndicator.isPresent).toBeTruthy();
     });
 
     it('should have a collapse indicator', function() {
@@ -37,21 +34,21 @@ describe('network-list', function() {
     });
 
     it('should be expanded', function() {
-      expect(networkEntry.getAttribute('collapsed')).toBeNull();
+      expect(networkItem.getAttribute('collapsed')).toBeNull();
       expect(channelList.getCssValue('height')).not.toBe('0px');
     });
 
     it('should collapsed when clicking the indicator', function() {
       collapseIndicator.click();
-      expect(networkEntry.getAttribute('collapsed')).toBeTruthy();
+      expect(networkItem.getAttribute('collapsed')).toBeTruthy();
       expect(channelList.getCssValue('height')).toBe('0px');
     });
 
     it('should expand when clicking the indicator a second time', function() {
       collapseIndicator.click();
-      expect(networkEntry.getAttribute('collapsed')).toBeTruthy();
+      expect(networkItem.getAttribute('collapsed')).toBeTruthy();
       collapseIndicator.click();
-      expect(networkEntry.getAttribute('collapsed')).toBeFalsy();
+      expect(networkItem.getAttribute('collapsed')).toBeFalsy();
       expect(channelList.getCssValue('height')).not.toBe('0px');
     });
 

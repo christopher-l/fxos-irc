@@ -3,6 +3,7 @@
 describe('drawer', function() {
 
   var body = element(by.css('body'));
+  var uiView = element(by.css('body > div'));
   var drawer = element(by.css('gaia-drawer'));
   var header = element(by.css('gaia-header'));
 
@@ -60,6 +61,21 @@ describe('drawer', function() {
     clickBottom();
     expect(drawer.getAttribute('open')).toBeFalsy();
     clickMenuButton();
+    expect(drawer.getAttribute('open')).toBeTruthy();
+  });
+
+  it('should update the scope variable', function() {
+    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
+    clickMenuButton();
+    expect(uiView.evaluate('drawerOpen')).toBeTruthy();
+    clickBottom();
+    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
+  });
+
+  it('should update as the scope variable changes', function() {
+    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
+    uiView.evaluate('drawerOpen = true; $digest();');
+    expect(uiView.evaluate('drawerOpen')).toBeTruthy();
     expect(drawer.getAttribute('open')).toBeTruthy();
   });
 

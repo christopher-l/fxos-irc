@@ -4,7 +4,7 @@ var irc = angular.module('irc');
 
 irc.controller('MainCtrl', ['$scope', function($scope) {
   $scope.theme = 'theme-communications';
-  $scope.drawerOpen = true;
+  $scope.drawerOpen = false;
 
   $scope.networks = [
     {
