@@ -7,7 +7,10 @@ var irc = angular.module('irc', [
 
 irc.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise("/");
+
+  /* FIXME: Together with injecting $state into the run block below, this breaks
+     karma tests. */
+  // $urlRouterProvider.otherwise("/");
 
   $stateProvider
     .state('main', {
