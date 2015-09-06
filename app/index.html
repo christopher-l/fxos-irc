@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="irc" class="no-js">
+<html lang="en" ng-app="irc" class="no-js" ng-controller="TitleCtrl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
 
-  <meta name="theme-group" content="theme-communications">
-  <meta name="theme-color" content="var(--header-background)">
+  <meta name="theme-group" content="{{theme}}" irc-theme-group>
+  <meta name="theme-color" content="{{statusbarColor}}">
 
-  <title>IRC</title>
+  <title>{{title}}</title>
 
   <!-- Gaia components -->
   <link href="bower_components/base/base.css" type="text/css" rel="stylesheet">

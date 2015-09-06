@@ -2,7 +2,29 @@
 
 var irc = angular.module('irc');
 
+irc.directive('ircThemeGroup',[function() {
+  /* Whenever "theme-group" changes, remove and reappend the "theme-group" and
+     "theme-color" meta tags to force the statusbar to apply the new colors. */
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      attrs.$observe('content', function() {
+        var parent = element.parent();
+        if (!parent[0]) { return; }
+        var themeColor = angular.element(
+            parent[0].querySelector('meta[name=theme-color]'));
+        element.remove();
+        themeColor.remove();
+        parent.append(element);
+        parent.append(themeColor);
+      });
+    }
+  };
+}]);
+
 irc.directive('ircAction', function() {
+  /* Evaluate a given expression when the "action" event is fired by the
+     object */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -14,10 +36,11 @@ irc.directive('ircAction', function() {
 });
 
 irc.directive('ircOpen', ['$parse', function($parse) {
+  /* Like ngOpen, but has further features */
   return {
     restrict: 'A',
-    priority: 100,
     link: function(scope, element, attrs) {
+      /* This is what ngOpen does: update the open attribute */
       var model = $parse(attrs.ircOpen);
       scope.$watch(model, function(value) {
         if (value) {
@@ -26,11 +49,13 @@ irc.directive('ircOpen', ['$parse', function($parse) {
           element[0].removeAttribute('open');
         }
       });
+      /* We additionally update the module */
       scope.$watch(function() {
         return element[0].hasAttribute('open');
       }, function(value) {
         model.assign(scope, value);
       });
+      /* We have to notify angular of any attribute updates from outside */
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'attributes' &&
@@ -44,6 +69,7 @@ irc.directive('ircOpen', ['$parse', function($parse) {
 }]);
 
 irc.directive('ircClientHeight', ['$parse', function($parse) {
+  /* Bind the client-height property to a given scope variable */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -57,25 +83,12 @@ irc.directive('ircClientHeight', ['$parse', function($parse) {
   };
 }]);
 
-irc.directive('ircMin', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      element[0].els.input.min = attrs.ircMin;
-    }
-  };
-});
-
-irc.directive('ircMax', function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      element[0].els.input.max = attrs.ircMax;
-    }
-  };
-});
-
 irc.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
+  /* Wrap gaia-slider to include further attributes:
+       model: passed as ngModel to the input
+       min:   the minimum input value
+       max:   the maximum input value
+       unit:  the unit appended to output field when shown to the user */
   return {
     restrict: 'E',
     transclude: true,
@@ -99,7 +112,7 @@ irc.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
       input[0].max = attrs.max;
       input.attr('ng-model', attrs.model);
       $compile(input)(scope.$parent);
-
+      /* Update the output field */
       var model = $parse(attrs.model);
       scope.$parent.$watch(model, function() {
         slider.updateOutput();

@@ -2,8 +2,14 @@
 
 var irc = angular.module('irc');
 
-irc.controller('MainCtrl', ['$scope', function($scope) {
-  $scope.theme = 'theme-communications';
+irc.controller('TitleCtrl', ['$rootScope', function($rootScope) {
+  $rootScope.statusbarColor = 'var(--header-background)';
+  $rootScope.title = 'IRC';
+}]);
+
+irc.controller('MainCtrl', ['$rootScope', '$scope',
+    function($rootScope, $scope) {
+  $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
   $scope.drawerOpen = false;
 
@@ -40,8 +46,9 @@ irc.controller('MainCtrl', ['$scope', function($scope) {
 irc.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
 
-irc.controller('SettingsCtrl', ['$scope', function($scope) {
-  $scope.theme = 'theme-settings';
+irc.controller('SettingsCtrl', ['$rootScope', '$scope',
+    function($rootScope, $scope) {
+  $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
   $scope.settings = {
