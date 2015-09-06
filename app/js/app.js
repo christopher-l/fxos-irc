@@ -14,9 +14,25 @@ irc.config(['$stateProvider', '$urlRouterProvider',
       templateUrl: "partials/main.html",
       controller: 'MainCtrl'
     })
+    .state('settings', {
+      url: "/settings",
+      templateUrl: "partials/settings.html",
+      controller: 'SettingsCtrl'
+    })
     .state('main.conversation', {
-      url: "/:network/:channel",
+      url: ":network/:channel",
       templateUrl: "partials/conversation.html",
       controller: 'ConversationCtrl'
     });
+}]);
+
+irc.run(['$rootScope', '$state', function($rootScope, $state) {
+  $rootScope.$on('$stateChangeSuccess',
+      function(event, toState, toParams, fromState, fromParams) {
+    $rootScope.prevState = fromState;
+    $rootScope.prevParams = fromParams;
+  });
+  $rootScope.back = function() {
+    $state.go($rootScope.prevState, $rootScope.prevParams);
+  };
 }]);

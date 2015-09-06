@@ -38,3 +38,7 @@ irc.controller('MainCtrl', ['$scope', function($scope) {
 
 irc.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
+
+irc.controller('SettingsCtrl', ['$scope', function($scope) {
+  $scope.theme = 'theme-settings';
+}]);
