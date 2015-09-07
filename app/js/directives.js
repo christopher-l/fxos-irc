@@ -101,7 +101,7 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
         <output unit="{{unit}}"></output>
       </gaia-slider>
       <style>
-        output[unit={{unit}}]::after {
+        irc-slider > gaia-slider > output[unit={{unit}}]::after {
           content: '{{unit}}' !important;
         }
       </style>`,

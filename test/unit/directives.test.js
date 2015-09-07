@@ -60,7 +60,7 @@ describe('irc-theme-group', function() {
     updateTheme();
     expect(head.children().length).toBe(3);
   });
-  
+
 });
 
 describe('irc-action', function() {
@@ -161,5 +161,49 @@ describe('irc-client-height', function() {
   //   scope.$digest();
   //   expect(scope.clientHeight).toBe(100);
   // });
+
+});
+
+describe('irc-slider', function() {
+
+  var scope;
+  var slider;
+  var input;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    scope.bananas = 3;
+    slider = $compile('<irc-slider min="3" max="30" unit="bananas" ' +
+        'model="bananas">Bananas</irc-slider>')(scope);
+    input = slider.children()[0].els.input;
+    scope.$digest();
+  }));
+
+  it('should set the minimum and maximum attributes', function() {
+    expect(input.getAttribute('min')).toBe('3');
+    expect(input.getAttribute('max')).toBe('30');
+  });
+
+  it('should update with the model', function() {
+    expect(input.value).toBe('3');
+    scope.bananas = 20;
+    scope.$digest();
+    expect(input.value).toBe('20');
+  });
+
+  it('should update the model on input', function() {
+    input.value = 10;
+    angular.element(input).triggerHandler('input');
+    expect(scope.bananas).toBe('10');
+  });
+
+  it('should set the label', function() {
+    expect(slider.find('label').html()).toContain('Bananas');
+  });
+
+  /* No tests for "unit", as it seems to be hard to access css pseudo elements
+     from javascript */
 
 });
