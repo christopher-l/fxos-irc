@@ -46,13 +46,24 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
 ui.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
 
-ui.controller('SettingsCtrl', ['$rootScope', '$scope',
-    function($rootScope, $scope) {
+ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
+    function($rootScope, $scope, storage) {
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
-  $scope.settings = {
-    darkTheme: true,
+  storage.default('settings', {
+    darkTheme: false,
     fontSize: 12
+  });
+
+  $scope.settings = storage.items.settings;
+
+  $scope.onDone = function() {
+    // storage.save('settings');
+    $rootScope.back();
   };
+
+  // $scope.$watch('settings', function() {
+  //   storage.save('settings');
+  // }, true);
 }]);
