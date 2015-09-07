@@ -52,6 +52,7 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope',
   $scope.type = 'settings';
 
   $scope.settings = {
+    darkTheme: true,
     fontSize: 12
   };
 }]);

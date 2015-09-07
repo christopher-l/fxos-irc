@@ -83,6 +83,26 @@ ui.directive('ircClientHeight', ['$parse', function($parse) {
   };
 }]);
 
+ui.directive('ircSwitch', ['$parse', function($parse) {
+  /* Bind a gaia-switch element to a model */
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.ircSwitch);
+      element.bind('change', function() {
+        var value = element[0].checked;
+        model.assign(scope, value);
+        try {
+          scope.$digest();
+        } catch(e) {} // We are already digesting when updated by model
+      });
+      scope.$watch(model, function(value) {
+        element[0].checked = value;
+      });
+    }
+  };
+}]);
+
 ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
   /* Wrap gaia-slider to include further attributes:
        model: passed as ngModel to the input

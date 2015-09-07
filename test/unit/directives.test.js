@@ -164,6 +164,34 @@ describe('irc-client-height', function() {
 
 });
 
+describe('irc-switch', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    element = $compile('<div irc-switch="checked"></div>')(scope);
+  }));
+
+  it('should update the model', function() {
+    expect(scope.checked).toBeUndefined();
+    element[0].checked = true;
+    element.triggerHandler('change');
+    expect(scope.checked).toBeTruthy();
+  });
+
+  it('should update the element', function() {
+    expect(element[0].checked).toBeUndefined();
+    scope.checked = true;
+    scope.$digest();
+    expect(element[0].checked).toBeTruthy();
+  });
+
+});
+
 describe('irc-slider', function() {
 
   var scope;

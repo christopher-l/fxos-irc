@@ -11,10 +11,11 @@
         Dark Theme
       </div>
     </label>
-    <gaia-switch id="theme-switch"></gaia-switch>
+    <gaia-switch id="theme-switch" irc-switch="settings.darkTheme">
+    </gaia-switch>
   </li>
   <li>
-    <irc-slider id="font-size-slider" flex
+    <irc-slider flex
         min="6" max="20" unit="pt"
         model="settings.fontSize">
       Font Size
