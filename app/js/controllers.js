@@ -1,13 +1,13 @@
 'use strict';
 
-var irc = angular.module('irc');
+var ui = angular.module('irc.ui');
 
-irc.controller('TitleCtrl', ['$rootScope', function($rootScope) {
+ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
   $rootScope.statusbarColor = 'var(--header-background)';
   $rootScope.title = 'IRC';
 }]);
 
-irc.controller('MainCtrl', ['$rootScope', '$scope',
+ui.controller('MainCtrl', ['$rootScope', '$scope',
     function($rootScope, $scope) {
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
@@ -43,10 +43,10 @@ irc.controller('MainCtrl', ['$rootScope', '$scope',
   };
 }]);
 
-irc.controller('ConversationCtrl', ['$scope', function($scope) {
+ui.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
 
-irc.controller('SettingsCtrl', ['$rootScope', '$scope',
+ui.controller('SettingsCtrl', ['$rootScope', '$scope',
     function($rootScope, $scope) {
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';

@@ -1,8 +1,8 @@
 'use strict';
 
-var irc = angular.module('irc');
+var ui = angular.module('irc.ui');
 
-irc.directive('ircThemeGroup',[function() {
+ui.directive('ircThemeGroup',[function() {
   /* Whenever "theme-group" changes, remove and reappend the "theme-group" and
      "theme-color" meta tags to force the statusbar to apply the new colors. */
   return {
@@ -22,7 +22,7 @@ irc.directive('ircThemeGroup',[function() {
   };
 }]);
 
-irc.directive('ircAction', function() {
+ui.directive('ircAction', function() {
   /* Evaluate a given expression when the "action" event is fired by the
      object */
   return {
@@ -35,7 +35,7 @@ irc.directive('ircAction', function() {
   };
 });
 
-irc.directive('ircOpen', ['$parse', function($parse) {
+ui.directive('ircOpen', ['$parse', function($parse) {
   /* Like ngOpen, but has further features */
   return {
     restrict: 'A',
@@ -68,7 +68,7 @@ irc.directive('ircOpen', ['$parse', function($parse) {
   };
 }]);
 
-irc.directive('ircClientHeight', ['$parse', function($parse) {
+ui.directive('ircClientHeight', ['$parse', function($parse) {
   /* Bind the client-height property to a given scope variable */
   return {
     restrict: 'A',
@@ -83,7 +83,7 @@ irc.directive('ircClientHeight', ['$parse', function($parse) {
   };
 }]);
 
-irc.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
+ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
   /* Wrap gaia-slider to include further attributes:
        model: passed as ngModel to the input
        min:   the minimum input value

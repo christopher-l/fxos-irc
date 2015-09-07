@@ -1,16 +1,21 @@
 'use strict';
 
-var irc = angular.module('irc', [
+var navigation = angular.module('irc.navigation', [
   'ui.router',
-  'ngAnimate',
 ]);
 
-irc.config(['$stateProvider', '$urlRouterProvider',
+angular.module('irc.ui', []);
+
+angular.module('irc', [
+  'ngAnimate',
+  'irc.navigation',
+  'irc.ui'
+]);
+
+navigation.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-  /* FIXME: Together with injecting $state into the run block below, this breaks
-     karma tests. */
-  // $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/");
 
   $stateProvider
     .state('main', {
@@ -30,7 +35,7 @@ irc.config(['$stateProvider', '$urlRouterProvider',
     });
 }]);
 
-irc.run(['$rootScope', '$state', function($rootScope, $state) {
+navigation.run(['$rootScope', '$state', function($rootScope, $state) {
   $rootScope.$on('$stateChangeSuccess',
       function(event, toState, toParams, fromState, fromParams) {
     $rootScope.prevState = fromState;

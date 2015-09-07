@@ -5,7 +5,7 @@ describe('irc-action', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc'));
+  beforeEach(module('irc.ui'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -31,7 +31,7 @@ describe('irc-open', function() {
   var scope;
   var drawer;
 
-  beforeEach(module('irc'));
+  beforeEach(module('irc.ui'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -78,7 +78,7 @@ describe('irc-client-height', function() {
   var outer;
   var inner;
 
-  beforeEach(module('irc'));
+  beforeEach(module('irc.ui'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
