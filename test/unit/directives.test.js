@@ -1,5 +1,68 @@
 'use strict';
 
+describe('irc-theme-group', function() {
+
+  beforeEach(module('irc.ui'));
+
+  var scope;
+  var head;
+  var themeGroup;
+  var themeColor;
+  var notThemeColor;
+
+  var updateTheme = function() {
+    scope.theme = 'new-theme';
+    scope.$digest();
+  };
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    head = $compile('<head></head>')(scope);
+    themeGroup = $compile('<meta content="{{theme}}" irc-theme-group>')(scope);
+    themeColor = $compile('<meta name="theme-color">')(scope);
+    notThemeColor = $compile('<meta name="not-theme-color">')(scope);
+    head.append(themeGroup);
+    head.append(themeColor);
+    head.append(notThemeColor);
+
+    scope.onThemeGroupRemove = function() {};
+    spyOn(scope, 'onThemeGroupRemove');
+    themeGroup.bind('$destroy', scope.onThemeGroupRemove);
+
+    scope.onThemeColorRemove = function() {};
+    spyOn(scope, 'onThemeColorRemove');
+    themeColor.bind('$destroy', scope.onThemeColorRemove);
+
+    scope.onNotThemeColorRemove = function() {};
+    spyOn(scope, 'onNotThemeColorRemove');
+    notThemeColor.bind('$destroy', scope.onNotThemeColorRemove);
+  }));
+
+  it('should remove the theme group element as content changes', function() {
+    expect(scope.onThemeGroupRemove).not.toHaveBeenCalled();
+    updateTheme();
+    expect(scope.onThemeGroupRemove).toHaveBeenCalled();
+  });
+
+  it('should remove the theme color element as content changes', function() {
+    expect(scope.onThemeColorRemove).not.toHaveBeenCalled();
+    updateTheme();
+    expect(scope.onThemeColorRemove).toHaveBeenCalled();
+  });
+
+  it('should not remove other elements as content changes', function() {
+    updateTheme();
+    expect(scope.onNotThemeColorRemove).not.toHaveBeenCalled();
+  });
+
+  it('should append the elements again', function() {
+    expect(head.children().length).toBe(3);
+    updateTheme();
+    expect(head.children().length).toBe(3);
+  });
+  
+});
+
 describe('irc-action', function() {
 
   var scope;
