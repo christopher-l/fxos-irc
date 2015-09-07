@@ -1,6 +1,7 @@
 {
   "globalstrict": true,
   "globals": {
+    "jasmine": false,
     "angular": false,
     "require": false,
     "exports": false,
