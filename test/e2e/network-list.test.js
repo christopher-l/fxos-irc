@@ -5,7 +5,7 @@ describe('network-list', function() {
   var uiView = element(by.css('body > div'));
   var header = element(by.css('gaia-header'));
   var networkList = element(by.css('#network-list'));
-  var networkItem= networkList.all(by.css('li')).first();
+  var networkItem = networkList.all(by.css('li')).first();
 
   beforeEach(function() {
     browser.get('');

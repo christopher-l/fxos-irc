@@ -1,8 +1,10 @@
 'use strict';
 
-fdescribe('settings', function() {
+describe('settings', function() {
 
+  var uiView = element(by.css('body > div'));
   var doneButton = element(by.css('gaia-header button'));
+  var settingsButton = element(by.css('gaia-button#settings-button'));
 
   var get = function(identifier) {
     var deferred = protractor.promise.defer();
@@ -26,7 +28,14 @@ fdescribe('settings', function() {
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(false);
     });
+  });
 
+  it('should open when clicking the settings button', function() {
+    browser.get('');
+    expect(browser.getCurrentUrl()).not.toContain('#/settings');
+    uiView.evaluate('drawerOpen = true; $digest();');
+    settingsButton.click();
+    expect(browser.getCurrentUrl()).toContain('#/settings');
   });
 
 });
