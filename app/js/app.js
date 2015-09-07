@@ -2,14 +2,20 @@
 
 var navigation = angular.module('irc.navigation', [
   'ui.router',
+  'irc.data'
 ]);
 
-angular.module('irc.ui', []);
+angular.module('irc.data', []);
+
+angular.module('irc.ui', [
+  'irc.data'
+]);
 
 angular.module('irc', [
   'ngAnimate',
   'irc.navigation',
-  'irc.ui'
+  'irc.ui',
+  'irc.data'
 ]);
 
 navigation.config(['$stateProvider', '$urlRouterProvider',
@@ -31,7 +37,8 @@ navigation.config(['$stateProvider', '$urlRouterProvider',
     .state('settings', {
       url: "/settings",
       templateUrl: "partials/settings.html",
-      controller: 'SettingsCtrl'
+      controller: 'SettingsCtrl',
+      onExit: ['storage', function(storage) { storage.save('settings'); }]
     });
 }]);
 

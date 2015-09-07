@@ -5,7 +5,7 @@ describe('storage', function() {
   var storage;
   var mock;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.data'));
 
   var removeItem = function(item) {
     delete mock.localStorage[item];

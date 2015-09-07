@@ -3,6 +3,7 @@
   "esnext": true,
   "globals": {
     "jasmine": false,
+    "protractor": false,
     "angular": false,
     "require": false,
     "exports": false,

@@ -1,6 +1,6 @@
 'use strict';
 
-var ui = angular.module('irc.ui');
+var data = angular.module('irc.data');
 
 /* Storage Service
  *
@@ -10,7 +10,7 @@ var ui = angular.module('irc.ui');
  * loaded and saved before the window unloads.  Additionally, writing to
  * localStorage can be triggered with save() for single items or saveAll().
  */
-ui.factory('storage', ['$window', function($window) {
+data.factory('storage', ['$window', function($window) {
   var Storage = function() {
     this.prefix = 'irc-';
     this.items = {};

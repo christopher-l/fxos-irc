@@ -58,11 +58,6 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
 
   $scope.settings = storage.items.settings;
 
-  $scope.onDone = function() {
-    // storage.save('settings');
-    $rootScope.back();
-  };
-
   // $scope.$watch('settings', function() {
   //   storage.save('settings');
   // }, true);
