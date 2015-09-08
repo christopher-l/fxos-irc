@@ -250,3 +250,24 @@ describe('irc-slider', function() {
      from javascript */
 
 });
+
+describe('irc-dialog', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    element = $compile('<div irc-dialog open="openDialog"></div>')(scope);
+    element[0].open = jasmine.createSpy();
+  }));
+
+  it('should register the open function', function() {
+    expect(element[0].open).not.toHaveBeenCalled();
+    scope.openDialog();
+    expect(element[0].open).toHaveBeenCalled();
+  });
+
+});

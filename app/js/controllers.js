@@ -42,11 +42,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     obj.focused = true;
   };
 
-  $scope.onTouch = function() {
-    console.log('TOUCH');
-  };
   $scope.onLongTouch = function() {
-    console.log('LONG TOUCH');
   };
 }]);
 

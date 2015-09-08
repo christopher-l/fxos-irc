@@ -13,7 +13,7 @@
             ng-attr-status="{{network.status}}"
             ng-attr-focused="{{network.focused || undefined}}"
             ng-click="focus(network); network.collapsed = false;"
-            irc-context-menu="onLongTouch()">
+            irc-context-menu="openDialog()">
           <span class="collapse-indicator"
                 ng-click="network.collapsed = !network.collapsed;
                           $event.stopPropagation();">
@@ -68,5 +68,11 @@
 
   </div>
 </gaia-drawer>
+
+<gaia-dialog-action irc-dialog open="openDialog">
+  <h1>Descriptions...</h1>
+  <button>Action 1</button>
+  <button>Action 2</button>
+</gaia-dialog-action>
 
 <div ui-view></div>
