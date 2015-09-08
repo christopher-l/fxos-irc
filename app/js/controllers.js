@@ -7,8 +7,8 @@ ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
   $rootScope.title = 'IRC';
 }]);
 
-ui.controller('MainCtrl', ['$rootScope', '$scope',
-    function($rootScope, $scope) {
+ui.controller('MainCtrl', ['$rootScope', '$scope', '$timeout',
+    function($rootScope, $scope, $timeout) {
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
   $scope.drawerOpen = false;
@@ -17,7 +17,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     {
       name: 'Foo',
       unreadCount: 0,
-      status: 'connection-lost',
+      status: 'connected',
       channels: [
         {name: 'channel1', unreadCount: 32, focused: true, joined: true},
         {name: 'channel2', unreadCount: 0, joined: true}
@@ -26,7 +26,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     {
       name: 'Bar',
       unreadCount: 32,
-      status: 'connecting',
+      status: 'connection lost',
       channels: [
         {name: 'channel3', unreadCount: 0, autoJoin: true},
         {name: 'channel4', unreadCount: 32}
@@ -43,8 +43,6 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     if (obj.collapsed) { obj.collapsed = false; }
   };
 
-  $scope.onLongTouch = function() {
-  };
 }]);
 
 ui.controller('ConversationCtrl', ['$scope', function($scope) {

@@ -145,7 +145,7 @@ gaia-drawer > div {
   color: var(--color-warning);
 }
 
-[status=connection-lost] .network-info {
+[status='connection lost'] .network-info {
   color: var(--color-destructive);
 }
 
@@ -234,4 +234,16 @@ gaia-list li > label {
 
 gaia-list gaia-slider {
   margin: 0px !important;
+}
+
+
+/*
+ * Dialog
+ */
+button.danger {
+  color: var(--color-destructive) !important;
+}
+
+button.primary {
+  color: var(--highlight-color) !important;
 }
