@@ -12,7 +12,8 @@
         <div class="network-entry"
             ng-attr-status="{{network.status}}"
             ng-attr-focused="{{network.focused || undefined}}"
-            ng-click="focus(network); network.collapsed = false;">
+            ng-click="focus(network); network.collapsed = false;"
+            irc-context-menu="onLongTouch()">
           <span class="collapse-indicator"
                 ng-click="network.collapsed = !network.collapsed;
                           $event.stopPropagation();">

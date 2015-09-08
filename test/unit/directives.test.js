@@ -1,5 +1,26 @@
 'use strict';
 
+describe('irc-context-menu', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    scope.fun = jasmine.createSpy();
+    element = $compile('<div irc-context-menu="fun()"></div>')(scope);
+  }));
+
+  it('should evaluate its expression when "contextmenu" is fired', function() {
+    expect(scope.fun).not.toHaveBeenCalled();
+    element.triggerHandler('contextmenu');
+    expect(scope.fun).toHaveBeenCalled();
+  });
+
+});
+
 describe('irc-theme-group', function() {
 
   beforeEach(module('irc.ui'));

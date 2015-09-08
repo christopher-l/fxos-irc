@@ -2,6 +2,24 @@
 
 var ui = angular.module('irc.ui');
 
+ui.directive('ircContextMenu', ['$parse', function($parse) {
+  /* Binds to a long touch on mobile and right click on desktop. */
+  /* from https://stackoverflow.com/a/15732476 */
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var fn = $parse(attrs.ircContextMenu);
+      element.bind('contextmenu', function(event) {
+        scope.$apply(function() {
+          event.preventDefault();
+          fn(scope, {$event:event});
+        });
+      });
+    }
+  };
+}]);
+
+
 ui.directive('ircThemeGroup',[function() {
   /* Whenever "theme-group" changes, remove and reappend the "theme-group" and
      "theme-color" meta tags to force the statusbar to apply the new colors. */
@@ -24,7 +42,7 @@ ui.directive('ircThemeGroup',[function() {
 
 ui.directive('ircAction', function() {
   /* Evaluate a given expression when the "action" event is fired by the
-     object */
+     object. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -36,11 +54,11 @@ ui.directive('ircAction', function() {
 });
 
 ui.directive('ircOpen', ['$parse', function($parse) {
-  /* Like ngOpen, but has further features */
+  /* Like ngOpen, but has further features. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      /* This is what ngOpen does: update the open attribute */
+      /* This is what ngOpen does: update the open attribute. */
       var model = $parse(attrs.ircOpen);
       scope.$watch(model, function(value) {
         if (value) {
@@ -49,13 +67,13 @@ ui.directive('ircOpen', ['$parse', function($parse) {
           element[0].removeAttribute('open');
         }
       });
-      /* We additionally update the module */
+      /* We additionally update the module. */
       scope.$watch(function() {
         return element[0].hasAttribute('open');
       }, function(value) {
         model.assign(scope, value);
       });
-      /* We have to notify angular of any attribute updates from outside */
+      /* We have to notify angular of any attribute updates from outside. */
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'attributes' &&
@@ -69,7 +87,7 @@ ui.directive('ircOpen', ['$parse', function($parse) {
 }]);
 
 ui.directive('ircClientHeight', ['$parse', function($parse) {
-  /* Bind the client-height property to a given scope variable */
+  /* Bind the client-height property to a given scope variable. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -84,7 +102,7 @@ ui.directive('ircClientHeight', ['$parse', function($parse) {
 }]);
 
 ui.directive('ircSwitch', ['$parse', function($parse) {
-  /* Bind a gaia-switch element to a model */
+  /* Bind a gaia-switch element to a model. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -94,7 +112,7 @@ ui.directive('ircSwitch', ['$parse', function($parse) {
         model.assign(scope, value);
         try {
           scope.$digest();
-        } catch(e) {} // We are already digesting when updated by model
+        } catch(e) {} // We are already digesting when updated by model.
       });
       scope.$watch(model, function(value) {
         element[0].checked = value;
@@ -132,7 +150,7 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
       input[0].max = attrs.max;
       input.attr('ng-model', attrs.model);
       $compile(input)(scope.$parent);
-      /* Update the output field */
+      /* Update the output field. */
       var model = $parse(attrs.model);
       scope.$parent.$watch(model, function() {
         slider.updateOutput();

@@ -41,6 +41,13 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     $scope.current = obj;
     obj.focused = true;
   };
+
+  $scope.onTouch = function() {
+    console.log('TOUCH');
+  };
+  $scope.onLongTouch = function() {
+    console.log('LONG TOUCH');
+  };
 }]);
 
 ui.controller('ConversationCtrl', ['$scope', function($scope) {
