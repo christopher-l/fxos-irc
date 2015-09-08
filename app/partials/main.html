@@ -10,26 +10,6 @@
       <li ng-repeat="network in networks"
           ng-attr-collapsed="{{network.collapsed || undefined}}">
 
-        <!-- Register a dialog per network entry, as ngIf is too slow for
-             updating a single one. -->
-        <gaia-dialog-action irc-dialog="network.dialog">
-          <h1>{{network.name}}</h1>
-          <button ng-if="network.status=='connected'">
-            Disconnect
-          </button>
-          <button ng-if="network.status=='connecting'">
-            Cancel connection
-          </button>
-          <button ng-if="network.status=='disconnected'" class="primary">
-            Connect
-          </button>
-          <button ng-if="network.status=='connection lost'" class="primary">
-            Reconnect
-          </button>
-          <button>Edit</button>
-          <button class="danger">Delete</button>
-        </gaia-dialog-action>
-
         <div class="network-entry"
             ng-attr-status="{{network.status}}"
             ng-attr-focused="{{network.focused || undefined}}"
@@ -91,3 +71,24 @@
 </gaia-drawer>
 
 <div ui-view></div>
+
+
+<!-- Register a dialog per network entry, as ngIf is too slow for
+     updating a single one. -->
+<gaia-dialog-action ng-repeat="network in networks" irc-dialog="network.dialog">
+  <h1>{{network.name}}</h1>
+  <button ng-if="network.status=='connected'">
+    Disconnect
+  </button>
+  <button ng-if="network.status=='connecting'">
+    Cancel connection
+  </button>
+  <button ng-if="network.status=='disconnected'" class="primary">
+    Connect
+  </button>
+  <button ng-if="network.status=='connection lost'" class="primary">
+    Reconnect
+  </button>
+  <button>Edit</button>
+  <button class="danger">Delete</button>
+</gaia-dialog-action>
