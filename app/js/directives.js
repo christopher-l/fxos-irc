@@ -1,4 +1,5 @@
 'use strict';
+/* global MutationObserver */
 
 var ui = angular.module('irc.ui');
 
@@ -160,6 +161,7 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
 }]);
 
 ui.directive('ircTextInput', ['$compile', function($compile) {
+  /* Bind a gaia-text-input to a model with the "model" attribute. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -170,10 +172,41 @@ ui.directive('ircTextInput', ['$compile', function($compile) {
   };
 }]);
 
+ui.directive('ircCheckbox', ['$parse', function($parse) {
+  /* Bind a gaia-checkbox to a model with the "model" attribute. */
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.model);
+      scope.$watch(model, function(value) {
+        if (value) {
+          element[0].setAttribute('checked', '');
+        } else {
+          element[0].removeAttribute('checked');
+        }
+      });
+      scope.$watch(function() {
+        return element[0].hasAttribute('checked');
+      }, function(value) {
+        model.assign(scope, value);
+      });
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes' &&
+              mutation.attributeName === 'checked') {
+            scope.$digest();
+          }
+        });
+      }).observe(element[0], {attributes: true});
+    }
+  };
+}]);
+
 ui.directive('ircDialog', ['$parse', function($parse) {
   /* Assign a model to a gaia-dialog, defining the following properties:
        open:  function to open the dialog
-       close: function to close the dialog */
+       close: function to close the dialog
+       onConfirm: function that gets called when user confirms */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {

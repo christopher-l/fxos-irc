@@ -98,7 +98,6 @@ describe('irc-action', function() {
 
   it('should evaluate its value when action event is fired', function() {
     element.triggerHandler('action');
-    // equivalent to element[0].dispatchEvent(new CustomEvent('action'));
     expect(scope.fun).toHaveBeenCalled();
   });
 
@@ -277,6 +276,41 @@ describe('irc-text-input', function() {
     scope.input = 'bar';
     scope.$digest();
     expect(input.val()).toBe('bar');
+  });
+
+});
+
+describe('irc-checkbox', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    element = $compile('<div irc-checkbox model="checked"></div>')(scope);
+    scope.$digest();
+  }));
+
+  it('should update the model', function() {
+    expect(scope.checked).toBe(false);
+    element[0].setAttribute('checked', '');
+    scope.$digest();
+    expect(scope.checked).toBe(true);
+    element[0].removeAttribute('checked');
+    scope.$digest();
+    expect(scope.checked).toBe(false);
+  });
+
+  it('should update the input', function() {
+    expect(element[0].hasAttribute('checked')).toBe(false);
+    scope.checked = true;
+    scope.$digest();
+    expect(element[0].hasAttribute('checked')).toBe(true);
+    scope.checked = false;
+    scope.$digest();
+    expect(element[0].hasAttribute('checked')).toBe(false);
   });
 
 });

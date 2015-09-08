@@ -21,11 +21,12 @@ angular.module('irc', [
 navigation.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/show/foo/bar");
 
   $stateProvider
     .state('main', {
       url: "/",
+      abstract: true,
       templateUrl: "partials/main.html",
       controller: 'MainCtrl'
     })
@@ -57,7 +58,7 @@ navigation.run(['$rootScope', '$state', function($rootScope, $state) {
     if (!$rootScope.prevState.abstract) {
       $state.go($rootScope.prevState, $rootScope.prevParams);
     } else {
-      $state.go('main');
+      $state.go('main.conversation');
     }
   };
 }]);
