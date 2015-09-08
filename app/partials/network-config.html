@@ -1,0 +1,66 @@
+<gaia-header action="close">
+  <h1>{{network.name}}</h1>
+  <button ng-click="back()">Save</button>
+</gaia-header>
+
+<div class="config">
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Name</h3>
+        <gaia-text-input placeholder="e.g. Freenode (Optional)"
+            irc-text-input model="network.name">
+        </gaia-text-input>
+      </div>
+    </li>
+    <li class="ripple">
+      <label flex for="auto-connect">
+        <h3>Auto Connect</h3>
+      </label>
+      <gaia-checkbox id="auto-connect"></gaia-checkbox>
+    </li>
+  </gaia-list>
+  <h2>Server</h2>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Host</h3>
+        <gaia-text-input id="host" placeholder="e.g. irc.freenode.net" required></gaia-text-input>
+      </div>
+    </li>
+    <li flexbox>
+      <label flex>
+        <h3>Port</h3>
+        <!-- <p>Leave empty for default</p> -->
+      </label>
+      <gaia-text-input id="port" type="number" maxlength="5" placeholder="6667"></gaia-text-input>
+    </li>
+    <li class="ripple">
+      <label flex for="tls">
+        <h3>Use TLS</h3>
+      </label>
+      <gaia-checkbox id="tls"></gaia-checkbox>
+    </li>
+  </gaia-list>
+  <h2>Identity</h2>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Nick</h3>
+        <gaia-text-input id="nick"></gaia-text-input>
+      </div>
+    </li>
+    <li>
+      <label flex>
+        <h3>User</h3>
+      </label>
+      <gaia-text-input id="user" placeholder="(Optional)"></gaia-text-input>
+    </li>
+    <li>
+      <label flex>
+        <h3>Password</h3>
+      </label>
+      <gaia-text-input id="password" type="password" placeholder="(Optional)"></gaia-text-input>
+    </li>
+  </gaia-list>
+<div>

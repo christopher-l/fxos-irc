@@ -73,3 +73,15 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
   //   storage.save('settings');
   // }, true);
 }]);
+
+ui.controller('NetConfCtrl', ['$rootScope', '$scope',
+    function($rootScope, $scope) {
+  $rootScope.theme = 'theme-settings';
+  $scope.type = 'settings';
+
+  $scope.network = {
+    name: 'Foo',
+    autoConnect: true,
+    host: 'bar.baz'
+  };
+}]);

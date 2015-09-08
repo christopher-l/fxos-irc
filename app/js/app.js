@@ -39,6 +39,11 @@ navigation.config(['$stateProvider', '$urlRouterProvider',
       templateUrl: "partials/settings.html",
       controller: 'SettingsCtrl',
       onExit: ['storage', function(storage) { storage.save('settings'); }]
+    })
+    .state('network-config', {
+      url: "/config/:network",
+      templateUrl: "partials/network-config.html",
+      controller: 'NetConfCtrl'
     });
 }]);
 

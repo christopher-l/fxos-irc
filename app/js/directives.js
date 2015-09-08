@@ -159,6 +159,16 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
   };
 }]);
 
+ui.directive('ircTextInput', ['$compile', function($compile) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var input = angular.element(element[0].els.input);
+      input.attr('ng-model', attrs.model);
+      $compile(input)(scope);
+    }
+  };
+}]);
 
 ui.directive('ircDialog', ['$parse', function($parse) {
   /* Assign a model to a gaia-dialog, defining the following properties:

@@ -251,6 +251,36 @@ describe('irc-slider', function() {
 
 });
 
+describe('irc-text-input', function() {
+
+  var scope;
+  var element;
+  var input;
+
+  beforeEach(module('irc.ui'));
+
+  beforeEach(inject(function($compile, $rootScope) {
+    scope = $rootScope.$new();
+    element = angular.element('<div irc-text-input model="input"></div>');
+    input = angular.element('<input></input>');
+    element[0].els = { input: input[0] };
+    element = $compile(element)(scope);
+  }));
+
+  it('should update the model', function() {
+    input.val('foo');
+    input.triggerHandler('input');
+    expect(scope.input).toBe('foo');
+  });
+
+  it('should update the input', function() {
+    scope.input = 'bar';
+    scope.$digest();
+    expect(input.val()).toBe('bar');
+  });
+
+});
+
 describe('irc-dialog', function() {
 
   var scope;

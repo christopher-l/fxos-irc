@@ -213,7 +213,7 @@ gaia-list {
   z-index: 1; /* needed for ripple effect */
 }
 
-gaia-list h2 {
+.config > h2 {
   margin: 0px;
   padding: 0.3rem 2rem;
   font-size: 1rem;
@@ -230,9 +230,33 @@ gaia-list li > label {
   display: flex;
   min-height: 42px;
   align-items: center;
-  }
+}
 
 gaia-list gaia-slider {
+  margin: 0px !important;
+}
+
+/* config */
+.config {
+  overflow-y: auto;
+}
+
+gaia-list h3, p {
+  padding-left: 1rem;
+}
+gaia-list emph {
+  font-weight: bold;
+}
+gaia-list gaia-text-input {
+  margin: .5rem 0px !important;
+}
+gaia-list #port {
+  width: 5rem !important;
+  margin: 0px !important;
+}
+gaia-list #user,
+gaia-list #password {
+  width: calc(100% - 7rem);
   margin: 0px !important;
 }
 
