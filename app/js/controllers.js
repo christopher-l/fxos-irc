@@ -43,6 +43,15 @@ ui.controller('MainCtrl', ['$rootScope', '$scope', '$timeout',
     if (obj.collapsed) { obj.collapsed = false; }
   };
 
+  $scope.onDelete = function(obj, index) {
+    obj.dialog.close();
+    $scope.confirmDialog.toBeDeleted = obj;
+    $scope.confirmDialog.open();
+    $scope.confirmDialog.onConfirm = function() {
+      $scope.networks.splice(index, 1);
+    };
+  };
+
 }]);
 
 ui.controller('ConversationCtrl', ['$scope', function($scope) {

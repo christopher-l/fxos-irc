@@ -90,5 +90,9 @@
     Reconnect
   </button>
   <button>Edit</button>
-  <button class="danger">Delete</button>
+  <button class="danger" ng-click="onDelete(network, $index)">Delete</button>
 </gaia-dialog-action>
+
+<gaia-dialog-confirm irc-dialog="confirmDialog">
+  Delete {{confirmDialog.toBeDeleted.name}}?
+</gaia-dialog-confirm>

@@ -171,6 +171,11 @@ ui.directive('ircDialog', ['$parse', function($parse) {
       if (!model(scope)) { model.assign(scope, {}); }
       model(scope).open = () => element[0].open();
       model(scope).close = () => element[0].close();
+      if (element[0].els && element[0].els.submit) {
+        angular.element(element[0].els.submit).bind('click', function() {
+          scope.$apply(model(scope).onConfirm);
+        });
+      }
     }
   };
 }]);

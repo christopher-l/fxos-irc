@@ -258,27 +258,71 @@ describe('irc-dialog', function() {
 
   beforeEach(module('irc.ui'));
 
-  beforeEach(inject(function($compile, $rootScope) {
+  beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
-    scope.dialog = { foo: 'bar' };
-    element = $compile('<div irc-dialog="dialog"></div>')(scope);
-    element[0].open = jasmine.createSpy();
-    element[0].close = jasmine.createSpy();
+    element = angular.element('<div irc-dialog="dialog"></div>');
   }));
 
-  it('should register the open function', function() {
-    expect(element[0].open).not.toHaveBeenCalled();
-    scope.dialog.open();
-    expect(element[0].open).toHaveBeenCalled();
+  describe('base', function() {
+
+    beforeEach(inject(function($compile) {
+      scope.dialog = { foo: 'bar' };
+      element = $compile(element)(scope);
+      element[0].open = jasmine.createSpy();
+      element[0].close = jasmine.createSpy();
+    }));
+
+    it('should register the open function', function() {
+      expect(element[0].open).not.toHaveBeenCalled();
+      scope.dialog.open();
+      expect(element[0].open).toHaveBeenCalled();
+    });
+
+    it('should register the close function', function() {
+      expect(element[0].close).not.toHaveBeenCalled();
+      scope.dialog.close();
+      expect(element[0].close).toHaveBeenCalled();
+    });
+
+    it('should leave properties intact', function() {
+      expect(scope.dialog.foo).toBe('bar');
+    });
+
   });
 
-  it('should register the close function', function() {
-    expect(element[0].close).not.toHaveBeenCalled();
-    scope.dialog.close();
-    expect(element[0].close).toHaveBeenCalled();
+  describe('confirm', function() {
+
+    var submit;
+
+    beforeEach(inject(function($compile) {
+      submit = angular.element('<div></div>');
+      element[0].els = { submit: submit[0] };
+      element = $compile(element)(scope);
+      scope.dialog.onConfirm = jasmine.createSpy();
+    }));
+
+    it('should register submit', function() {
+      expect(scope.dialog.onConfirm).not.toHaveBeenCalled();
+      submit.triggerHandler('click');
+      expect(scope.dialog.onConfirm).toHaveBeenCalled();
+    });
+
+    it('should change onSubmit function', function() {
+      var oldSpy = scope.dialog.onConfirm;
+      var newSpy = jasmine.createSpy();
+      submit.triggerHandler('click');
+      expect(oldSpy.calls.count()).toBe(1);
+      expect(newSpy.calls.count()).toBe(0);
+      submit.triggerHandler('click');
+      expect(oldSpy.calls.count()).toBe(2);
+      expect(newSpy.calls.count()).toBe(0);
+      scope.dialog.onConfirm = newSpy;
+      submit.triggerHandler('click');
+      expect(oldSpy.calls.count()).toBe(2);
+      expect(newSpy.calls.count()).toBe(1);
+    });
+
   });
 
-  it('should leave properties intact', function() {
-    expect(scope.dialog.foo).toBe('bar');
-  });
+
 });
