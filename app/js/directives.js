@@ -161,18 +161,16 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
 
 
 ui.directive('ircDialog', ['$parse', function($parse) {
-  /* Attributes for gaia-dialog:
-       open: the name to which the open function will be registered
-       close: the name to which the close function will be registered */
+  /* Assign a model to a gaia-dialog, defining the following properties:
+       open:  function to open the dialog
+       close: function to close the dialog */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      $parse(attrs.open).assign(scope, function() {
-        element[0].open();
-      });
-      $parse(attrs.close).assign(scope, function() {
-        element[0].close();
-      });
+      var model = $parse(attrs.ircDialog);
+      if (!model(scope)) { model.assign(scope, {}); }
+      model(scope).open = () => element[0].open();
+      model(scope).close = () => element[0].close();
     }
   };
 }]);

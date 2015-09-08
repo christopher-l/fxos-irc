@@ -40,6 +40,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope',
     }
     $scope.current = obj;
     obj.focused = true;
+    if (obj.collapsed) { obj.collapsed = false; }
   };
 
   $scope.onLongTouch = function() {

@@ -260,21 +260,25 @@ describe('irc-dialog', function() {
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
-    element = $compile('<div irc-dialog open="openDialog"' +
-        'close="closeDialog"></div>')(scope);
+    scope.dialog = { foo: 'bar' };
+    element = $compile('<div irc-dialog="dialog"></div>')(scope);
     element[0].open = jasmine.createSpy();
     element[0].close = jasmine.createSpy();
   }));
 
   it('should register the open function', function() {
     expect(element[0].open).not.toHaveBeenCalled();
-    scope.openDialog();
+    scope.dialog.open();
     expect(element[0].open).toHaveBeenCalled();
   });
 
   it('should register the close function', function() {
     expect(element[0].close).not.toHaveBeenCalled();
-    scope.closeDialog();
+    scope.dialog.close();
     expect(element[0].close).toHaveBeenCalled();
+  });
+
+  it('should leave properties intact', function() {
+    expect(scope.dialog.foo).toBe('bar');
   });
 });
