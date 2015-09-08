@@ -260,8 +260,10 @@ describe('irc-dialog', function() {
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
-    element = $compile('<div irc-dialog open="openDialog"></div>')(scope);
+    element = $compile('<div irc-dialog open="openDialog"' +
+        'close="closeDialog"></div>')(scope);
     element[0].open = jasmine.createSpy();
+    element[0].close = jasmine.createSpy();
   }));
 
   it('should register the open function', function() {
@@ -270,4 +272,9 @@ describe('irc-dialog', function() {
     expect(element[0].open).toHaveBeenCalled();
   });
 
+  it('should register the close function', function() {
+    expect(element[0].close).not.toHaveBeenCalled();
+    scope.closeDialog();
+    expect(element[0].close).toHaveBeenCalled();
+  });
 });
