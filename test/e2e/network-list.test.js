@@ -9,7 +9,7 @@ describe('network-list', function() {
 
   beforeEach(function() {
     browser.get('');
-    uiView.evaluate('drawerOpen = true; $digest();');
+    uiView.evaluate('drawer.open = true; $digest();');
   });
 
   it('should have an entry', function() {

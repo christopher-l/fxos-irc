@@ -12,7 +12,10 @@ navigation.config(['$stateProvider', '$urlRouterProvider',
       url: "/",
       abstract: true,
       templateUrl: "partials/main.html",
-      controller: 'MainCtrl'
+      controller: 'MainCtrl',
+      params: {
+        drawer: {}
+      }
     })
     .state('main.conversation', {
       url: "show/:network/:channel",

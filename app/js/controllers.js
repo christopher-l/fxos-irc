@@ -7,11 +7,11 @@ ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
   $rootScope.title = 'IRC';
 }]);
 
-ui.controller('MainCtrl', ['$rootScope', '$scope', '$timeout',
-    function($rootScope, $scope, $timeout) {
+ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams',
+    function($rootScope, $scope, $stateParams) {
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
-  $scope.drawerOpen = false;
+  $scope.drawer = $stateParams.drawer;
 
   $scope.networks = [
     {

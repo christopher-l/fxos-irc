@@ -65,17 +65,17 @@ describe('drawer', function() {
   });
 
   it('should update the scope variable', function() {
-    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
+    expect(uiView.evaluate('drawer.open')).toBeFalsy();
     clickMenuButton();
-    expect(uiView.evaluate('drawerOpen')).toBeTruthy();
+    expect(uiView.evaluate('drawer.open')).toBeTruthy();
     clickBottom();
-    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
+    expect(uiView.evaluate('drawer.open')).toBeFalsy();
   });
 
   it('should update as the scope variable changes', function() {
-    expect(uiView.evaluate('drawerOpen')).toBeFalsy();
-    uiView.evaluate('drawerOpen = true; $digest();');
-    expect(uiView.evaluate('drawerOpen')).toBeTruthy();
+    expect(uiView.evaluate('drawer.open')).toBeFalsy();
+    uiView.evaluate('drawer.open = true; $digest();');
+    expect(uiView.evaluate('drawer.open')).toBeTruthy();
     expect(drawer.getAttribute('open')).toBeTruthy();
   });
 

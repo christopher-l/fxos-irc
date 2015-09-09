@@ -40,7 +40,7 @@ describe('settings', function() {
   it('should open when clicking the settings button', function() {
     browser.get('');
     expect(browser.getCurrentUrl()).not.toContain('#/settings');
-    uiView.evaluate('drawerOpen = true; $digest();');
+    uiView.evaluate('drawer.open = true; $digest();');
     settingsButton.click();
     expect(browser.getCurrentUrl()).toContain('#/settings');
   });
