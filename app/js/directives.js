@@ -1,7 +1,7 @@
 'use strict';
 /* global MutationObserver */
 
-var adapters = angular.module('irc.adapters', []);
+var adapters = angular.module('irc.adapters');
 
 adapters.directive('ircContextMenu', ['$parse', function($parse) {
   /* Binds to a long touch on mobile and right click on desktop. */

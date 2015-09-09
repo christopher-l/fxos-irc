@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('settings', function() {
+describe('settings', function() {
 
   var uiView = element(by.css('body > div'));
   var doneButton = element(by.css('gaia-header button'));
