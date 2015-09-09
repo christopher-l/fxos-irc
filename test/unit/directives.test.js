@@ -130,10 +130,10 @@ describe('irc-open', function() {
   it('should update the module when the attribute changes', function() {
     expect(scope.drawerOpen).toBe(false);
     drawer[0].setAttribute('open', '');
-    scope.$digest();
+    drawer.triggerHandler('changed');
     expect(scope.drawerOpen).toBe(true);
     drawer[0].removeAttribute('open');
-    scope.$digest();
+    drawer.triggerHandler('changed');
     expect(scope.drawerOpen).toBe(false);
   });
 

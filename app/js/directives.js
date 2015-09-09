@@ -55,7 +55,7 @@ adapters.directive('ircAction', function() {
 });
 
 adapters.directive('ircOpen', ['$parse', function($parse) {
-  /* Like ngOpen, but has further features. */
+  /* Like ngOpen, but also update the module, as the attribute changes. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -68,18 +68,22 @@ adapters.directive('ircOpen', ['$parse', function($parse) {
           element[0].removeAttribute('open');
         }
       });
-      /* We additionally update the module. */
-      scope.$watch(function() {
-        return element[0].hasAttribute('open');
-      }, function(value) {
-        model.assign(scope, value);
+      /* Bind to our own event. */
+      element.bind('changed', function() {
+        scope.$apply(function() {
+          model.assign(scope, element[0].hasAttribute('open'));
+        });
       });
-      /* We have to notify angular of any attribute updates from outside. */
+      /* Trigger the event. */
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'attributes' &&
               mutation.attributeName === 'open') {
-            scope.$digest();
+            var oldValue = model(scope);
+            var newValue = element[0].hasAttribute('open');
+            if (oldValue != newValue) {
+              element.triggerHandler('changed');
+            }
           }
         });
       }).observe(element[0], {attributes: true});
