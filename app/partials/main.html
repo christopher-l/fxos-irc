@@ -90,7 +90,7 @@
   <button ng-if="network.status=='connection lost'" class="primary">
     Reconnect
   </button>
-  <button ui-sref="network-config({index:{{$index}}})">Edit</button>
+  <button ui-sref="network-config({index:$index})">Edit</button>
   <button class="danger" ng-click="onDelete(network, $index)">Delete</button>
 </gaia-dialog-action>
 

@@ -6,75 +6,31 @@ var data = angular.module('irc.data');
  * Storage Service
  *
  * Provides a persistent key-value storage using window.localStorage.
- *
+ * TODO: update description
  * Items can are added directly to the storage object.  They are restored when
  * the service is loaded and saved before the window unloads.  Additionally,
- * writing to * localStorage can be triggered with save() for single items or
+ * writing to localStorage can be triggered with save() for single items or
  * saveAll().
  */
 data.factory('storage', ['$window', function storageFactory($window) {
-  var Storage = function() {
-    this.loadAll();
-    $window.addEventListener('beforeunload', () => this.saveAll());
-  };
 
-  Storage.prototype = {
-    _hasPrefix: function(item) {
-      return item.substring(0, this._prefix.length) === this._prefix;
-    },
-    _removePrefix: function(item) {
-      return item.substring(this._prefix.length)  ;
-    },
-    save: function(item) {
-      $window.localStorage[this._prefix + item] =
-          angular.toJson(this[item]);
-    },
-    load: function(item) {
-      this[item] = angular.fromJson($window.localStorage[this._prefix + item]);
-    },
-    saveAll: function() {
-      this.clearLocalStorage();
-      for (var item in this) {
-        if (typeof this[item] !== 'function') {
-          this.save(item);
-        }
-      }
-    },
-    loadAll: function() {
-      for (var item in $window.localStorage) {
-        if ($window.localStorage.hasOwnProperty(item) &&
-            this._hasPrefix(item)) {
-          this.load(this._removePrefix(item));
-        }
-      }
-    },
-    clear: function() {
-      for (var item in this) {
-        if (typeof this[item] !== 'function') {
-          delete this[item];
-        }
-      }
-    },
-    clearLocalStorage: function() {
-      for (var item in $window.localStorage) {
-        if ($window.localStorage.hasOwnProperty(item) &&
-            this._hasPrefix(item)) {
-          $window.localStorage.removeItem(item);
-        }
-      }
-    },
-    default: function(key, value) {
-      if (!this[key]) {
-        this[key] = value;
-      }
-    }
-  };
+  var storage = {};
 
-  Object.defineProperty(Storage.prototype, '_prefix', {
-    value: 'irc-'
+  [
+    'networks',
+    'settings'
+  ].forEach(function(key) {
+    Object.defineProperty(storage, key, {
+      get: function() {
+        return angular.fromJson($window.localStorage[key]);
+      },
+      set: function(value) {
+        $window.localStorage[key] = angular.toJson(value);
+      }
+    });
   });
 
-  return new Storage();
+  return storage;
 
 }]);
 
@@ -89,7 +45,7 @@ data.factory('storage', ['$window', function storageFactory($window) {
  *         the additional method save().
  */
 data.factory('networks', ['storage', function networksFactory(storage) {
-  storage.default('networks', [
+  if (!storage.networks) {storage.networks = [
     {
       name: 'Foo',
       unreadCount: 0,
@@ -108,24 +64,48 @@ data.factory('networks', ['storage', function networksFactory(storage) {
         {name: 'channel4', unreadCount: 32}
       ]
     }
-  ]);
+  ];}
 
-  var networks = storage.networks;
 
-  networks.edit = function(index) {
-    var network = index ? angular.copy(networks[index]) : { new: true };
-    network.save = function() {
-      delete this.new;
-      delete this.save;
-      if (index) {
-        networks[index] = this;
-      } else {
-        networks.push(this);
-      }
-      storage.save('networks');
-    };
-    return network;
+  var Network = function(storageRef) {
+    this._storageRef = storageRef;
+    this._config = angular.copy(storageRef);
   };
 
+  Network.prototype = {
+    getConfig: function() {
+      return angular.copy(this._config);
+    },
+    applyConfig: function(config) {
+      this._config = config;
+      this.save();
+    },
+    save: function() {
+      // storage.networks[this._index] = this._config;
+      this._storageRef = this._config;
+    }
+  };
+
+  [
+    'name',
+    'autoConnect'
+  ].forEach(function(key) {
+    Object.defineProperty(Network.prototype, key, {
+      get: function() {
+        return this._config[key];
+      },
+      set: function(value) {
+        this._config[key] = value;
+      }
+    });
+  });
+
+  var networks = [];
+
+  storage.networks.forEach(function(storageRef) {
+    networks.push(new Network(storageRef));
+  });
+
   return networks;
+
 }]);

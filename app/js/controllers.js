@@ -45,16 +45,12 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
-  storage.default('settings', {
-    darkTheme: false,
-    fontSize: 12
-  });
+  // storage.default('settings', {
+  //   darkTheme: false,
+  //   fontSize: 12
+  // });
 
   $scope.settings = storage.settings;
-
-  $scope.$watch('settings', function() {
-    storage.save('settings');
-  }, true);
 }]);
 
 ui.controller('NetConfCtrl', [
@@ -64,6 +60,11 @@ ui.controller('NetConfCtrl', [
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
-  $scope.network = networks.edit($stateParams.index);
+  var network = networks[$stateParams.index];
+  $scope.network = network.getConfig();
+
+  $scope.save = function() {
+    network.applyConfig($scope.network);
+  };
 
 }]);
