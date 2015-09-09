@@ -11,7 +11,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope', '$timeout',
     function($rootScope, $scope, $timeout) {
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
-  $scope.drawer = { open: false };
+  $scope.drawerOpen = false;
 
   $scope.networks = [
     {

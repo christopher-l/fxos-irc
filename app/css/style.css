@@ -15,6 +15,11 @@ body > div[ui-view] {
   display: flex;
   flex-direction: column;
   transition-duration: 200ms;
+  transition-property: none;
+}
+
+body > div[ui-view][type=main].ng-animate {
+  z-index: -10;
 }
 
 /*
@@ -191,7 +196,6 @@ gaia-drawer > div {
  * Settings
  */
 [ui-view][type=settings] {
-  z-index: 10;
   transition-property: opacity;
 }
 
