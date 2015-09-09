@@ -32,6 +32,7 @@ ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams', 'networks',
     $scope.confirmDialog.onConfirm = function() {
       $scope.networks.splice(index, 1);
     };
+    // TODO: save changes
   };
 
 }]);
@@ -49,7 +50,7 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
     fontSize: 12
   });
 
-  $scope.settings = storage.items.settings;
+  $scope.settings = storage.settings;
 
   $scope.$watch('settings', function() {
     storage.save('settings');

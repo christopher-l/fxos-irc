@@ -17,7 +17,7 @@ describe('storage', function() {
   };
 
   var reload = function() {
-    storage.items = {};
+    storage.clear();
     storage.loadAll();
   };
 
@@ -33,61 +33,61 @@ describe('storage', function() {
   });
 
   it('should restore nothing', function() {
-    expect(storage.items).toEqual({});
+    expect(storage).toEqual({});
   });
 
   it('should take a string', function() {
-    storage.items.foo = 'bar';
-    expect(storage.items).toEqual({foo: 'bar'});
+    storage.foo = 'bar';
+    expect(storage).toEqual({foo: 'bar'});
   });
 
   it('should clear on reload if not saved', function() {
-    storage.items.foo = 'bar';
-    expect(storage.items).toEqual({foo: 'bar'});
+    storage.foo = 'bar';
+    expect(storage).toEqual({foo: 'bar'});
     reload();
-    expect(storage.items).toEqual({});
+    expect(storage).toEqual({});
   });
 
   it('should be persistent', function() {
-    storage.items.foo = 'bar';
+    storage.foo = 'bar';
     storage.saveAll();
     reload();
-    expect(storage.items).toEqual({foo: 'bar'});
+    expect(storage).toEqual({foo: 'bar'});
   });
 
   it('should be persistent with multiple strings', function() {
-    storage.items.foo = 'foo!';
-    storage.items.bar = 'bar!';
-    storage.items.baz = 'baz!';
+    storage.foo = 'foo!';
+    storage.bar = 'bar!';
+    storage.baz = 'baz!';
     storage.saveAll();
     reload();
-    expect(storage.items).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
+    expect(storage).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
   });
 
   it('should clear localStorage', function() {
-    storage.items.foo = 'bar';
-    expect(storage.items).toEqual({foo: 'bar'});
+    storage.foo = 'bar';
+    expect(storage).toEqual({foo: 'bar'});
     storage.saveAll();
-    storage.clear();
+    storage.clearLocalStorage();
     expect(mock.localStorage).toEqual(mockLocalStorage({}));
   });
 
   it('should clear localStorage with multiple strings', function() {
-    storage.items.foo = 'foo!';
-    storage.items.bar = 'bar!';
-    storage.items.baz = 'baz!';
-    expect(storage.items).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
+    storage.foo = 'foo!';
+    storage.bar = 'bar!';
+    storage.baz = 'baz!';
+    expect(storage).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
     storage.saveAll();
-    storage.clear();
+    storage.clearLocalStorage();
     expect(mock.localStorage).toEqual(mockLocalStorage({}));
   });
 
   it('should work with objects', function() {
     var obj = {foo: 'foo!', bar: 'bar!'};
-    storage.items.obj = obj;
+    storage.obj = obj;
     storage.saveAll();
     reload();
-    expect(storage.items).toEqual({obj: obj});
+    expect(storage).toEqual({obj: obj});
   });
 
   it('should not clear data that is not prefixed', function() {
@@ -97,11 +97,11 @@ describe('storage', function() {
   });
 
   it('should save individual items', function() {
-    storage.items.foo = 'foo!';
-    storage.items.bar = 'bar!';
+    storage.foo = 'foo!';
+    storage.bar = 'bar!';
     storage.save('foo');
     reload();
-    expect(storage.items).toEqual({foo: 'foo!'});
+    expect(storage).toEqual({foo: 'foo!'});
   });
 
 });

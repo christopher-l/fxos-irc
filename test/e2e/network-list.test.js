@@ -45,7 +45,6 @@ describe('network-list', function() {
     });
 
     it('should expand when clicking the indicator a second time', function() {
-      collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeTruthy();
       collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeFalsy();
