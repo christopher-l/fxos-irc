@@ -59,3 +59,55 @@ data.service('storage', ['$window', function Storage($window) {
   this.loadAll();
   $window.addEventListener('beforeunload', () => this.saveAll());
 }]);
+
+/*
+ * Network Service
+ *
+ * Provides an array with saved networks.  Also provides the following method:
+ *   edit()
+ *     takes index: If index is given, edit an existing network, otherwise
+ *         create a new one.
+ *     returns network: Copy of a network instance meant to be edited.  Provides
+ *         the additional method save().
+ */
+data.factory('networks', ['storage', function networksFactory(storage) {
+  storage.default('networks', [
+    {
+      name: 'Foo',
+      unreadCount: 0,
+      status: 'connected',
+      channels: [
+        {name: 'channel1', unreadCount: 32, focused: true, joined: true},
+        {name: 'channel2', unreadCount: 0, joined: true}
+      ]
+    },
+    {
+      name: 'Bar',
+      unreadCount: 32,
+      status: 'connection lost',
+      channels: [
+        {name: 'channel3', unreadCount: 0, autoJoin: true},
+        {name: 'channel4', unreadCount: 32}
+      ]
+    }
+  ]);
+
+  var networks = storage.items.networks;
+
+  networks.edit = function(index) {
+    var network = index ? angular.copy(networks[index]) : { new: true };
+    network.save = function() {
+      delete this.new;
+      delete this.save;
+      if (index) {
+        networks[index] = this;
+      } else {
+        networks.push(this);
+      }
+      storage.save('networks');
+    };
+    return network;
+  };
+
+  return networks;
+}]);

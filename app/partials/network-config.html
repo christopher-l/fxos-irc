@@ -1,6 +1,6 @@
 <gaia-header action="close" irc-action="back()">
-  <h1>{{network.name}}</h1>
-  <button ng-click="back()">Save</button>
+  <h1>{{network.new ? 'New Network' : network.name}}</h1>
+  <button ng-click="network.save(); back();">Save</button>
 </gaia-header>
 
 <div class="config">

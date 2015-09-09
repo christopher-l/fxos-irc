@@ -7,32 +7,14 @@ ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
   $rootScope.title = 'IRC';
 }]);
 
-ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams',
-    function($rootScope, $scope, $stateParams) {
+ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams', 'networks',
+    function($rootScope, $scope, $stateParams, networks) {
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
+
   $scope.drawer = $stateParams.drawer;
 
-  $scope.networks = [
-    {
-      name: 'Foo',
-      unreadCount: 0,
-      status: 'connected',
-      channels: [
-        {name: 'channel1', unreadCount: 32, focused: true, joined: true},
-        {name: 'channel2', unreadCount: 0, joined: true}
-      ]
-    },
-    {
-      name: 'Bar',
-      unreadCount: 32,
-      status: 'connection lost',
-      channels: [
-        {name: 'channel3', unreadCount: 0, autoJoin: true},
-        {name: 'channel4', unreadCount: 32}
-      ]
-    }
-  ];
+  $scope.networks = networks;
 
   $scope.focus = function(obj) {
     if ($scope.current) {
@@ -74,14 +56,13 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
   }, true);
 }]);
 
-ui.controller('NetConfCtrl', ['$rootScope', '$scope',
-    function($rootScope, $scope) {
+ui.controller('NetConfCtrl', [
+    '$rootScope', '$scope', '$stateParams', 'networks',
+    function($rootScope, $scope, $stateParams, networks)
+{
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
-  $scope.network = {
-    name: 'Foo',
-    autoConnect: true,
-    host: 'bar.baz'
-  };
+  $scope.network = networks.edit($stateParams.index);
+
 }]);

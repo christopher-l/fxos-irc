@@ -59,7 +59,8 @@
     </section>
 
     <div id="drawer-buttons">
-      <gaia-button id="add-network-button">
+      <gaia-button id="add-network-button"
+          ui-sref="network-config">
         <i data-icon="add"></i>
       </gaia-button>
       <gaia-button id="settings-button" ui-sref="settings">
@@ -89,7 +90,7 @@
   <button ng-if="network.status=='connection lost'" class="primary">
     Reconnect
   </button>
-  <button ui-sref="network-config">Edit</button>
+  <button ui-sref="network-config({index:{{$index}}})">Edit</button>
   <button class="danger" ng-click="onDelete(network, $index)">Delete</button>
 </gaia-dialog-action>
 

@@ -28,7 +28,7 @@ navigation.config(['$stateProvider', '$urlRouterProvider',
       controller: 'SettingsCtrl'
     })
     .state('network-config', {
-      url: "/config/:network",
+      url: "/config/network/:index",
       templateUrl: "partials/network-config.html",
       controller: 'NetConfCtrl'
     });
