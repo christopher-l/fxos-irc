@@ -190,16 +190,20 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
           element[0].removeAttribute('checked');
         }
       });
-      scope.$watch(function() {
-        return element[0].hasAttribute('checked');
-      }, function(value) {
-        model.assign(scope, value);
+      element.bind('changed', function() {
+        scope.$apply(function() {
+          model.assign(scope, element[0].hasAttribute('checked'));
+        });
       });
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'attributes' &&
               mutation.attributeName === 'checked') {
-            scope.$digest();
+            var oldValue = model(scope);
+            var newValue = element[0].hasAttribute('checked');
+            if (oldValue != newValue) {
+              element.triggerHandler('changed');
+            }
           }
         });
       }).observe(element[0], {attributes: true});

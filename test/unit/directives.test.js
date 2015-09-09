@@ -294,12 +294,12 @@ describe('irc-checkbox', function() {
   }));
 
   it('should update the model', function() {
-    expect(scope.checked).toBe(false);
+    expect(scope.checked).toBeFalsy();
     element[0].setAttribute('checked', '');
-    scope.$digest();
+    element.triggerHandler('changed');
     expect(scope.checked).toBe(true);
     element[0].removeAttribute('checked');
-    scope.$digest();
+    element.triggerHandler('changed');
     expect(scope.checked).toBe(false);
   });
 
