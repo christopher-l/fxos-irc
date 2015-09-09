@@ -1,9 +1,9 @@
 'use strict';
 /* global MutationObserver */
 
-var ui = angular.module('irc.ui');
+var adapters = angular.module('irc.adapters', []);
 
-ui.directive('ircContextMenu', ['$parse', function($parse) {
+adapters.directive('ircContextMenu', ['$parse', function($parse) {
   /* Binds to a long touch on mobile and right click on desktop. */
   /* from https://stackoverflow.com/a/15732476 */
   return {
@@ -21,7 +21,7 @@ ui.directive('ircContextMenu', ['$parse', function($parse) {
 }]);
 
 
-ui.directive('ircThemeGroup',[function() {
+adapters.directive('ircThemeGroup',[function() {
   /* Whenever "theme-group" changes, remove and reappend the "theme-group" and
      "theme-color" meta tags to force the statusbar to apply the new colors. */
   return {
@@ -41,7 +41,7 @@ ui.directive('ircThemeGroup',[function() {
   };
 }]);
 
-ui.directive('ircAction', function() {
+adapters.directive('ircAction', function() {
   /* Evaluate a given expression when the "action" event is fired by the
      object. */
   return {
@@ -54,7 +54,7 @@ ui.directive('ircAction', function() {
   };
 });
 
-ui.directive('ircOpen', ['$parse', function($parse) {
+adapters.directive('ircOpen', ['$parse', function($parse) {
   /* Like ngOpen, but has further features. */
   return {
     restrict: 'A',
@@ -87,7 +87,7 @@ ui.directive('ircOpen', ['$parse', function($parse) {
   };
 }]);
 
-ui.directive('ircClientHeight', ['$parse', function($parse) {
+adapters.directive('ircClientHeight', ['$parse', function($parse) {
   /* Bind the client-height property to a given scope variable. */
   return {
     restrict: 'A',
@@ -102,7 +102,7 @@ ui.directive('ircClientHeight', ['$parse', function($parse) {
   };
 }]);
 
-ui.directive('ircSwitch', ['$parse', function($parse) {
+adapters.directive('ircSwitch', ['$parse', function($parse) {
   /* Bind a gaia-switch element to a model. */
   return {
     restrict: 'A',
@@ -122,7 +122,8 @@ ui.directive('ircSwitch', ['$parse', function($parse) {
   };
 }]);
 
-ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
+adapters.directive('ircSlider', ['$compile', '$parse',
+    function($compile, $parse) {
   /* Wrap gaia-slider to include further attributes:
        model: passed as ngModel to the input
        min:   the minimum input value
@@ -160,7 +161,7 @@ ui.directive('ircSlider', ['$compile', '$parse', function($compile, $parse) {
   };
 }]);
 
-ui.directive('ircTextInput', ['$compile', function($compile) {
+adapters.directive('ircTextInput', ['$compile', function($compile) {
   /* Bind a gaia-text-input to a model with the "model" attribute. */
   return {
     restrict: 'A',
@@ -172,7 +173,7 @@ ui.directive('ircTextInput', ['$compile', function($compile) {
   };
 }]);
 
-ui.directive('ircCheckbox', ['$parse', function($parse) {
+adapters.directive('ircCheckbox', ['$parse', function($parse) {
   /* Bind a gaia-checkbox to a model with the "model" attribute. */
   return {
     restrict: 'A',
@@ -202,7 +203,7 @@ ui.directive('ircCheckbox', ['$parse', function($parse) {
   };
 }]);
 
-ui.directive('ircDialog', ['$parse', function($parse) {
+adapters.directive('ircDialog', ['$parse', function($parse) {
   /* Assign a model to a gaia-dialog, defining the following properties:
        open:  function to open the dialog
        close: function to close the dialog

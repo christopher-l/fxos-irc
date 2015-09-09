@@ -15,7 +15,8 @@ angular.module('irc', [
   'ngAnimate',
   'irc.navigation',
   'irc.ui',
-  'irc.data'
+  'irc.data',
+  'irc.adapters'
 ]);
 
 navigation.config(['$stateProvider', '$urlRouterProvider',

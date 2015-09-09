@@ -5,7 +5,7 @@ describe('irc-context-menu', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -23,7 +23,7 @@ describe('irc-context-menu', function() {
 
 describe('irc-theme-group', function() {
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   var scope;
   var head;
@@ -84,7 +84,7 @@ describe('irc-action', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -108,7 +108,7 @@ describe('irc-open', function() {
   var scope;
   var drawer;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -155,7 +155,7 @@ describe('irc-client-height', function() {
   var outer;
   var inner;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -183,7 +183,7 @@ describe('irc-switch', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -212,7 +212,7 @@ describe('irc-slider', function() {
   var slider;
   var input;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -256,7 +256,7 @@ describe('irc-text-input', function() {
   var element;
   var input;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -285,7 +285,7 @@ describe('irc-checkbox', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -320,7 +320,7 @@ describe('irc-dialog', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.ui'));
+  beforeEach(module('irc.adapters'));
 
   beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
