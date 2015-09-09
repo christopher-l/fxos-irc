@@ -1,8 +1,7 @@
 'use strict';
 
 var navigation = angular.module('irc.navigation', [
-  'ui.router',
-  'irc.data'
+  'ui.router'
 ]);
 
 angular.module('irc.data', []);
@@ -39,8 +38,7 @@ navigation.config(['$stateProvider', '$urlRouterProvider',
     .state('settings', {
       url: "/settings",
       templateUrl: "partials/settings.html",
-      controller: 'SettingsCtrl',
-      onExit: ['storage', function(storage) { storage.save('settings'); }]
+      controller: 'SettingsCtrl'
     })
     .state('network-config', {
       url: "/config/:network",

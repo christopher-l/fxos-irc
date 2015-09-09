@@ -69,9 +69,9 @@ ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
 
   $scope.settings = storage.items.settings;
 
-  // $scope.$watch('settings', function() {
-  //   storage.save('settings');
-  // }, true);
+  $scope.$watch('settings', function() {
+    storage.save('settings');
+  }, true);
 }]);
 
 ui.controller('NetConfCtrl', ['$rootScope', '$scope',

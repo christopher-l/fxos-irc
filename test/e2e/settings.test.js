@@ -1,10 +1,11 @@
 'use strict';
 
-describe('settings', function() {
+fdescribe('settings', function() {
 
   var uiView = element(by.css('body > div'));
   var doneButton = element(by.css('gaia-header button'));
   var settingsButton = element(by.css('gaia-button#settings-button'));
+  var themeSwitch = element(by.css('gaia-switch'));
 
   var get = function(identifier) {
     var deferred = protractor.promise.defer();
@@ -19,14 +20,20 @@ describe('settings', function() {
     browser.get('#/settings');
   });
 
-  it('should save to localStorage on exit', function() {
-    expect(get('window.localStorage')).toEqual({});
-    doneButton.click();
+  it('should save to localStorage', function() {
     get('window.localStorage').then(function(localStorage) {
       expect(localStorage['irc-settings']).toBeTruthy();
       var settings = JSON.parse(localStorage['irc-settings']);
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(false);
+    });
+    themeSwitch.click();
+    doneButton.click();
+    get('window.localStorage').then(function(localStorage) {
+      expect(localStorage['irc-settings']).toBeTruthy();
+      var settings = JSON.parse(localStorage['irc-settings']);
+      expect(settings.fontSize).toBe(12);
+      expect(settings.darkTheme).toBe(true);
     });
   });
 
@@ -36,6 +43,10 @@ describe('settings', function() {
     uiView.evaluate('drawerOpen = true; $digest();');
     settingsButton.click();
     expect(browser.getCurrentUrl()).toContain('#/settings');
+  });
+
+  it('should load the settings', function() {
+    expect(themeSwitch.getAttribute('checked')).toBeTruthy();
   });
 
 });
