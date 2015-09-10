@@ -25,14 +25,13 @@ ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams', 'networks',
     if (obj.collapsed) { obj.collapsed = false; }
   };
 
-  $scope.onDelete = function(obj, index) {
-    obj.dialog.close();
-    $scope.confirmDialog.toBeDeleted = obj;
+  $scope.onDelete = function(network) {
+    network.dialog.close();
+    $scope.confirmDialog.toBeDeleted = network;
     $scope.confirmDialog.open();
     $scope.confirmDialog.onConfirm = function() {
-      $scope.networks.splice(index, 1);
+      network.delete();
     };
-    // TODO: save changes
   };
 
 }]);

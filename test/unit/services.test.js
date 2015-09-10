@@ -84,10 +84,14 @@ describe('storage', function() {
 
   it('should work with objects', function() {
     var obj = {foo: 'foo!', bar: 'bar!'};
-    storage.obj = obj;
-    storage.saveAll();
-    reload();
-    expect(storage).toEqual({obj: obj});
+    storage.networks = obj;
+    // storage.saveAll();
+    // reload();
+    expect(storage.networks).toEqual(obj);
+    expect(mock.localStorage.networks).toEqual(angular.toJson(obj));
+    storage.networks.baz = 'baz!';
+    expect(storage.networks.baz).toEqual('baz!');
+    expect(mock.localStorage.networks).toEqual(angular.toJson(obj));
   });
 
   it('should not clear data that is not prefixed', function() {

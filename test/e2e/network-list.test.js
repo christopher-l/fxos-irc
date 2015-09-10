@@ -2,6 +2,9 @@
 
 describe('network-list', function() {
 
+  // TODO: 2 networks, delete first, edit remaining, reload, check number of
+  // networks, check if correct one.
+
   var uiView = element(by.css('body > div'));
   var header = element(by.css('gaia-header'));
   var networkList = element(by.css('#network-list'));
