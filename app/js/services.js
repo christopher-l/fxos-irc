@@ -1,4 +1,5 @@
 'use strict';
+/* global setTimeout */
 
 var data = angular.module('irc.data');
 
@@ -8,7 +9,14 @@ var data = angular.module('irc.data');
  * Provides a persistent key-value storage using window.localStorage.
  * Items must be declared in the array below.  They can then be accessed
  * on the storage object.  They are restored when the service is loaded
- * and saved automatically.
+ * and saved when the element is accessed through storage.  Note that
+ * just writing to a stored reference does *not* save to localStorage:
+ *
+ *   var settings = storage.settings;
+ *   settings.foo = 'bar';              // Does *not* save the change!
+ *
+ *   storage.settings.foo = 'bar';      // Works.
+ *   storage.settings = {foo: 'bar'};   // Also works.
  */
 data.factory('storage', ['$window', function storageFactory($window) {
 
@@ -23,7 +31,10 @@ data.factory('storage', ['$window', function storageFactory($window) {
       get: function() {
         // In case a property of an object is changed, get will be called
         // instead of set, so we write to storage in both cases.
-        $window.localStorage[key] = angular.toJson(volatile[key]);
+        setTimeout(function() { // $timeout won't work for some reason.
+          // Write to storage *after* the item was accessed.
+          $window.localStorage[key] = angular.toJson(volatile[key]);
+        });
         return volatile[key];
       },
       set: function(value) {
@@ -31,7 +42,7 @@ data.factory('storage', ['$window', function storageFactory($window) {
         volatile[key] = value;
       }
     });
-    // Read from storage only one time.
+    // Read from localStorage only one time.
     volatile[key] = angular.fromJson($window.localStorage[key]);
   });
 

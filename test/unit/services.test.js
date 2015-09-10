@@ -16,9 +16,10 @@ describe('storage', function() {
     return localStorage;
   };
 
-  var reload = function() {
-    storage.clear();
-    storage.loadAll();
+  var load = function() {
+    inject(function($injector) {
+      storage = $injector.get('storage');
+    });
   };
 
   beforeEach(function() {
@@ -27,85 +28,57 @@ describe('storage', function() {
     module(function($provide) {
       $provide.value('$window', mock);
     });
-    inject(function($injector) {
-      storage = $injector.get('storage');
-    });
   });
 
   it('should restore nothing', function() {
+    load();
     expect(storage).toEqual({});
   });
 
   it('should take a string', function() {
-    storage.foo = 'bar';
-    expect(storage).toEqual({foo: 'bar'});
+    load();
+    storage.settings = 'bar';
+    expect(storage.settings).toEqual('bar');
   });
 
-  it('should clear on reload if not saved', function() {
-    storage.foo = 'bar';
-    expect(storage).toEqual({foo: 'bar'});
-    reload();
-    expect(storage).toEqual({});
+  it('should save a string to localStorage', function() {
+    load();
+    storage.settings = 'bar';
+    expect(mock.localStorage.settings).toEqual('"bar"');
   });
 
-  it('should be persistent', function() {
-    storage.foo = 'bar';
-    storage.saveAll();
-    reload();
-    expect(storage).toEqual({foo: 'bar'});
+  it('should load a string from localStorage', function() {
+    mock.localStorage.settings = '"bar"';
+    load();
+    expect(storage.settings).toEqual('bar');
   });
 
-  it('should be persistent with multiple strings', function() {
-    storage.foo = 'foo!';
-    storage.bar = 'bar!';
-    storage.baz = 'baz!';
-    storage.saveAll();
-    reload();
-    expect(storage).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
-  });
-
-  it('should clear localStorage', function() {
-    storage.foo = 'bar';
-    expect(storage).toEqual({foo: 'bar'});
-    storage.saveAll();
-    storage.clearLocalStorage();
-    expect(mock.localStorage).toEqual(mockLocalStorage({}));
-  });
-
-  it('should clear localStorage with multiple strings', function() {
-    storage.foo = 'foo!';
-    storage.bar = 'bar!';
-    storage.baz = 'baz!';
-    expect(storage).toEqual({foo: 'foo!', bar: 'bar!', baz: 'baz!'});
-    storage.saveAll();
-    storage.clearLocalStorage();
-    expect(mock.localStorage).toEqual(mockLocalStorage({}));
-  });
-
-  it('should work with objects', function() {
+  it('should take objects', function() {
+    load();
     var obj = {foo: 'foo!', bar: 'bar!'};
     storage.networks = obj;
-    // storage.saveAll();
-    // reload();
     expect(storage.networks).toEqual(obj);
-    expect(mock.localStorage.networks).toEqual(angular.toJson(obj));
     storage.networks.baz = 'baz!';
     expect(storage.networks.baz).toEqual('baz!');
+  });
+
+  it('should save objects to localStorage', function(done) {
+    load();
+    var obj = {foo: 'foo!', bar: 'bar!'};
+    storage.networks = obj;
     expect(mock.localStorage.networks).toEqual(angular.toJson(obj));
+    storage.networks.baz = 'baz!';
+    /* global setTimeout */
+    setTimeout(function() {
+      expect(mock.localStorage.networks).toEqual(angular.toJson(obj));
+      done();
+    });
   });
 
-  it('should not clear data that is not prefixed', function() {
-    mock.localStorage.foo = 'bar';
-    storage.clear();
-    expect(mock.localStorage.foo).toEqual('bar');
-  });
-
-  it('should save individual items', function() {
-    storage.foo = 'foo!';
-    storage.bar = 'bar!';
-    storage.save('foo');
-    reload();
-    expect(storage).toEqual({foo: 'foo!'});
+  it('should load objects from localStorage', function() {
+    mock.localStorage.settings = '{"foo":"foo!","bar":"bar!"}';
+    load();
+    expect(storage.settings).toEqual({foo: 'foo!', bar: 'bar!'});
   });
 
 });
