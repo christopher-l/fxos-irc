@@ -1,54 +1,62 @@
 'use strict';
-/* global setTimeout */
 
 var data = angular.module('irc.data');
 
-/*
+/**
  * Storage Service
  *
  * Provides a persistent key-value storage using window.localStorage.
- * Items must be declared in the array below.  They can then be accessed
- * on the storage object.  They are restored when the service is loaded
- * and saved when the element is accessed through storage.  Note that
- * just writing to a stored reference does *not* save to localStorage:
  *
- *   var settings = storage.settings;
- *   settings.foo = 'bar';              // Does *not* save the change!
+ * An instance is created with `new Storage` and the following arguments:
+ *   name:         The identifier used as key for localStorage.
+ *   defaultValue: If there are no stored data by the identifier 'name',
+ *                 take this value.
  *
- *   storage.settings.foo = 'bar';      // Works.
- *   storage.settings = {foo: 'bar'};   // Also works.
+ * The created instance has the following properties:
+ *   data:         The data read from and written to localStorage.
+ *   save():       Save data to localStorage.
  */
-data.factory('storage', ['$window', function storageFactory($window) {
+data.factory('Storage', ['$window', function StorageFactory($window) {
 
-  var storage = {};
-  var volatile = {};
+  var Storage = function(name, defaultValue) {
+    this._name = name;
 
-  [
-    'networks',
-    'settings'
-  ].forEach(function(key) {
-    Object.defineProperty(storage, key, {
-      get: function() {
-        // In case a property of an object is changed, get will be called
-        // instead of set, so we write to storage in both cases.
-        setTimeout(function() { // $timeout won't work for some reason.
-          // Write to storage *after* the item was accessed.
-          $window.localStorage[key] = angular.toJson(volatile[key]);
-        });
-        return volatile[key];
-      },
-      set: function(value) {
-        $window.localStorage[key] = angular.toJson(value);
-        volatile[key] = value;
-      }
-    });
-    // Read from localStorage only one time.
-    volatile[key] = angular.fromJson($window.localStorage[key]);
-  });
+    if (typeof $window.localStorage[name] === 'undefined') {
+      this.data = defaultValue;
+      return;
+    }
 
-  return storage;
+    try {
+      this.data = angular.fromJson($window.localStorage[name]);
+    } catch(e) {
+      this.data = defaultValue;
+    }
+  };
+
+  Storage.prototype = {
+    save: function() {
+      $window.localStorage[this._name] = angular.toJson(this.data);
+    }
+  };
+
+  return Storage;
 
 }]);
+
+
+data.factory('settings', ['Storage', function settingsFactory(Storage) {
+
+  var settings = new Storage('settings', {
+    darkTheme: false,
+    fontSize: 12
+  });
+
+  settings.data.save = settings.save();
+
+  return settings.data;
+
+}]);
+
 
 /*
  * Network Service  //TODO update description
@@ -60,8 +68,9 @@ data.factory('storage', ['$window', function storageFactory($window) {
  *     returns network: Copy of a network instance meant to be edited.  Provides
  *         the additional method save().
  */
-data.factory('networks', ['storage', function networksFactory(storage) {
-  if (!storage.networks) {storage.networks = [
+data.factory('networks', ['Storage', function networksFactory(Storage) {
+
+  var storage = new Storage('networks', [
     {
       name: 'Foo',
       unreadCount: 0,
@@ -80,12 +89,32 @@ data.factory('networks', ['storage', function networksFactory(storage) {
         {name: 'channel4', unreadCount: 32}
       ]
     }
-  ];}
+  ]);
 
+  var Channel = function(storageChan) {
+    this._storageChan = storageChan;
+  };
 
-  var Network = function(config, index) {
-    this._index = index;
-    this._config = angular.copy(config);
+  var Network = function(storageNet) {
+    this._state = {
+      connection: 'disconnected'
+    };
+    if (storageNet) {
+      this._storageNet = storageNet;
+      this._config = storageNet.config;
+    } else {
+      this.new = true;
+      this._config = {};
+      this.channels = [];
+      this._storageNet = {
+        config: this._config,
+        channels: []
+      };
+    }
+    this._storageNet.channels.forEach(function(storageChan){
+      this.channels.push(new Channel(storageChan));
+    });
+    this._storageNet.lastState = this._state;
   };
 
   Network.prototype = {
@@ -97,14 +126,17 @@ data.factory('networks', ['storage', function networksFactory(storage) {
       this.save();
     },
     save: function() {
-      storage.networks[this._index] = this._config;
+      if (this.new) {
+        networks.push(this);
+        storage.data.push(this._storageNet);
+      }
+      storage.save();
     },
     delete: function() {
-      networks.splice(this._index, 1);
-      storage.networks.splice(this._index, 1);
-      for (var i = this._index; i < networks.length; i++) {
-        networks[i]._index--;
-      }
+      var index = networks.indexOf(this);
+      networks.splice(index, 1);
+      storage.data.splice(index, 1);
+      storage.save();
     }
   };
 
@@ -117,16 +149,20 @@ data.factory('networks', ['storage', function networksFactory(storage) {
         return this._config[key];
       },
       set: function(value) {
-        this._config[key] = value;
+        throw new Error('Tried to write access network config.');
       }
     });
   });
 
   var networks = [];
 
-  storage.networks.forEach(function(config, index) {
-    networks.push(new Network(config, index));
+  storage.networks.data.forEach(function(storageNet) {
+    networks.push(new Network(storageNet));
   });
+
+  networks.new = function() {
+    return new Network();
+  };
 
   return networks;
 
