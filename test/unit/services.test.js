@@ -9,13 +9,8 @@ describe('storage', function() {
 
   beforeEach(function() {
     mock = {
-      localStorage: {
-        removeItem: function(item) {
-          delete mock.localStorage[item];
-        }
-      }
+      localStorage: {}
     };
-    mock.addEventListener = angular.noop;
     module(function($provide) {
       $provide.value('$window', mock);
     });
@@ -86,6 +81,80 @@ describe('storage', function() {
     mock.localStorage.foo = '{"foo":"foo!","bar":"bar!"}';
     var storage = new Storage('foo', {});
     expect(storage.data).toEqual({foo: 'foo!', bar: 'bar!'});
+  });
+
+});
+
+describe('settings', function() {
+
+  var settings;
+  var mock;
+
+  beforeEach(module('irc.data'));
+
+  beforeEach(function() {
+    mock = {
+      localStorage: {}
+    };
+    module(function($provide) {
+      $provide.value('$window', mock);
+    });
+  });
+
+  var load = function() {
+    inject(function($injector) {
+      settings = $injector.get('settings');
+    });
+  };
+
+  it('should load the defaults', function() {
+    load();
+    expect(settings.darkTheme).toBe(false);
+    expect(settings.fontSize).toBe(12);
+  });
+
+  it('should save to localStorage', function() {
+    load();
+    settings.darkTheme = true;
+    settings.fontSize = 17;
+    settings.save();
+    expect(mock.localStorage.settings).toBe(angular.toJson(settings));
+  });
+
+  it('should load from localStorage', function() {
+    mock.localStorage.settings = '{"darkTheme":true,"fontSize":17}';
+    load();
+    expect(settings.darkTheme).toBe(true);
+    expect(settings.fontSize).toBe(17);
+  });
+
+});
+
+describe('networks', function() {
+
+  var networks;
+  var mock;
+
+  beforeEach(module('irc.data'));
+
+  beforeEach(function() {
+    mock = {
+      localStorage: {}
+    };
+    module(function($provide) {
+      $provide.value('$window', mock);
+    });
+  });
+
+  var load = function() {
+    inject(function($injector) {
+      networks = $injector.get('networks');
+    });
+  };
+
+  it('should load empty netork list', function() {
+    mock.localStorege.networks = '[]';
+    load();
   });
 
 });

@@ -44,6 +44,13 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
 }]);
 
 
+/**
+ * Settings Service
+ *
+ * Provides an object on which settings are stored as properties.  Also
+ * provides the method:
+ *   save():  Write settings to localStore.
+ */
 data.factory('settings', ['Storage', function settingsFactory(Storage) {
 
   var settings = new Storage('settings', {
@@ -51,7 +58,9 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
     fontSize: 12
   });
 
-  settings.data.save = settings.save();
+  settings.data.save = function() {
+    settings.save();
+  };
 
   return settings.data;
 
