@@ -28,7 +28,7 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
 
     try {
       this.data = angular.fromJson($window.localStorage[name]);
-    } catch(e) {
+    } catch (e) {
       this.data = defaultValue;
     }
   };
@@ -36,7 +36,7 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
   Storage.prototype = {
     save: function() {
       $window.localStorage[this._name] = angular.toJson(this.data);
-    }
+    },
   };
 
   return Storage;
@@ -111,7 +111,7 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
         channels: []
       };
     }
-    this._storageNet.channels.forEach(function(storageChan){
+    this._storageNet.channels.forEach(function(storageChan) {
       this.channels.push(new Channel(storageChan));
     });
     this._storageNet.lastState = this._state;

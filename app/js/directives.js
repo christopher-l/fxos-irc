@@ -3,9 +3,9 @@
 
 var adapters = angular.module('irc.adapters');
 
+// Bind to a long touch on mobile and right click on desktop.
+// From https://stackoverflow.com/a/15732476
 adapters.directive('ircContextMenu', ['$parse', function($parse) {
-  /* Binds to a long touch on mobile and right click on desktop. */
-  /* from https://stackoverflow.com/a/15732476 */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -13,7 +13,7 @@ adapters.directive('ircContextMenu', ['$parse', function($parse) {
       element.bind('contextmenu', function(event) {
         scope.$apply(function() {
           event.preventDefault();
-          fn(scope, {$event:event});
+          fn(scope, {$event: event});
         });
       });
     }
@@ -21,9 +21,9 @@ adapters.directive('ircContextMenu', ['$parse', function($parse) {
 }]);
 
 
+// Whenever "theme-group" changes, remove and reappend the "theme-group" and
+// "theme-color" meta tags to force the statusbar to apply the new colors.
 adapters.directive('ircThemeGroup',[function() {
-  /* Whenever "theme-group" changes, remove and reappend the "theme-group" and
-     "theme-color" meta tags to force the statusbar to apply the new colors. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -41,9 +41,9 @@ adapters.directive('ircThemeGroup',[function() {
   };
 }]);
 
+// Evaluate a given expression when the "action" event is fired by the
+// object.
 adapters.directive('ircAction', function() {
-  /* Evaluate a given expression when the "action" event is fired by the
-     object. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -54,12 +54,12 @@ adapters.directive('ircAction', function() {
   };
 });
 
+// Like ngOpen, but also update the module, as the attribute changes.
 adapters.directive('ircOpen', ['$parse', function($parse) {
-  /* Like ngOpen, but also update the module, as the attribute changes. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      /* This is what ngOpen does: update the open attribute. */
+      // This is what ngOpen does: update the open attribute
       var model = $parse(attrs.ircOpen);
       scope.$watch(model, function(value) {
         if (value) {
@@ -68,20 +68,20 @@ adapters.directive('ircOpen', ['$parse', function($parse) {
           element[0].removeAttribute('open');
         }
       });
-      /* Bind to our own event. */
+      // Bind to our own event
       element.bind('changed', function() {
         scope.$apply(function() {
           model.assign(scope, element[0].hasAttribute('open'));
         });
       });
-      /* Trigger the event. */
+      // Trigger the event
       new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           if (mutation.type === 'attributes' &&
               mutation.attributeName === 'open') {
             var oldValue = model(scope);
             var newValue = element[0].hasAttribute('open');
-            if (oldValue != newValue) {
+            if (oldValue !== newValue) {
               element.triggerHandler('changed');
             }
           }
@@ -91,8 +91,8 @@ adapters.directive('ircOpen', ['$parse', function($parse) {
   };
 }]);
 
+// Bind the client-height property to a given scope variable.
 adapters.directive('ircClientHeight', ['$parse', function($parse) {
-  /* Bind the client-height property to a given scope variable. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -106,8 +106,8 @@ adapters.directive('ircClientHeight', ['$parse', function($parse) {
   };
 }]);
 
+// Bind a gaia-switch element to a model.
 adapters.directive('ircSwitch', ['$parse', function($parse) {
-  /* Bind a gaia-switch element to a model. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -117,7 +117,9 @@ adapters.directive('ircSwitch', ['$parse', function($parse) {
         model.assign(scope, value);
         try {
           scope.$digest();
-        } catch(e) {} // We are already digesting when updated by model.
+        } catch (e) {
+          // We are already digesting when updated by model
+        }
       });
       scope.$watch(model, function(value) {
         element[0].checked = value;
@@ -126,13 +128,13 @@ adapters.directive('ircSwitch', ['$parse', function($parse) {
   };
 }]);
 
+// Wrap gaia-slider to include further attributes:
+//   model: Passed as ngModel to the input
+//   min:   The minimum input value
+//   max:   The maximum input value
+//   unit:  The unit appended to output field when shown to the user
 adapters.directive('ircSlider', ['$compile', '$parse',
     function($compile, $parse) {
-  /* Wrap gaia-slider to include further attributes:
-       model: passed as ngModel to the input
-       min:   the minimum input value
-       max:   the maximum input value
-       unit:  the unit appended to output field when shown to the user */
   return {
     restrict: 'E',
     transclude: true,
@@ -156,7 +158,7 @@ adapters.directive('ircSlider', ['$compile', '$parse',
       input[0].max = attrs.max;
       input.attr('ng-model', attrs.model);
       $compile(input)(scope.$parent);
-      /* Update the output field. */
+      // Update the output field
       var model = $parse(attrs.model);
       scope.$parent.$watch(model, function() {
         slider.updateOutput();
@@ -165,8 +167,8 @@ adapters.directive('ircSlider', ['$compile', '$parse',
   };
 }]);
 
+// Bind a gaia-text-input to a model with the "model" attribute.
 adapters.directive('ircTextInput', ['$compile', function($compile) {
-  /* Bind a gaia-text-input to a model with the "model" attribute. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -177,8 +179,8 @@ adapters.directive('ircTextInput', ['$compile', function($compile) {
   };
 }]);
 
+// Bind a gaia-checkbox to a model with the "model" attribute.
 adapters.directive('ircCheckbox', ['$parse', function($parse) {
-  /* Bind a gaia-checkbox to a model with the "model" attribute. */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -201,7 +203,7 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
               mutation.attributeName === 'checked') {
             var oldValue = model(scope);
             var newValue = element[0].hasAttribute('checked');
-            if (oldValue != newValue) {
+            if (oldValue !== newValue) {
               element.triggerHandler('changed');
             }
           }
@@ -211,11 +213,11 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
   };
 }]);
 
+// Assign a model to a gaia-dialog, defining the following properties:
+//   open():      Open the dialog
+//   close():     Close the dialog
+//   onConfirm(): Gets called when user confirms
 adapters.directive('ircDialog', ['$parse', function($parse) {
-  /* Assign a model to a gaia-dialog, defining the following properties:
-       open:  function to open the dialog
-       close: function to close the dialog
-       onConfirm: function that gets called when user confirms */
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
