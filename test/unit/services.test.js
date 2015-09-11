@@ -139,7 +139,9 @@ describe('networks', function() {
 
   beforeEach(function() {
     mock = {
-      localStorage: {}
+      localStorage: {
+        networks: '[]' // While other default for debugging
+      }
     };
     module(function($provide) {
       $provide.value('$window', mock);
@@ -153,8 +155,80 @@ describe('networks', function() {
   };
 
   it('should load empty netork list', function() {
-    mock.localStorege.networks = '[]';
+    mock.localStorage.networks = '[]';
     load();
+    expect(networks instanceof Array).toBe(true);
+    expect(networks.length).toBe(0);
+  });
+
+  describe('new network', function() {
+
+    var network;
+
+    beforeEach(function() {
+      mock.localStorage.networks = '[]';
+      load();
+      network = networks.new();
+    });
+
+    it('should be defined', function() {
+      expect(network).toBeDefined();
+    });
+
+    it('should have the correct properties', function() {
+      expect(Object.keys(network)).toEqual([
+        '_state',
+        'new',
+        '_config',
+        '_storageNet',
+        'channels'
+      ]);
+    });
+
+    it('should be marked new', function() {
+      expect(network.new).toBe(true);
+    });
+
+    it('should initialize its state', function() {
+      expect(network.connection).toBe('disconnected');
+    });
+
+    it('should have an empty channel list', function() {
+      expect(network.channels).toEqual([]);
+    });
+
+    it('should set up its storage reference', function() {
+      expect(Object.keys(network._storageNet).length).toBe(3);
+      expect(network._storageNet.config).toBe(network._config);
+      expect(network._storageNet.lastState).toBe(network._state);
+      expect(network._storageNet.channels).toEqual([]);
+    });
+
+    it('should not yet be in the networks list', function() {
+      expect(networks.length).toBe(0);
+    });
+
+    it('should be pushed to the networks list when saved', function() {
+      network.save();
+      expect(networks[0]).toBe(network);
+    });
+
+    it('should lose its new property when saved', function() {
+      network.save();
+      expect(network.new).toBeUndefined();
+    });
+
+    it('should be pushed to the storage when saved', function() {
+      var storage = angular.fromJson(mock.localStorage.networks);
+      expect(storage.length).toBe(0);
+      network.save();
+      storage = angular.fromJson(mock.localStorage.networks);
+      expect(storage.length).toBe(1);
+      expect(storage[0].config).toEqual({});
+      expect(storage[0].channels).toEqual([]);
+      expect(storage[0].lastState).toEqual(network._state);
+    });
+
   });
 
 });

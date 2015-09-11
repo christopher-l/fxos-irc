@@ -49,7 +49,7 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
  *
  * Provides an object on which settings are stored as properties.  Also
  * provides the method:
- *   save():  Write settings to localStore.
+ *   save():  Write settings to localStorage.
  */
 data.factory('settings', ['Storage', function settingsFactory(Storage) {
 
@@ -114,14 +114,15 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
     } else {
       this.new = true;
       this._config = {};
-      this.channels = [];
       this._storageNet = {
         config: this._config,
         channels: []
       };
     }
+    this.channels = [];
+    var self = this;
     this._storageNet.channels.forEach(function(storageChan) {
-      this.channels.push(new Channel(storageChan));
+      self.channels.push(new Channel(storageChan));
     });
     this._storageNet.lastState = this._state;
   };
@@ -138,6 +139,7 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
       if (this.new) {
         networks.push(this);
         storage.data.push(this._storageNet);
+        delete this.new;
       }
       storage.save();
     },
@@ -163,9 +165,22 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
     });
   });
 
+  [
+    'connection'
+  ].forEach(function(key) {
+    Object.defineProperty(Network.prototype, key, {
+      get: function() {
+        return this._state[key];
+      },
+      set: function(value) {
+        this._state[key] = value;
+      }
+    });
+  });
+
   var networks = [];
 
-  storage.networks.data.forEach(function(storageNet) {
+  storage.data.forEach(function(storageNet) {
     networks.push(new Network(storageNet));
   });
 
