@@ -107,7 +107,7 @@ gaia-drawer > div {
   transition: transform 200ms 0ms;
 }
 
-.status-indicator {
+.focus-indicator {
   border-radius: .5rem;
   width: .5rem;
   height: .5rem;
@@ -116,8 +116,8 @@ gaia-drawer > div {
   margin-right: .5rem;
 }
 
-.network-entry[focused] > .status-indicator,
-.channel-entry[focused] > .status-indicator {
+.network-entry[focused] > .focus-indicator,
+.channel-entry[focused] > .focus-indicator {
   background-color: var(--highlight-color);
 }
 

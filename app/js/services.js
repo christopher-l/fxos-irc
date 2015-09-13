@@ -67,12 +67,7 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
 }]);
 
 
-/**
- * Network Service
- *
- * Provides a constructor for network objects.
- */
-data.factory('Network', [function NetworkFactory() {
+data.factory('Channel', [function ChannelFactory() {
 
   var Channel = function(storageRef) {
     this._storageRef = storageRef;
@@ -93,7 +88,7 @@ data.factory('Network', [function NetworkFactory() {
         return this._config[key];
       },
       set: function(value) {
-        throw new Error('Tried to write access network config.');
+        throw new Error('Tried to write access channel config.');
       }
     });
   });
@@ -114,9 +109,21 @@ data.factory('Network', [function NetworkFactory() {
     });
   });
 
+  return Channel;
+
+}]);
+
+
+/**
+ * Network Service
+ *
+ * Provides a constructor for network objects.
+ */
+data.factory('Network', ['Channel', function NetworkFactory(Channel) {
+
   var Network = function(storageRef) {
     this._state = {
-      connection: 'disconnected',
+      status: 'disconnected',
       unreadCount: 0,
     };
     if (storageRef) {
@@ -178,7 +185,7 @@ data.factory('Network', [function NetworkFactory() {
   });
 
   [
-    'connection',
+    'status',
     'unreadCount',
   ].forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
@@ -213,7 +220,7 @@ data.factory('networks', [
         autoConnect: true,
       },
       lastState: {
-        connection: 'connected',
+        status: 'connected',
         unreadCount: 0,
       },
       channels: [
@@ -243,7 +250,7 @@ data.factory('networks', [
         name: 'Bar',
       },
       lastState: {
-        connection: 'connection lost',
+        status: 'connection lost',
         unreadCount: 32,
       },
       channels: [

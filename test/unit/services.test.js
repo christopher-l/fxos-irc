@@ -178,7 +178,7 @@ describe('Network', function() {
     });
 
     it('should initialize a new state', function() {
-      expect(network.connection).toBe('disconnected');
+      expect(network.status).toBe('disconnected');
     });
 
     it('should set up an empty channel list', function() {
@@ -202,12 +202,12 @@ describe('Network', function() {
     });
 
     it('should allow to change the state', function() {
-      network.connection = 'connected';
-      expect(network._state.connection).toBe('connected');
+      network.status = 'connected';
+      expect(network._state.status).toBe('connected');
     });
 
     it('should save the changed state', function() {
-      network.connection = 'connected';
+      network.status = 'connected';
       expect(network._storage.save).toHaveBeenCalled();
     });
 
@@ -287,7 +287,7 @@ describe('Network', function() {
     });
 
     it('should initialize its state', function() {
-      expect(network.connection).toBe('disconnected');
+      expect(network.status).toBe('disconnected');
     });
 
     it('should have an empty channel list', function() {

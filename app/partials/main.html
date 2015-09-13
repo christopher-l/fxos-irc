@@ -20,7 +20,7 @@
                           $event.stopPropagation();">
             &#9660;
           </span>
-          <span class="status-indicator"></span>
+          <span class="focus-indicator"></span>
           <span class="network-text">
             <div class="network-name">{{network.name}}</div>
             <div class="network-info">{{network.status}}</div>
@@ -40,7 +40,7 @@
                 ng-repeat="channel in network.channels"
                 ng-attr-active="{{channel.joined || undefined}}"
                 ng-attr-focused="{{channel.focused || undefined}}">
-              <span class="status-indicator"></span>
+              <span class="focus-indicator"></span>
                     <!-- ng-click="network.channels.splice($index, 1)" -->
               <span class="channel-text"
                     ng-click="focus(channel)">
