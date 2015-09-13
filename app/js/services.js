@@ -74,31 +74,31 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
  */
 data.factory('Network', [function NetworkFactory() {
 
-  var Channel = function(storageChan) {
-    this._storageChan = storageChan;
+  var Channel = function(storageRef) {
+    this._storageRef = storageRef;
   };
 
-  var Network = function(storageNet) {
+  var Network = function(storageRef) {
     this._state = {
       connection: 'disconnected'
     };
-    if (storageNet) {
-      this._storageNet = storageNet;
-      this._config = storageNet.config;
+    if (storageRef) {
+      this._storageRef = storageRef;
+      this._config = storageRef.config;
     } else {
       this.new = true;
       this._config = {};
-      this._storageNet = {
+      this._storageRef = {
         config: this._config,
         channels: []
       };
     }
     this.channels = [];
     var self = this;
-    this._storageNet.channels.forEach(function(storageChan) {
-      self.channels.push(new Channel(storageChan));
+    this._storageRef.channels.forEach(function(chan) {
+      self.channels.push(new Channel(chan));
     });
-    this._storageNet.lastState = this._state;
+    this._storageRef.lastState = this._state;
   };
 
   Network.prototype = {
@@ -112,7 +112,7 @@ data.factory('Network', [function NetworkFactory() {
     save: function() {
       if (this.new) {
         this._networks.push(this);
-        this._storage.data.push(this._storageNet);
+        this._storage.data.push(this._storageRef);
         delete this.new;
       }
       this._storage.save();
@@ -148,6 +148,7 @@ data.factory('Network', [function NetworkFactory() {
       },
       set: function(value) {
         this._state[key] = value;
+        this.save();
       }
     });
   });
@@ -192,8 +193,8 @@ data.factory('networks', [
   Network.prototype._storage = storage;
   Network.prototype._networks = networks;
 
-  storage.data.forEach(function(storageNet) {
-    networks.push(new Network(storageNet));
+  storage.data.forEach(function(net) {
+    networks.push(new Network(net));
   });
 
   networks.new = function() {
