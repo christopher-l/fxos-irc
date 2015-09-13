@@ -55,7 +55,8 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
 
   var settings = new Storage('settings', {
     darkTheme: false,
-    fontSize: 12
+    fontSize: 12,
+    onStartup: 'Reset State',
   });
 
   settings.data.save = function() {

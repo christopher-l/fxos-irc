@@ -217,6 +217,8 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
 //   open():      Open the dialog
 //   close():     Close the dialog
 //   onConfirm(): Gets called when user confirms
+// Provide an additional attribute 'model', that binds the selection of a
+// gaia-dialog-select.
 adapters.directive('ircDialog', ['$parse', function($parse) {
   return {
     restrict: 'A',
@@ -228,6 +230,23 @@ adapters.directive('ircDialog', ['$parse', function($parse) {
       if (element[0].els && element[0].els.submit) {
         angular.element(element[0].els.submit).bind('click', function() {
           scope.$apply(model(scope).onConfirm);
+        });
+      }
+      // Model for gaia-dialog-select
+      if (attrs.model) {
+        var selectModel = $parse(attrs.model);
+        element.bind('change', function(evt) {
+          scope.$apply(function() {
+            selectModel.assign(scope, evt.detail.value);
+          });
+        });
+        scope.$watch(selectModel, function(value) {
+          element[0].clearSelected();
+          [].forEach.call(element.find('li'), function(item) {
+            if (item.innerHTML === value) {
+              item.setAttribute('aria-selected', true);
+            }
+          });
         });
       }
     }

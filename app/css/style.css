@@ -228,9 +228,6 @@ gaia-list {
 
 gaia-list label {
   background: none;
-}
-
-gaia-list li > label {
   display: flex;
   min-height: 42px;
   align-items: center;

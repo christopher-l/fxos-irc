@@ -19,10 +19,11 @@
     "gaia-switch": "gaia-components/gaia-switch#~0.2.1",
     "gaia-text-input": "gaia-components/gaia-text-input#~0.1.2",
     "gaia-theme": "gaia-components/gaia-theme#~0.5.0",
-    "gaia-toast": "gaia-components/gaia-toast"
+    "gaia-toast": "gaia-components/gaia-toast",
+    "gaia-value-selector": "gaia-components/gaia-value-selector"
   },
   "resolutions": {
-    "gaia-component": "0.3.8",
+    "gaia-component": "0.3.9",
     "gaia-icons": "~0.8.0"
   },
   "devDependencies": {
