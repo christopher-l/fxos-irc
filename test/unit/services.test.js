@@ -139,91 +139,169 @@ describe('Network', function() {
 
   beforeEach(module('irc.data'));
 
-  beforeEach(inject(function(Network) {
-    storageRef = {
-      config: {
-        name: 'Foo',
-        autoConnect: true,
-      },
-      lastState: {
-        unreadCount: 0,
-        status: 'connected',
-      },
-      channels: []
-    };
-    network = new Network(storageRef);
-    networks = ['fooo', network, 'baar'];
-    storage = {
-      data: ['foo', storageRef, 'bar'],
-      save: jasmine.createSpy('storage.save')
-    };
-    Network.prototype._networks = networks;
-    Network.prototype._storage = storage;
-  }));
+  describe('from storage', function() {
 
-  it('should read the config', function() {
-    expect(network.name).toBe('Foo');
-    expect(network.autoConnect).toBe(true);
+    beforeEach(inject(function(Network) {
+      storageRef = {
+        config: {
+          name: 'Foo',
+          autoConnect: true,
+        },
+        lastState: {
+          unreadCount: 0,
+          status: 'connected',
+        },
+        channels: []
+      };
+      network = new Network(storageRef);
+      networks = ['fooo', network, 'baar'];
+      storage = {
+        data: ['foo', storageRef, 'bar'],
+        save: jasmine.createSpy('storage.save')
+      };
+      Network.prototype._networks = networks;
+      Network.prototype._storage = storage;
+    }));
+
+    it('should have the correct properties', function() {
+      expect(Object.keys(network)).toEqual([
+        '_state',
+        '_storageRef',
+        '_config',
+        'channels'
+      ]);
+    });
+
+    it('should read the config', function() {
+      expect(network.name).toBe('Foo');
+      expect(network.autoConnect).toBe(true);
+    });
+
+    it('should initialize a new state', function() {
+      expect(network.connection).toBe('disconnected');
+    });
+
+    it('should set up an empty channel list', function() {
+      expect(network.channels).toEqual([]);
+      expect(network.channels).not.toBe(storageRef.channels);
+    });
+
+    it('should link to storageRef', function() {
+      expect(network._storageRef).toBe(storageRef);
+    });
+
+    it('should set up its storage reference', function() {
+      expect(Object.keys(storageRef).length).toBe(3);
+      expect(storageRef.config).toBe(network._config);
+      expect(storageRef.lastState).toBe(network._state);
+      expect(storageRef.channels).toEqual([]);
+    });
+
+    it('should not allow to change the config directly', function() {
+      expect(function() {network.name = 'Bar';}).toThrow();
+    });
+
+    it('should allow to change the state', function() {
+      network.connection = 'connected';
+      expect(network._state.connection).toBe('connected');
+    });
+
+    it('should save the changed state', function() {
+      network.connection = 'connected';
+      expect(network._storage.save).toHaveBeenCalled();
+    });
+
+    it('should give a copy of the config', function() {
+      var config = network.getConfig();
+      expect(config).not.toBe(network._config);
+      expect(config).toEqual(network._config);
+    });
+
+    it('should apply a changed config', function() {
+      var config = network.getConfig();
+      config.name = 'Bar';
+      config.autoConnect = false;
+      network.applyConfig(config);
+      expect(network.name).toBe('Bar');
+      expect(network.autoConnect).toBe(false);
+    });
+
+    it('should save when applying a config', function() {
+      var config = network.getConfig();
+      expect(network._storage.save).not.toHaveBeenCalled();
+      network.applyConfig(config);
+      expect(network._storage.save).toHaveBeenCalled();
+    });
+
+    it('should delete the network from networks', function() {
+      network.delete();
+      expect(networks).toEqual(['fooo', 'baar']);
+    });
+
+    it('should delete the network from storage', function() {
+      network.delete();
+      expect(storage.data).toEqual(['foo', 'bar']);
+      expect(storage.save).toHaveBeenCalled();
+    });
+
   });
 
-  it('should initialize a new state', function() {
-    expect(network.connection).toBe('disconnected');
-  });
+  describe('newly created', function() {
 
-  it('should set up an empty channel list', function() {
-    expect(network.channels).toEqual([]);
-    expect(network.channels).not.toBe(storageRef.channels);
-  });
+    beforeEach(inject(function(Network) {
+      network = new Network();
+      networks = ['fooo', 'baar'];
+      storage = {
+        data: ['foo', 'bar'],
+        save: jasmine.createSpy('storage.save')
+      };
+      Network.prototype._networks = networks;
+      Network.prototype._storage = storage;
+    }));
 
-  it('should link to storageRef', function() {
-    expect(network._storageRef).toBe(storageRef);
-  });
+    it('should have the correct properties', function() {
+      expect(Object.keys(network)).toEqual([
+        '_state',
+        'new',
+        '_config',
+        '_storageRef',
+        'channels'
+      ]);
+    });
 
-  it('should not allow to change the config directly', function() {
-    expect(function() {network.name = 'Bar';}).toThrow();
-  });
+    it('should set up its storage reference', function() {
+      expect(Object.keys(network._storageRef).length).toBe(3);
+      expect(network._storageRef.config).toBe(network._config);
+      expect(network._storageRef.lastState).toBe(network._state);
+      expect(network._storageRef.channels).toEqual([]);
+    });
 
-  it('should allow to change the state', function() {
-    network.connection = 'connected';
-    expect(network._state.connection).toBe('connected');
-  });
+    it('should be marked new', function() {
+      expect(network.new).toBe(true);
+    });
 
-  it('should save the changed state', function() {
-    network.connection = 'connected';
-    expect(network._storage.save).toHaveBeenCalled();
-  });
+    it('should initialize its state', function() {
+      expect(network.connection).toBe('disconnected');
+    });
 
-  it('should give a copy of the config', function() {
-    var config = network.getConfig();
-    expect(config).not.toBe(network._config);
-    expect(config).toEqual(network._config);
-  });
+    it('should have an empty channel list', function() {
+      expect(network.channels).toEqual([]);
+    });
 
-  it('should apply a changed config', function() {
-    var config = network.getConfig();
-    config.name = 'Bar';
-    config.autoConnect = false;
-    network.applyConfig(config);
-    expect(network.name).toBe('Bar');
-    expect(network.autoConnect).toBe(false);
-  });
+    it('should not yet be in the networks list', function() {
+      expect(networks.length).toBe(2);
+    });
 
-  it('should save when applying a config', function() {
-    var config = network.getConfig();
-    expect(network._storage.save).not.toHaveBeenCalled();
-    network.applyConfig(config);
-    expect(network._storage.save).toHaveBeenCalled();
-  });
+    it('should be pushed to the networks list when saved', function() {
+      network.save();
+      expect(networks[2]).toBe(network);
+    });
 
-  it('should delete the network from networks', function() {
-    network.delete();
-    expect(networks).toEqual(['fooo', 'baar']);
-  });
+    it('should lose its new property when saved', function() {
+      network.save();
+      expect(network.new).toBeUndefined();
+    });
 
-  it('should delete the network from storage', function() {
-    network.delete();
-    expect(storage.data).toEqual(['foo', 'bar']);
-    expect(storage.save).toHaveBeenCalled();
   });
 
 });
@@ -261,59 +339,20 @@ describe('networks', function() {
 
   describe('new network', function() {
 
+    var Network;
     var network;
 
-    beforeEach(function() {
+    beforeEach(inject(function(_Network_) {
+      Network = _Network_;
       mock.localStorage.networks = '[]';
       load();
       network = networks.new();
-    });
+    }));
 
-    it('should be defined', function() {
+    it('should be a new instance of Network', function() {
       expect(network).toBeDefined();
-    });
-
-    it('should have the correct properties', function() {
-      expect(Object.keys(network)).toEqual([
-        '_state',
-        'new',
-        '_config',
-        '_storageRef',
-        'channels'
-      ]);
-    });
-
-    it('should be marked new', function() {
-      expect(network.new).toBe(true);
-    });
-
-    it('should initialize its state', function() {
-      expect(network.connection).toBe('disconnected');
-    });
-
-    it('should have an empty channel list', function() {
-      expect(network.channels).toEqual([]);
-    });
-
-    it('should set up its storage reference', function() {
-      expect(Object.keys(network._storageRef).length).toBe(3);
-      expect(network._storageRef.config).toBe(network._config);
-      expect(network._storageRef.lastState).toBe(network._state);
-      expect(network._storageRef.channels).toEqual([]);
-    });
-
-    it('should not yet be in the networks list', function() {
-      expect(networks.length).toBe(0);
-    });
-
-    it('should be pushed to the networks list when saved', function() {
-      network.save();
-      expect(networks[0]).toBe(network);
-    });
-
-    it('should lose its new property when saved', function() {
-      network.save();
-      expect(network.new).toBeUndefined();
+      expect(network).toEqual(new Network());
+      expect(network instanceof Network).toBe(true);
     });
 
     it('should be pushed to the storage when saved', function() {
