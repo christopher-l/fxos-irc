@@ -233,6 +233,12 @@ describe('Network', function() {
       expect(network._storage.save).toHaveBeenCalled();
     });
 
+    it('should save to storage', function() {
+      var config = network.getConfig();
+      network.applyConfig(config);
+      expect(network._storageRef.config).toBe(network._config);
+    });
+
     it('should delete the network from networks', function() {
       network.delete();
       expect(networks).toEqual(['fooo', 'baar']);

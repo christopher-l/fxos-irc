@@ -7,8 +7,10 @@ ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
   $rootScope.title = 'IRC';
 }]);
 
-ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams', 'networks',
+ui.controller('MainCtrl', [
+    '$rootScope', '$scope', '$stateParams', 'networks',
     function($rootScope, $scope, $stateParams, networks) {
+
   $rootScope.theme = 'theme-communications';
   $scope.type = 'main';
 
@@ -39,23 +41,20 @@ ui.controller('MainCtrl', ['$rootScope', '$scope', '$stateParams', 'networks',
 ui.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
 
-ui.controller('SettingsCtrl', ['$rootScope', '$scope', 'storage',
-    function($rootScope, $scope, storage) {
+ui.controller('SettingsCtrl', [
+    '$rootScope', '$scope', 'settings',
+    function($rootScope, $scope, settings) {
+
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 
-  // storage.default('settings', {
-  //   darkTheme: false,
-  //   fontSize: 12
-  // });
-
-  $scope.settings = storage.settings;
+  $scope.settings = settings;
 }]);
 
 ui.controller('NetConfCtrl', [
     '$rootScope', '$scope', '$stateParams', 'networks',
-    function($rootScope, $scope, $stateParams, networks)
-{
+    function($rootScope, $scope, $stateParams, networks) {
+
   $rootScope.theme = 'theme-settings';
   $scope.type = 'settings';
 

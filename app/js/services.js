@@ -76,11 +76,48 @@ data.factory('Network', [function NetworkFactory() {
 
   var Channel = function(storageRef) {
     this._storageRef = storageRef;
+    this._config = storageRef.config;
+    this._state = storageRef.lastState;
   };
+
+  Channel.prototype = {
+    save: angular.noop,
+  };
+
+  [
+    'name',
+    'autoJoin'
+  ].forEach(function(key) {
+    Object.defineProperty(Channel.prototype, key, {
+      get: function() {
+        return this._config[key];
+      },
+      set: function(value) {
+        throw new Error('Tried to write access network config.');
+      }
+    });
+  });
+
+  [
+    'focused',
+    'joined',
+    'unreadCount',
+  ].forEach(function(key) {
+    Object.defineProperty(Channel.prototype, key, {
+      get: function() {
+        return this._state[key];
+      },
+      set: function(value) {
+        this._state[key] = value;
+        this.save();
+      }
+    });
+  });
 
   var Network = function(storageRef) {
     this._state = {
-      connection: 'disconnected'
+      connection: 'disconnected',
+      unreadCount: 0,
     };
     if (storageRef) {
       this._storageRef = storageRef;
@@ -107,6 +144,7 @@ data.factory('Network', [function NetworkFactory() {
     },
     applyConfig: function(config) {
       this._config = config;
+      this._storageRef.config = config;
       this.save();
     },
     save: function() {
@@ -140,7 +178,8 @@ data.factory('Network', [function NetworkFactory() {
   });
 
   [
-    'connection'
+    'connection',
+    'unreadCount',
   ].forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
       get: function() {
@@ -169,21 +208,62 @@ data.factory('networks', [
 
   var storage = new Storage('networks', [
     {
-      name: 'Foo',
-      unreadCount: 0,
-      status: 'connected',
+      config: {
+        name: 'Foo',
+        autoConnect: true,
+      },
+      lastState: {
+        connection: 'connected',
+        unreadCount: 0,
+      },
       channels: [
-        {name: 'channel1', unreadCount: 32, focused: true, joined: true},
-        {name: 'channel2', unreadCount: 0, joined: true}
+        {
+          config: {
+            name: 'channel1',
+          },
+          lastState: {
+            joined: true,
+            unreadCount: 0,
+            focused: true,
+          }
+        },
+        {
+          config: {
+            name: 'channel2',
+          },
+          lastState : {
+            unreadCount: 23,
+            joined: true,
+          }
+        }
       ]
     },
     {
-      name: 'Bar',
-      unreadCount: 32,
-      status: 'connection lost',
+      config: {
+        name: 'Bar',
+      },
+      lastState: {
+        connection: 'connection lost',
+        unreadCount: 32,
+      },
       channels: [
-        {name: 'channel3', unreadCount: 0, autoJoin: true},
-        {name: 'channel4', unreadCount: 32}
+        {
+          config: {
+            name: 'channel3',
+            autoJoin: true,
+          },
+          lastState: {
+            unreadCount: 0,
+          }
+        },
+        {
+          config: {
+            name: 'channel4',
+          },
+          lastState: {
+            unreadCount: 0,
+          }
+        }
       ]
     }
   ]);
