@@ -19,11 +19,7 @@ ui.controller('MainCtrl', [
   $scope.networks = networks;
 
   $scope.focus = function(obj) {
-    if ($scope.current) {
-      $scope.current.focused = false;
-    }
-    $scope.current = obj;
-    obj.focused = true;
+    obj.focus();
     if (obj.collapsed) { obj.collapsed = false; }
   };
 

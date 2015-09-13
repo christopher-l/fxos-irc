@@ -167,7 +167,7 @@ data.factory('Network', ['Channel', function NetworkFactory(Channel) {
       this._networks.splice(index, 1);
       this._storage.data.splice(index, 1);
       this._storage.save();
-    }
+    },
   };
 
   [
@@ -187,6 +187,7 @@ data.factory('Network', ['Channel', function NetworkFactory(Channel) {
   [
     'status',
     'unreadCount',
+    'focused',
   ].forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
       get: function() {
@@ -210,8 +211,8 @@ data.factory('Network', ['Channel', function NetworkFactory(Channel) {
  * Provides an array of all known networks.
  */
 data.factory('networks', [
-    'Storage', 'Network',
-    function networksFactory(Storage, Network) {
+    'Storage', 'Network', 'Channel',
+    function networksFactory(Storage, Network, Channel) {
 
   var storage = new Storage('networks', [
     {
@@ -279,6 +280,19 @@ data.factory('networks', [
 
   Network.prototype._storage = storage;
   Network.prototype._networks = networks;
+  Channel.prototype._storage = storage;
+  Channel.prototype._networks = networks;
+
+  var focus =  function() {
+    if (networks.current) {
+      networks.current.focused = false;
+    }
+    this.focused = true;
+    networks.current = this;
+  };
+
+  Network.prototype.focus = focus;
+  Channel.prototype.focus = focus;
 
   storage.data.forEach(function(net) {
     networks.push(new Network(net));
