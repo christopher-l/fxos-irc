@@ -67,38 +67,12 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
 }]);
 
 
-/*
- * Network Service  //TODO update description
+/**
+ * Network Service
  *
- * Provides an array with saved networks.  Also provides the following method:
- *   edit()
- *     takes index: If index is given, edit an existing network, otherwise
- *         create a new one.
- *     returns network: Copy of a network instance meant to be edited.  Provides
- *         the additional method save().
+ * Provides a constructor for network objects.
  */
-data.factory('networks', ['Storage', function networksFactory(Storage) {
-
-  var storage = new Storage('networks', [
-    {
-      name: 'Foo',
-      unreadCount: 0,
-      status: 'connected',
-      channels: [
-        {name: 'channel1', unreadCount: 32, focused: true, joined: true},
-        {name: 'channel2', unreadCount: 0, joined: true}
-      ]
-    },
-    {
-      name: 'Bar',
-      unreadCount: 32,
-      status: 'connection lost',
-      channels: [
-        {name: 'channel3', unreadCount: 0, autoJoin: true},
-        {name: 'channel4', unreadCount: 32}
-      ]
-    }
-  ]);
+data.factory('Network', [function NetworkFactory() {
 
   var Channel = function(storageChan) {
     this._storageChan = storageChan;
@@ -137,17 +111,17 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
     },
     save: function() {
       if (this.new) {
-        networks.push(this);
-        storage.data.push(this._storageNet);
+        this._networks.push(this);
+        this._storage.data.push(this._storageNet);
         delete this.new;
       }
-      storage.save();
+      this._storage.save();
     },
     delete: function() {
-      var index = networks.indexOf(this);
-      networks.splice(index, 1);
-      storage.data.splice(index, 1);
-      storage.save();
+      var index = this._networks.indexOf(this);
+      this._networks.splice(index, 1);
+      this._storage.data.splice(index, 1);
+      this._storage.save();
     }
   };
 
@@ -178,7 +152,45 @@ data.factory('networks', ['Storage', function networksFactory(Storage) {
     });
   });
 
+  return Network;
+
+}]);
+
+
+/**
+ * Networks Service
+ *
+ * Provides an array of all known networks.
+ */
+data.factory('networks', [
+    'Storage', 'Network',
+    function networksFactory(Storage, Network) {
+
+  var storage = new Storage('networks', [
+    {
+      name: 'Foo',
+      unreadCount: 0,
+      status: 'connected',
+      channels: [
+        {name: 'channel1', unreadCount: 32, focused: true, joined: true},
+        {name: 'channel2', unreadCount: 0, joined: true}
+      ]
+    },
+    {
+      name: 'Bar',
+      unreadCount: 32,
+      status: 'connection lost',
+      channels: [
+        {name: 'channel3', unreadCount: 0, autoJoin: true},
+        {name: 'channel4', unreadCount: 32}
+      ]
+    }
+  ]);
+
   var networks = [];
+
+  Network.prototype._storage = storage;
+  Network.prototype._networks = networks;
 
   storage.data.forEach(function(storageNet) {
     networks.push(new Network(storageNet));
