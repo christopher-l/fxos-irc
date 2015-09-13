@@ -226,7 +226,7 @@ gaia-list {
   color: var(--text-color);
 }
 
-gaia-list label {
+gaia-list > li > label {
   background: none;
   display: flex;
   min-height: 42px;
@@ -235,6 +235,10 @@ gaia-list label {
 
 gaia-list gaia-slider {
   margin: 0px !important;
+}
+
+gaia-dialog-select {
+  z-index: 1;
 }
 
 /* config */
