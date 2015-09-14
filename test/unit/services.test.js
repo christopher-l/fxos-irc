@@ -109,23 +109,23 @@ describe('settings', function() {
 
   it('should load the defaults', function() {
     load();
-    expect(settings.darkTheme).toBe(false);
-    expect(settings.fontSize).toBe(12);
+    expect(settings.data.darkTheme).toBe(false);
+    expect(settings.data.fontSize).toBe(12);
   });
 
   it('should save to localStorage', function() {
     load();
-    settings.darkTheme = true;
-    settings.fontSize = 17;
+    settings.data.darkTheme = true;
+    settings.data.fontSize = 17;
     settings.save();
-    expect(mock.localStorage.settings).toBe(angular.toJson(settings));
+    expect(mock.localStorage.settings).toBe(angular.toJson(settings.data));
   });
 
   it('should load from localStorage', function() {
     mock.localStorage.settings = '{"darkTheme":true,"fontSize":17}';
     load();
-    expect(settings.darkTheme).toBe(true);
-    expect(settings.fontSize).toBe(17);
+    expect(settings.data.darkTheme).toBe(true);
+    expect(settings.data.fontSize).toBe(17);
   });
 
 });
