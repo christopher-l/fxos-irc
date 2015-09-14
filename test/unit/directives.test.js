@@ -400,8 +400,8 @@ describe('irc-dialog-select', function() {
   beforeEach(inject(function($rootScope, $compile) {
     scope = $rootScope.$new();
     element = angular.element('<div irc-dialog="dialog" model=select>' +
-        '<li>foo</li>' +
-        '<li>bar</li>' +
+        '<li value="foo">Foo</li>' +
+        '<li value="bar">Bar</li>' +
         '</div>');
     element[0].clearSelected = jasmine.createSpy('clearSelected');
     element = $compile(element)(scope);
@@ -420,10 +420,8 @@ describe('irc-dialog-select', function() {
 
   it('should update the model', function() {
     expect(scope.select).toBeUndefined();
-    element.triggerHandler({
-      type: 'change',
-      detail: {value: 'foo'}
-    });
+    element[0].value = 'foo';
+    element.triggerHandler('change');
     expect(scope.select).toBe('foo');
   });
 

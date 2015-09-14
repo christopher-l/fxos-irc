@@ -235,15 +235,15 @@ adapters.directive('ircDialog', ['$parse', function($parse) {
       // Model for gaia-dialog-select
       if (attrs.model) {
         var selectModel = $parse(attrs.model);
-        element.bind('change', function(evt) {
+        element.bind('change', function() {
           scope.$apply(function() {
-            selectModel.assign(scope, evt.detail.value);
+            selectModel.assign(scope, element[0].value);
           });
         });
         scope.$watch(selectModel, function(value) {
           element[0].clearSelected();
           [].forEach.call(element.find('li'), function(item) {
-            if (item.innerHTML === value) {
+            if (item.getAttribute('value') === value) {
               item.setAttribute('aria-selected', true);
             }
           });

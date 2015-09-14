@@ -31,8 +31,8 @@ describe('gaia-dialog-select', function() {
 
   var dialog = element(by.css('gaia-dialog-select'));
   var monitor = element(by.css('div'));
-  var foo = dialog.element(by.cssContainingText('li', 'foo'));
-  var bar = dialog.element(by.cssContainingText('li', 'bar'));
+  var foo = dialog.element(by.cssContainingText('li', 'Foo!'));
+  var bar = dialog.element(by.cssContainingText('li', 'Bar!'));
 
   beforeEach(function() {
     browser.get('/test/e2e/html/dialog-select.html');

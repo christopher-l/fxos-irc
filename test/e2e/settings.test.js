@@ -51,7 +51,7 @@ describe('settings', function() {
       var settings = JSON.parse(localStorage.settings);
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(false);
-      expect(settings.onStartup).toBe('Reset State');
+      expect(settings.onStartup).toBe('reset');
     });
     themeSwitch.click();
     onStartupSelector.click();
@@ -62,7 +62,7 @@ describe('settings', function() {
       var settings = JSON.parse(localStorage.settings);
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(true);
-      expect(settings.onStartup).toBe('Restore Last State');
+      expect(settings.onStartup).toBe('restore');
     });
   });
 
