@@ -22,16 +22,16 @@ describe('settings', function() {
 
   it('should save to localStorage', function() {
     get('window.localStorage').then(function(localStorage) {
-      expect(localStorage['irc-settings']).toBeTruthy();
-      var settings = JSON.parse(localStorage['irc-settings']);
+      expect(localStorage.settings).toBeTruthy();
+      var settings = JSON.parse(localStorage.settings);
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(false);
     });
     themeSwitch.click();
     doneButton.click();
     get('window.localStorage').then(function(localStorage) {
-      expect(localStorage['irc-settings']).toBeTruthy();
-      var settings = JSON.parse(localStorage['irc-settings']);
+      expect(localStorage.settings).toBeTruthy();
+      var settings = JSON.parse(localStorage.settings);
       expect(settings.fontSize).toBe(12);
       expect(settings.darkTheme).toBe(true);
     });
