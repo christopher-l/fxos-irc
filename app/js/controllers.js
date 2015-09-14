@@ -11,7 +11,7 @@ ui.controller('MainCtrl', [
     '$rootScope', '$scope', '$stateParams', 'networks',
     function($rootScope, $scope, $stateParams, networks) {
 
-  $rootScope.theme = 'theme-communications';
+  $rootScope.currentClass = 'main';
   $scope.type = 'main';
 
   $scope.drawer = $stateParams.drawer;
@@ -41,17 +41,19 @@ ui.controller('SettingsCtrl', [
     '$rootScope', '$scope', 'settings',
     function($rootScope, $scope, settings) {
 
-  $rootScope.theme = 'theme-settings';
+  $rootScope.currentClass = 'settings';
   $scope.type = 'settings';
 
   $scope.settings = settings;
+
+  $scope.$watch('settings', settings.apply, true);
 }]);
 
 ui.controller('NetConfCtrl', [
     '$rootScope', '$scope', '$stateParams', 'networks',
     function($rootScope, $scope, $stateParams, networks) {
 
-  $rootScope.theme = 'theme-settings';
+  $rootScope.currentClass = 'settings';
   $scope.type = 'settings';
 
   var network = networks[$stateParams.index];

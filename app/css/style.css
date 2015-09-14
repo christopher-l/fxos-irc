@@ -42,6 +42,7 @@ gaia-drawer > div {
   min-height: calc(100vh - 200px);
   max-height: calc(100vh - 95px);
   color: var(--text-color);
+  background-color: var(--text-input-background, var(--background));
 }
 
 #network-list {

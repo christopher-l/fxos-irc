@@ -51,7 +51,8 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
  * provides the method:
  *   save():  Write settings to localStorage.
  */
-data.factory('settings', ['Storage', function settingsFactory(Storage) {
+data.factory('settings', ['$rootScope', 'Storage',
+    function settingsFactory($rootScope, Storage) {
 
   var settings = new Storage('settings', {
     darkTheme: false,
@@ -62,6 +63,34 @@ data.factory('settings', ['Storage', function settingsFactory(Storage) {
   settings.data.save = function() {
     settings.save();
   };
+
+  settings.data.apply = function() {
+    applyDarkTheme(settings.data.darkTheme);
+    settings.save();
+  };
+
+  var applyDarkTheme;
+
+  (function setupDarkTheme() {
+    var lightTheme = {
+      main: 'theme-communications',
+      settings: 'theme-settings'
+    };
+    var darkTheme = {
+      main: 'theme-media',
+      settings: 'theme-media'
+    };
+    var currentTheme;
+    applyDarkTheme = function(value) {
+      currentTheme = value ? darkTheme : lightTheme;
+    };
+    applyDarkTheme(settings.data.darkTheme);
+    Object.defineProperty($rootScope, 'theme', {
+      get: function() {
+        return currentTheme[$rootScope.currentClass];
+      }
+    });
+  })();
 
   return settings.data;
 
