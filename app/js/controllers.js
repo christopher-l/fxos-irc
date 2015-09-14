@@ -58,8 +58,12 @@ ui.controller('NetConfCtrl', [
   $scope.type = 'settings';
   theme.setThemeClass('settings');
 
-  var network = networks[$stateParams.index];
+  var network = $stateParams.index ?
+      networks[$stateParams.index] :
+      networks.new();
   $scope.network = network.getConfig();
+
+  $scope.isNew = network.new;
 
   $scope.save = function() {
     network.applyConfig($scope.network);

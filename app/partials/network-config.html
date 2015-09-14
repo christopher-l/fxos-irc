@@ -1,5 +1,5 @@
 <gaia-header action="close" irc-action="back()">
-  <h1>{{network.new ? 'New Network' : network.name}}</h1>
+  <h1>{{isNew ? 'New Network' : network.name}}</h1>
   <button ng-click="save(); back();">Save</button>
 </gaia-header>
 
