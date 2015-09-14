@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="irc.adapters">
+<head>
+  <meta charset="utf-8">
+  <!-- Gaia components -->
+  <script src="/app/bower_components/gaia-component/gaia-component.js"></script>
+  <script src="bower_components/gaia-dialog/gaia-dialog.js"></script>
+  <script src="bower_components/gaia-dialog/gaia-dialog-select.js"></script>
+
+  <!-- Angular -->
+  <script src="/app/bower_components/angular/angular.js"></script>
+
+  <script src="/app/js/app.js"></script>
+  <script src="/app/js/directives.js"></script>
+</head>
+
+<body>
+  <gaia-dialog-select irc-dialog="dialog" model="selection">
+    <li>foo</li>
+    <li>bar</li>
+  </gaia-dialog-select>
+  <div>{{selection}}</div>
+</body>
+</html>

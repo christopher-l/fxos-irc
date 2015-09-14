@@ -388,5 +388,43 @@ describe('irc-dialog', function() {
 
   });
 
+});
+
+describe('irc-dialog-select', function() {
+
+  var scope;
+  var element;
+
+  beforeEach(module('irc.adapters'));
+
+  beforeEach(inject(function($rootScope, $compile) {
+    scope = $rootScope.$new();
+    element = angular.element('<div irc-dialog="dialog" model=select>' +
+        '<li>foo</li>' +
+        '<li>bar</li>' +
+        '</div>');
+    element[0].clearSelected = jasmine.createSpy('clearSelected');
+    element = $compile(element)(scope);
+  }));
+
+  it('should update selection', function() {
+    expect(element[0].clearSelected).not.toHaveBeenCalled();
+    expect(element.find('li')[0].hasAttribute('aria-selected')).toBeFalsy();
+    expect(element.find('li')[1].hasAttribute('aria-selected')).toBeFalsy();
+    scope.select = 'bar';
+    scope.$digest();
+    expect(element[0].clearSelected).toHaveBeenCalled();
+    expect(element.find('li')[0].hasAttribute('aria-selected')).toBeFalsy();
+    expect(element.find('li')[1].hasAttribute('aria-selected')).toBeTruthy();
+  });
+
+  it('should update the model', function() {
+    expect(scope.select).toBeUndefined();
+    element.triggerHandler({
+      type: 'change',
+      detail: {value: 'foo'}
+    });
+    expect(scope.select).toBe('foo');
+  });
 
 });

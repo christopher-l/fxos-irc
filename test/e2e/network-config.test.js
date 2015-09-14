@@ -30,7 +30,7 @@ describe('network-config', function() {
     });
 
     it('should have "Auto Connect" unchecked', function() {
-      browser.sleep(3000);
+      // browser.sleep(3000);
       expect(autoConnect.getAttribute('checked')).toBeFalsy();
     });
 
