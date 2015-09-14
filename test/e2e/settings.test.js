@@ -6,6 +6,14 @@ describe('settings', function() {
   var doneButton = element(by.css('gaia-header button'));
   var settingsButton = element(by.css('gaia-button#settings-button'));
   var themeSwitch = element(by.css('gaia-switch'));
+  var fontSizeSlider = element(by.css('[model="settings.fontSize"]'));
+  var fontSizeOutput = fontSizeSlider.element(by.css('output'));
+  var onStartupSelector = element(by.binding('settings.onStartup'));
+  var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
+  var resetState = onStartupDialog.element(
+      by.cssContainingText('li', 'Reset State'));
+  var restoreState = onStartupDialog.element(
+      by.cssContainingText('li', 'Restore Last State'));
 
   var get = function(identifier) {
     var deferred = protractor.promise.defer();
@@ -20,23 +28,6 @@ describe('settings', function() {
     browser.get('#/settings');
   });
 
-  it('should save to localStorage', function() {
-    get('window.localStorage').then(function(localStorage) {
-      expect(localStorage.settings).toBeTruthy();
-      var settings = JSON.parse(localStorage.settings);
-      expect(settings.fontSize).toBe(12);
-      expect(settings.darkTheme).toBe(false);
-    });
-    themeSwitch.click();
-    doneButton.click();
-    get('window.localStorage').then(function(localStorage) {
-      expect(localStorage.settings).toBeTruthy();
-      var settings = JSON.parse(localStorage.settings);
-      expect(settings.fontSize).toBe(12);
-      expect(settings.darkTheme).toBe(true);
-    });
-  });
-
   it('should open when clicking the settings button', function() {
     browser.get('');
     expect(browser.getCurrentUrl()).not.toContain('#/settings');
@@ -45,8 +36,43 @@ describe('settings', function() {
     expect(browser.getCurrentUrl()).toContain('#/settings');
   });
 
+  it('should load the defaults', function() {
+    expect(themeSwitch.getAttribute('checked')).toBeFalsy();
+    expect(fontSizeOutput.getText()).toBe('12');
+    expect(onStartupSelector.getText()).toBe('Reset State');
+    onStartupSelector.click();
+    expect(resetState.getAttribute('aria-selected')).toBeTruthy();
+    expect(restoreState.getAttribute('aria-selected')).toBeFalsy();
+  });
+
+  it('should save to localStorage', function() {
+    get('window.localStorage').then(function(localStorage) {
+      expect(localStorage.settings).toBeTruthy();
+      var settings = JSON.parse(localStorage.settings);
+      expect(settings.fontSize).toBe(12);
+      expect(settings.darkTheme).toBe(false);
+      expect(settings.onStartup).toBe('Reset State');
+    });
+    themeSwitch.click();
+    onStartupSelector.click();
+    restoreState.click();
+    doneButton.click();
+    get('window.localStorage').then(function(localStorage) {
+      expect(localStorage.settings).toBeTruthy();
+      var settings = JSON.parse(localStorage.settings);
+      expect(settings.fontSize).toBe(12);
+      expect(settings.darkTheme).toBe(true);
+      expect(settings.onStartup).toBe('Restore Last State');
+    });
+  });
+
   it('should load the settings', function() {
     expect(themeSwitch.getAttribute('checked')).toBeTruthy();
+    expect(fontSizeOutput.getText()).toBe('12');
+    expect(onStartupSelector.getText()).toBe('Restore Last State');
+    onStartupSelector.click();
+    expect(resetState.getAttribute('aria-selected')).toBeFalsy();
+    expect(restoreState.getAttribute('aria-selected')).toBeTruthy();
   });
 
 });
