@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="irc.adapters">
+<head>
+  <meta charset="utf-8">
+  <!-- Gaia components -->
+  <script src="/app/bower_components/gaia-component/gaia-component.js"></script>
+  <script src="/app/bower_components/gaia-slider/gaia-slider.js"></script>
+
+  <!-- Angular -->
+  <script src="/app/bower_components/angular/angular.js"></script>
+
+  <script src="/app/js/app.js"></script>
+  <script src="/app/js/directives.js"></script>
+</head>
+
+<body>
+  <irc-slider
+      min="3" max="30" unit="bananas"
+      model="bananas">
+    Bananas
+  </irc-slider>
+  <div>{{bananas}}</div>
+</body>
+</html>

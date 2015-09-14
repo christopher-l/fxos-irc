@@ -1,5 +1,40 @@
 'use strict';
 
+fdescribe('irc-slider', function() {
+
+  var ircSlider = element(by.css('irc-slider'));
+  var gaiaSlider = element(by.css('gaia-slider'));
+  var output = ircSlider.element(by.css('output'));
+  var monitor = element(by.css('div'));
+
+  beforeEach(function() {
+    browser.get('/test/e2e/html/slider.html');
+  });
+
+  it('should update the slider', function() {
+    ircSlider.evaluate('bananas = 5; $digest();');
+    expect(browser.executeScript(function() {
+      /* global document */
+      var el = document.querySelector('gaia-slider');
+      return el.shadowRoot.querySelector('input').value;
+    })).toBe('5');
+    expect(output.getText()).toBe('5');
+  });
+
+  it('should update the model', function() {
+    browser.executeScript(function() {
+      /* global CustomEvent */
+      var el = document.querySelector('gaia-slider');
+      var input = el.shadowRoot.querySelector('input');
+      input.value = 28;
+      input.dispatchEvent(new CustomEvent('input'));
+    });
+    expect(monitor.getText()).toBe('28');
+    expect(output.getText()).toBe('28');
+  });
+
+});
+
 describe('gaia-checkbox', function() {
 
   var gaiaCheckbox = element(by.css('gaia-checkbox'));
