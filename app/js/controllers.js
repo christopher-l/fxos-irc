@@ -2,17 +2,19 @@
 
 var ui = angular.module('irc.ui');
 
-ui.controller('TitleCtrl', ['$rootScope', function($rootScope) {
-  $rootScope.statusbarColor = 'var(--header-background)';
-  $rootScope.title = 'IRC';
+ui.controller('TitleCtrl', ['$scope', 'theme', function($scope, theme) {
+  $scope.statusbarColor = 'var(--header-background)';
+  $scope.title = 'IRC';
+  $scope.theme = theme;
+  theme.titleScope = $scope;
 }]);
 
 ui.controller('MainCtrl', [
-    '$rootScope', '$scope', '$stateParams', 'networks',
-    function($rootScope, $scope, $stateParams, networks) {
+    '$scope', '$stateParams', 'networks', 'theme',
+    function($scope, $stateParams, networks, theme) {
 
-  $rootScope.currentClass = 'main';
   $scope.type = 'main';
+  theme.setThemeClass('main');
 
   $scope.drawer = $stateParams.drawer;
 
@@ -38,23 +40,23 @@ ui.controller('ConversationCtrl', ['$scope', function($scope) {
 }]);
 
 ui.controller('SettingsCtrl', [
-    '$rootScope', '$scope', 'settings',
-    function($rootScope, $scope, settings) {
+    '$scope', 'settings', 'theme',
+    function($scope, settings, theme) {
 
-  $rootScope.currentClass = 'settings';
   $scope.type = 'settings';
+  theme.setThemeClass('settings');
 
-  $scope.settings = settings;
+  $scope.settings = settings.data;
 
   $scope.$watch('settings', settings.apply, true);
 }]);
 
 ui.controller('NetConfCtrl', [
-    '$rootScope', '$scope', '$stateParams', 'networks',
-    function($rootScope, $scope, $stateParams, networks) {
+    '$scope', '$stateParams', 'networks', 'theme',
+    function($scope, $stateParams, networks, theme) {
 
-  $rootScope.currentClass = 'settings';
   $scope.type = 'settings';
+  theme.setThemeClass('settings');
 
   var network = networks[$stateParams.index];
   $scope.network = network.getConfig();

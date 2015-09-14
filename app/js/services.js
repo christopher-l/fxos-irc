@@ -48,8 +48,9 @@ data.factory('Storage', ['$window', function StorageFactory($window) {
  * Settings Service
  *
  * Provides an object on which settings are stored as properties.  Also
- * provides the method:
+ * provides the methods:
  *   save():  Write settings to localStorage.
+ *   apply(): Apply changes and save.
  */
 data.factory('settings', ['$rootScope', 'Storage',
     function settingsFactory($rootScope, Storage) {
@@ -60,39 +61,68 @@ data.factory('settings', ['$rootScope', 'Storage',
     onStartup: 'Reset State',
   });
 
-  settings.data.save = function() {
-    settings.save();
-  };
+  var listeners = {};
+  for (var prop in settings.data) {
+    listeners[prop] = [];
+  }
 
-  settings.data.apply = function() {
-    applyDarkTheme(settings.data.darkTheme);
-    settings.save();
-  };
-
-  var applyDarkTheme;
-
-  (function setupDarkTheme() {
-    var lightTheme = {
-      main: 'theme-communications',
-      settings: 'theme-settings'
-    };
-    var darkTheme = {
-      main: 'theme-media',
-      settings: 'theme-media'
-    };
-    var currentTheme;
-    applyDarkTheme = function(value) {
-      currentTheme = value ? darkTheme : lightTheme;
-    };
-    applyDarkTheme(settings.data.darkTheme);
-    Object.defineProperty($rootScope, 'theme', {
-      get: function() {
-        return currentTheme[$rootScope.currentClass];
+  settings.apply = function(newVal, oldVal, scope) {
+    for (var prop in listeners) {
+      if (newVal[prop] !== oldVal[prop]) {
+        listeners[prop].forEach(fn => fn(newVal[prop], scope));
       }
-    });
-  })();
+    }
+    settings.save();
+  };
 
-  return settings.data;
+  settings.register = function(prop, fn) {
+    listeners[prop].push(fn);
+    fn(settings.data[prop]);
+  };
+
+  return settings;
+
+}]);
+
+
+data.service('theme', ['settings', function Theme(settings) {
+
+  var self = this;
+
+  var lightTheme = {
+    main: 'theme-communications',
+    settings: 'theme-settings'
+  };
+
+  var darkTheme = {
+    main: 'theme-media',
+    settings: 'theme-media'
+  };
+
+  var currentTheme;
+  var themeClass;
+
+  settings.register('darkTheme', function(value, scope) {
+    currentTheme = value ? darkTheme : lightTheme;
+    if (self.titleScope) {
+      setTimeout(() => self.titleScope.$digest());
+    }
+  });
+
+  this.setThemeClass = function(value) {
+    themeClass = value;
+  };
+
+  Object.defineProperties(this, {
+    'group': {
+      get: function() {
+        return currentTheme[themeClass];
+      }
+    },
+    'color': {
+      value: 'var(--header-background)'
+    }
+  });
 
 }]);
 
