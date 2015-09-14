@@ -315,6 +315,7 @@ describe('Network', function() {
 describe('networks', function() {
 
   var networks;
+  var Network;
   var mock;
 
   beforeEach(module('irc.data'));
@@ -328,30 +329,42 @@ describe('networks', function() {
     module(function($provide) {
       $provide.value('$window', mock);
     });
-  });
-
-  var load = function() {
     inject(function($injector) {
       networks = $injector.get('networks');
+      Network = $injector.get('Network');
     });
-  };
+  });
 
   it('should load empty netork list', function() {
-    mock.localStorage.networks = '[]';
-    load();
     expect(networks instanceof Array).toBe(true);
     expect(networks.length).toBe(0);
   });
 
+  it('should add networks', function() {
+    networks.new().save();
+    expect(networks.length).toBe(1);
+    networks.new().save();
+    expect(networks.length).toBe(2);
+  });
+
+  it('should focus networks', function() {
+    networks.new().save();
+    networks.new().save();
+    expect(networks[0].focused).toBe(false);
+    expect(networks[1].focused).toBe(false);
+    networks[1].focus();
+    expect(networks[0].focused).toBe(false);
+    expect(networks[1].focused).toBe(true);
+    networks[0].focus();
+    expect(networks[0].focused).toBe(true);
+    expect(networks[1].focused).toBe(false);
+  });
+
   describe('new network', function() {
 
-    var Network;
     var network;
 
     beforeEach(inject(function(_Network_) {
-      Network = _Network_;
-      mock.localStorage.networks = '[]';
-      load();
       network = networks.new();
     }));
 

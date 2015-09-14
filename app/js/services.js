@@ -120,17 +120,27 @@ data.factory('Channel', [function ChannelFactory() {
  *
  * Provides a constructor for network objects.
  */
-data.factory('Network', ['Channel', function NetworkFactory(Channel) {
+data.factory('Network', [
+    'Channel', 'settings',
+    function NetworkFactory(Channel, settings) {
 
   var Network = function(storageRef) {
+    // Set up state
     this._state = {
       status: 'disconnected',
       unreadCount: 0,
+      focused: false,
     };
+    if (settings.onStartup === 'Restore Last State' && storageRef) {
+      if (storageRef.lastState.focused) {
+        this.focus();
+      }
+    }
+    // Set up storageRef
     if (storageRef) {
       this._storageRef = storageRef;
       this._config = storageRef.config;
-    } else {
+    } else { // Network is new
       this.new = true;
       this._config = {};
       this._storageRef = {
@@ -138,12 +148,13 @@ data.factory('Network', ['Channel', function NetworkFactory(Channel) {
         channels: []
       };
     }
+    this._storageRef.lastState = this._state;
+    // Set up channels
     this.channels = [];
     var self = this;
     this._storageRef.channels.forEach(function(chan) {
       self.channels.push(new Channel(chan));
     });
-    this._storageRef.lastState = this._state;
   };
 
   Network.prototype = {
