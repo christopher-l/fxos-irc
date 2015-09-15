@@ -24,6 +24,14 @@ describe('settings', function() {
     return deferred.promise;
   };
 
+  beforeAll(function() {
+    browser.get('#/settings');
+    browser.executeScript(function() {
+      /* global localStorage */
+      localStorage.removeItem('settings');
+    });
+  });
+
   beforeEach(function() {
     browser.get('#/settings');
   });

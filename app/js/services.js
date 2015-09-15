@@ -213,7 +213,7 @@ data.factory('Network', [
       unreadCount: 0,
       focused: false,
     };
-    if (settings.onStartup === 'Restore Last State' && storageRef) {
+    if (settings.data.onStartup === 'restore' && storageRef) {
       if (storageRef.lastState.focused) {
         this.focus();
       }

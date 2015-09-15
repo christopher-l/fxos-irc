@@ -57,4 +57,68 @@ describe('network-list', function() {
 
   });
 
+  describe('reset state', function() {
+
+    var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
+    var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
+    var resetState = onStartupDialog.element(
+        by.cssContainingText('li', 'Reset State'));
+
+    var networkEntry = networkItem.element(by.css('div.network-entry'));
+    var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
+
+    beforeAll(function() {
+      browser.get('#/settings');
+      onStartupSelector.click();
+      resetState.click();
+    });
+
+    it('should reset focus', function() {
+      expect(focusIndicator.getCssValue('background-color'))
+          .toBe('transparent');
+      networkEntry.click();
+      expect(focusIndicator.getCssValue('background-color'))
+          .not.toBe('transparent');
+      browser.get('');
+      uiView.evaluate('drawer.open = true; $digest();');
+      expect(focusIndicator.getCssValue('background-color'))
+          .toBe('transparent');
+    });
+
+  });
+
+  describe('restore state', function() {
+
+    var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
+    var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
+    var restoreState = onStartupDialog.element(
+        by.cssContainingText('li', 'Restore Last State'));
+
+    var networkEntry = networkItem.element(by.css('div.network-entry'));
+    var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
+
+    beforeAll(function() {
+      browser.executeScript(function() {
+        /* global localStorage */
+        localStorage.removeItem('networks');
+      });
+      browser.get('#/settings');
+      onStartupSelector.click();
+      restoreState.click();
+    });
+
+    it('should reset focus', function() {
+      expect(focusIndicator.getCssValue('background-color'))
+          .toBe('transparent');
+      networkEntry.click();
+      expect(focusIndicator.getCssValue('background-color'))
+          .not.toBe('transparent');
+      browser.get('');
+      uiView.evaluate('drawer.open = true; $digest();');
+      expect(focusIndicator.getCssValue('background-color'))
+          .not.toBe('transparent');
+    });
+
+  });
+
 });
