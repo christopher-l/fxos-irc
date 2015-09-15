@@ -8,7 +8,7 @@ describe('settings', function() {
   var themeSwitch = element(by.css('gaia-switch'));
   var fontSizeSlider = element(by.css('[model="settings.fontSize"]'));
   var fontSizeOutput = fontSizeSlider.element(by.css('output'));
-  var onStartupSelector = element(by.binding('settings.onStartup'));
+  var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
   var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
   var resetState = onStartupDialog.element(
       by.cssContainingText('li', 'Reset State'));

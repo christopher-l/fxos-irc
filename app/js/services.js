@@ -64,7 +64,7 @@ data.factory('settings', ['$rootScope', 'Storage',
   var settings = new Storage('settings', {
     darkTheme: false,
     fontSize: 12,
-    onStartup: 'Reset State',
+    onStartup: 'reset',
   });
 
   var listeners = {};

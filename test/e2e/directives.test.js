@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('irc-slider', function() {
+describe('irc-slider', function() {
 
   var ircSlider = element(by.css('irc-slider'));
   var gaiaSlider = element(by.css('gaia-slider'));
@@ -65,7 +65,8 @@ describe('gaia-checkbox', function() {
 describe('gaia-dialog-select', function() {
 
   var dialog = element(by.css('gaia-dialog-select'));
-  var monitor = element(by.css('div'));
+  var valueMonitor = element(by.css('div.value'));
+  var textMonitor = element(by.css('div.text'));
   var foo = dialog.element(by.cssContainingText('li', 'Foo!'));
   var bar = dialog.element(by.cssContainingText('li', 'Bar!'));
 
@@ -86,13 +87,21 @@ describe('gaia-dialog-select', function() {
   });
 
   it('should update the model', function() {
-    expect(monitor.getText()).toBe('');
+    expect(valueMonitor.getText()).toBe('');
     dialog.evaluate('dialog.open()');
     foo.click();
-    expect(monitor.getText()).toBe('foo');
+    expect(valueMonitor.getText()).toBe('foo');
     dialog.evaluate('dialog.open()');
     bar.click();
-    expect(monitor.getText()).toBe('bar');
+    expect(valueMonitor.getText()).toBe('bar');
+  });
+
+  it('shoudl update currentText', function() {
+    dialog.evaluate('dialog.open()');
+    foo.click();
+    expect(textMonitor.getText()).toBe('Foo!');
+    dialog.evaluate('selection = "bar"; $digest()');
+    expect(textMonitor.getText()).toBe('Bar!');
   });
 
 });

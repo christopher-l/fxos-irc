@@ -421,8 +421,26 @@ describe('irc-dialog-select', function() {
   it('should update the model', function() {
     expect(scope.select).toBeUndefined();
     element[0].value = 'foo';
-    element.triggerHandler('change');
+    element.triggerHandler({
+      type: 'change',
+      detail: {
+        value: 'Foo'
+      }
+    });
     expect(scope.select).toBe('foo');
+  });
+
+  it('should update currentText', function() {
+    scope.select = 'bar';
+    scope.$digest();
+    expect(scope.dialog.currentText).toBe('Bar');
+    element.triggerHandler({
+      type: 'change',
+      detail: {
+        value: 'Foo'
+      }
+    });
+    expect(scope.dialog.currentText).toBe('Foo');
   });
 
 });
