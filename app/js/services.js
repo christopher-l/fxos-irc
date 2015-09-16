@@ -266,7 +266,13 @@ data.factory('Network', [
 
   [
     'name',
-    'autoConnect'
+    'autoConnect',
+    'host',
+    'port',
+    'tls',
+    'nick',
+    'user',
+    'password',
   ].forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
       get: function() {
