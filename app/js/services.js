@@ -392,6 +392,8 @@ data.factory('networks', [
     networks.push(new Network(net));
   });
 
+  storage.save();
+
   networks.new = function() {
     return new Network();
   };

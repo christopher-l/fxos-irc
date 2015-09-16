@@ -9,6 +9,16 @@ describe('network-list', function() {
   var header = element(by.css('gaia-header'));
   var networkList = element(by.css('#network-list'));
   var networkItem = networkList.all(by.css('li')).first();
+  var networkEntry = networkItem.element(by.css('div.network-entry'));
+  var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
+
+
+  var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
+  var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
+  var resetState = onStartupDialog.element(
+      by.cssContainingText('li', 'Reset State'));
+  var restoreState = onStartupDialog.element(
+      by.cssContainingText('li', 'Restore Last State'));
 
   beforeEach(function() {
     browser.get('');
@@ -59,14 +69,6 @@ describe('network-list', function() {
 
   describe('reset state', function() {
 
-    var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
-    var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
-    var resetState = onStartupDialog.element(
-        by.cssContainingText('li', 'Reset State'));
-
-    var networkEntry = networkItem.element(by.css('div.network-entry'));
-    var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
-
     beforeAll(function() {
       browser.get('#/settings');
       onStartupSelector.click();
@@ -88,14 +90,6 @@ describe('network-list', function() {
   });
 
   describe('restore state', function() {
-
-    var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
-    var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
-    var restoreState = onStartupDialog.element(
-        by.cssContainingText('li', 'Restore Last State'));
-
-    var networkEntry = networkItem.element(by.css('div.network-entry'));
-    var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
 
     beforeAll(function() {
       browser.executeScript(function() {
@@ -119,6 +113,23 @@ describe('network-list', function() {
           .not.toBe('transparent');
     });
 
+  });
+
+  it('should initially set lastState', function() {
+      browser.get('#/settings');
+      onStartupSelector.click();
+      resetState.click();
+      browser.get('');
+      uiView.evaluate('drawer.open = true; $digest();');
+      networkEntry.click();
+      browser.get('');
+      browser.get('#/settings');
+      onStartupSelector.click();
+      restoreState.click();
+      browser.get('');
+      uiView.evaluate('drawer.open = true; $digest();');
+      expect(focusIndicator.getCssValue('background-color'))
+          .toBe('transparent');
   });
 
 });
