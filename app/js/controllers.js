@@ -37,6 +37,7 @@ ui.controller('MainCtrl', [
 }]);
 
 ui.controller('ConversationCtrl', ['$scope', function($scope) {
+  $scope.users = ['foo', 'bar', 'baz'];
 }]);
 
 ui.controller('SettingsCtrl', [
