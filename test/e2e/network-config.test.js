@@ -73,6 +73,23 @@ describe('network-config', function() {
     });
     saveButton.click();
 
+    expect(uiView.evaluate('networks[networks.length-1].name'))
+        .toBe('Test Name');
+    expect(uiView.evaluate('networks[networks.length-1].autoConnect'))
+        .toBe(true);
+    expect(uiView.evaluate('networks[networks.length-1].host'))
+        .toBe('test.host');
+    expect(uiView.evaluate('networks[networks.length-1].port'))
+        .toBe(1234);
+    expect(uiView.evaluate('networks[networks.length-1].tls'))
+        .toBe(true);
+    expect(uiView.evaluate('networks[networks.length-1].nick'))
+        .toBe('test-nick');
+    expect(uiView.evaluate('networks[networks.length-1].user'))
+        .toBe('testuser');
+    expect(uiView.evaluate('networks[networks.length-1].password'))
+        .toBe('testpass');
+
     uiView.evaluate('drawer.open = true; $digest();');
     var entry = networkItems.last().element(by.css('div.network-entry'));
     browser.actions()
@@ -90,6 +107,30 @@ describe('network-config', function() {
     expect(nickField.getAttribute('value')).toBe('test-nick');
     expect(userField.getAttribute('value')).toBe('testuser');
     expect(passwordField.getAttribute('value')).toBe('testpass');
+
+  });
+
+  it('should set the default port to 6667', function() {
+    browser.get('#/config/network/');
+    expect(browser.executeScript(function() {
+      var port = document.querySelector('[model="network.port"]');
+      return port.els.input.getAttribute('placeholder');
+    })).toBe('6667');
+    saveButton.click();
+    expect(uiView.evaluate('networks[networks.length-1].port'))
+        .toBe(6667);
+  });
+
+  it('should set the default tls port to 6697', function() {
+    browser.get('#/config/network/');
+    tlsField.click();
+    expect(browser.executeScript(function() {
+      var port = document.querySelector('[model="network.port"]');
+      return port.els.input.getAttribute('placeholder');
+    })).toBe('6697');
+    saveButton.click();
+    expect(uiView.evaluate('networks[networks.length-1].port'))
+        .toBe(6697);
   });
 
 });

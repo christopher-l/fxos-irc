@@ -66,6 +66,9 @@ ui.controller('NetConfCtrl', [
   $scope.isNew = network.new;
 
   $scope.save = function() {
+    if (!$scope.network.port) {
+      $scope.network.port = $scope.network.tls ? 6697 : 6667;
+    }
     network.applyConfig($scope.network);
   };
 
