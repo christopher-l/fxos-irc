@@ -12,14 +12,6 @@ describe('network-list', function() {
   var networkEntry = networkItem.element(by.css('div.network-entry'));
   var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
 
-
-  var onStartupSelector = element(by.binding('onStartupDialog.currentText'));
-  var onStartupDialog = element(by.css('[irc-dialog=onStartupDialog]'));
-  var resetState = onStartupDialog.element(
-      by.cssContainingText('li', 'Reset State'));
-  var restoreState = onStartupDialog.element(
-      by.cssContainingText('li', 'Restore Last State'));
-
   beforeEach(function() {
     browser.get('');
     uiView.evaluate('drawer.open = true; $digest();');
@@ -58,7 +50,6 @@ describe('network-list', function() {
     });
 
     it('should expand when clicking the indicator a second time', function() {
-      collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeTruthy();
       collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeFalsy();
@@ -67,41 +58,17 @@ describe('network-list', function() {
 
   });
 
-  describe('reset state', function() {
-
-    beforeAll(function() {
-      browser.get('#/settings');
-      onStartupSelector.click();
-      resetState.click();
-    });
-
-    it('should reset focus', function() {
-      expect(focusIndicator.getCssValue('background-color'))
-          .toBe('transparent');
-      networkEntry.click();
-      expect(focusIndicator.getCssValue('background-color'))
-          .not.toBe('transparent');
-      browser.get('');
-      uiView.evaluate('drawer.open = true; $digest();');
-      expect(focusIndicator.getCssValue('background-color'))
-          .toBe('transparent');
-    });
-
-  });
-
   describe('restore state', function() {
 
     beforeAll(function() {
+      browser.get('');
       browser.executeScript(function() {
         /* global localStorage */
         localStorage.removeItem('networks');
       });
-      browser.get('#/settings');
-      onStartupSelector.click();
-      restoreState.click();
     });
 
-    it('should reset focus', function() {
+    it('should restore focus', function() {
       expect(focusIndicator.getCssValue('background-color'))
           .toBe('transparent');
       networkEntry.click();
@@ -113,23 +80,6 @@ describe('network-list', function() {
           .not.toBe('transparent');
     });
 
-  });
-
-  it('should initially set lastState', function() {
-      browser.get('#/settings');
-      onStartupSelector.click();
-      resetState.click();
-      browser.get('');
-      uiView.evaluate('drawer.open = true; $digest();');
-      networkEntry.click();
-      browser.get('');
-      browser.get('#/settings');
-      onStartupSelector.click();
-      restoreState.click();
-      browser.get('');
-      uiView.evaluate('drawer.open = true; $digest();');
-      expect(focusIndicator.getCssValue('background-color'))
-          .toBe('transparent');
   });
 
 });

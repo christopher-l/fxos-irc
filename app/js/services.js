@@ -64,7 +64,6 @@ data.factory('settings', ['$rootScope', 'Storage',
   var settings = new Storage('settings', {
     darkTheme: false,
     fontSize: 12,
-    onStartup: 'reset',
   });
 
   var listeners = {};
@@ -212,8 +211,10 @@ data.factory('Network', [
       status: 'disconnected',
       unreadCount: 0,
       focused: false,
+      collapsed: false,
     };
-    if (settings.data.onStartup === 'restore' && storageRef) {
+    if (storageRef) {
+      this._state.collapsed = storageRef.lastState.collapsed;
       if (storageRef.lastState.focused) {
         this.focus();
       }
@@ -288,6 +289,7 @@ data.factory('Network', [
     'status',
     'unreadCount',
     'focused',
+    'collapsed',
   ].forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
       get: function() {

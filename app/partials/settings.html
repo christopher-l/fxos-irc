@@ -21,19 +21,4 @@
       Font Size
     </irc-slider>
   </li>
-  <li>
-    <i data-icon="rocket"></i>
-    <label flex>
-      On Startup
-    </label>
-    <gaia-value-selector ng-click="onStartupDialog.open()">
-      {{onStartupDialog.currentText}}
-    </gaia-value-selector>
-  </li>
 </gaia-list>
-
-<gaia-dialog-select irc-dialog="onStartupDialog" model="settings.onStartup">
-  <h1>On Startup</h1>
-  <li value="reset">Reset State</li>
-  <li value="restore">Restore Last State</li>
-</gaia-dialog-select>
