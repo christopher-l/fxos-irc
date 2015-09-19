@@ -273,6 +273,13 @@ adapters.directive('ircComplete', ['$parse', function($parse) {
       input.css('padding-left', '2rem');
       input.after(completeButton);
       completeButton.on('click', complete);
+      input[0].addEventListener('keydown', function(evt) {
+        var TABKEY = 9;
+        if (evt.keyCode === TABKEY) {
+          complete();
+          evt.preventDefault();
+        }
+      });
     }
   };
 }]);
