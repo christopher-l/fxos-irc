@@ -64,7 +64,8 @@
       <label flex>
         <h3>User</h3>
       </label>
-      <gaia-text-input id="user" placeholder="(Optional)"
+      <gaia-text-input id="user" placeholder="optional"
+          inputmode="verbatim"
           irc-text-input model="network.user">
       </gaia-text-input>
     </li>
@@ -72,8 +73,9 @@
       <label flex>
         <h3>Password</h3>
       </label>
-      <gaia-text-input id="password" type="password" placeholder="(Optional)"
-          irc-text-input model="network.password">
+      <gaia-text-input id="password" placeholder="optional"
+          inputmode="verbatim"
+          irc-text-input model="network.password" irc-password>
       </gaia-text-input>
     </li>
   </gaia-list>
