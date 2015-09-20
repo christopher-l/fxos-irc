@@ -2,6 +2,7 @@
 
 var networkConfig = angular.module('irc.views.network-config', [
   'ui.router',
+  'irc.views.config',
 ]);
 
 
