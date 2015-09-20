@@ -2,7 +2,7 @@
 
 describe('irc-theme-group', function() {
 
-  beforeEach(module('irc.views.main'));
+  beforeEach(module('irc.views.main.directives'));
 
   var scope;
   var head;

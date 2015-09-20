@@ -6,6 +6,7 @@ var main = angular.module('irc.views.main', [
   'irc.networks',
   'irc.views.conversation',
   'irc.views.menu',
+  'irc.views.main.directives',
 ]);
 
 
@@ -42,25 +43,4 @@ main.controller('MainCtrl', [
     };
   };
 
-}]);
-
-
-// Whenever "theme-group" changes, remove and reappend the "theme-group" and
-// "theme-color" meta tags to force the statusbar to apply the new colors.
-main.directive('ircThemeGroup',[function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      attrs.$observe('content', function() {
-        var parent = element.parent();
-        if (!parent[0]) { return; }
-        var themeColor = angular.element(
-            parent[0].querySelector('meta[name=theme-color]'));
-        element.remove();
-        themeColor.remove();
-        parent.append(element);
-        parent.append(themeColor);
-      });
-    }
-  };
 }]);
