@@ -1,0 +1,61 @@
+[ui-view][type=settings] {
+  transition-property: opacity;
+}
+
+[ui-view][type=settings].ng-enter,
+[ui-view][type=settings].ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+[ui-view][type=settings].ng-enter.ng-enter-active,
+[ui-view][type=settings].ng-leave {
+  opacity: 1;
+}
+
+gaia-list {
+  flex-grow: 1;
+  background-color: var(--background);
+  -moz-user-select: none;
+  overflow-y: auto;
+  z-index: 1; /* needed for ripple effect */
+}
+
+.config > h2 {
+  margin: 0px;
+  padding: 0.3rem 2rem;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: var(--border-color, #E7E7E7);
+  color: var(--text-color);
+}
+
+gaia-list > li > label {
+  background: none;
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+}
+
+gaia-list gaia-slider {
+  margin: 0px !important;
+}
+
+gaia-dialog-select {
+  z-index: 1;
+}
+
+.config {
+  overflow-y: auto;
+}
+
+gaia-list h3, p {
+  padding-left: 1rem;
+}
+
+gaia-list emph {
+  font-weight: bold;
+}
+
+gaia-list gaia-text-input {
+  margin: .5rem 0px !important;
+}

@@ -1,40 +1,48 @@
 'use strict';
 
-var navigation = angular.module('irc.navigation');
+var views = angular.module('irc.views', [
+  'ui.router',
+  'irc.views.gaia',
+  'irc.views.main',
+  'irc.views.settings',
+  'irc.views.network-config',
+]);
 
-navigation.config(['$stateProvider', '$urlRouterProvider',
+
+views.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise("/show/foo/bar");
+  $urlRouterProvider.otherwise('/show/foo/bar');
 
   $stateProvider
     .state('main', {
-      url: "/",
+      url: '/',
       abstract: true,
-      templateUrl: "partials/main.html",
+      templateUrl: 'views/main/main.html',
       controller: 'MainCtrl',
       params: {
         drawer: {}
       }
     })
     .state('main.conversation', {
-      url: "show/:network/:channel",
-      templateUrl: "partials/conversation.html",
+      url: 'show/:network/:channel',
+      templateUrl: 'views/conversation/conversation.html',
       controller: 'ConversationCtrl'
     })
     .state('settings', {
-      url: "/settings",
-      templateUrl: "partials/settings.html",
+      url: '/settings',
+      templateUrl: 'views/settings/settings.html',
       controller: 'SettingsCtrl'
     })
     .state('network-config', {
-      url: "/config/network/:index",
-      templateUrl: "partials/network-config.html",
+      url: '/config/network/:index',
+      templateUrl: 'views/network-config/network-config.html',
       controller: 'NetConfCtrl'
     });
 }]);
 
-navigation.run(['$rootScope', '$state', function($rootScope, $state) {
+
+views.run(['$rootScope', '$state', function($rootScope, $state) {
   $rootScope.$on('$stateChangeSuccess',
       function(event, toState, toParams, fromState, fromParams) {
     $rootScope.prevState = fromState;

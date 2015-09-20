@@ -1,0 +1,10 @@
+gaia-list #port {
+  width: 5rem !important;
+  margin: 0px !important;
+}
+
+gaia-list #user,
+gaia-list #password {
+  width: calc(100% - 7rem);
+  margin: 0px !important;
+}

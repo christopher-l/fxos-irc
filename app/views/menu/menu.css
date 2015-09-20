@@ -1,28 +1,4 @@
-/*
- * Main Window
- */
-body {
-  overflow-x: hidden;
-  overflow-y: hidden;
-  font-family: fira sans, droid sans fallback;
-  font-weight: normal;
-}
-
-body > div[ui-view] {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  transition-duration: 200ms;
-  transition-property: none;
-}
-
-body > div[ui-view][type=main].ng-animate {
-  z-index: -10;
-}
-
-/*
+/**
  * Drawer
  */
 gaia-drawer {
@@ -70,8 +46,8 @@ gaia-drawer > div {
   border-right: solid 1px var(--border-color);
 }
 
-/*
- * Network
+/**
+ * Network List
  */
 #network-list > li {
   position: relative;
@@ -191,89 +167,4 @@ gaia-drawer > div {
 
 #network-list > li[collapsed] .collapse-indicator {
   transform: rotate(-90deg);
-}
-
-/*
- * Settings
- */
-[ui-view][type=settings] {
-  transition-property: opacity;
-}
-
-[ui-view][type=settings].ng-enter,
-[ui-view][type=settings].ng-leave.ng-leave-active {
-  opacity: 0;
-}
-
-[ui-view][type=settings].ng-enter.ng-enter-active,
-[ui-view][type=settings].ng-leave {
-  opacity: 1;
-}
-
-gaia-list {
-  flex-grow: 1;
-  background-color: var(--background);
-  -moz-user-select: none;
-  overflow-y: auto;
-  z-index: 1; /* needed for ripple effect */
-}
-
-.config > h2 {
-  margin: 0px;
-  padding: 0.3rem 2rem;
-  font-size: 1rem;
-  font-weight: 400;
-  background-color: var(--border-color, #E7E7E7);
-  color: var(--text-color);
-}
-
-gaia-list > li > label {
-  background: none;
-  display: flex;
-  min-height: 42px;
-  align-items: center;
-}
-
-gaia-list gaia-slider {
-  margin: 0px !important;
-}
-
-gaia-dialog-select {
-  z-index: 1;
-}
-
-/* config */
-.config {
-  overflow-y: auto;
-}
-
-gaia-list h3, p {
-  padding-left: 1rem;
-}
-gaia-list emph {
-  font-weight: bold;
-}
-gaia-list gaia-text-input {
-  margin: .5rem 0px !important;
-}
-gaia-list #port {
-  width: 5rem !important;
-  margin: 0px !important;
-}
-gaia-list #user,
-gaia-list #password {
-  width: calc(100% - 7rem);
-  margin: 0px !important;
-}
-
-
-/*
- * Dialog
- */
-button.danger {
-  color: var(--color-destructive) !important;
-}
-
-button.primary {
-  color: var(--highlight-color) !important;
 }

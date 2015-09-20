@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(config){
   config.set({
 
@@ -8,7 +10,9 @@ module.exports = function(config){
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/gaia-component/gaia-component.js',
       'app/bower_components/gaia-slider/gaia-slider.js',
-      'app/js/*.js',
+      'app/services/**/*.js',
+      'app/views/**/*.js',
+      'app/app.js',
       'test/unit/*.test.js',
     ],
 
@@ -16,7 +20,7 @@ module.exports = function(config){
 
     browsers: ['firefox_with_web_components'],
     customLaunchers: {
-      firefox_with_web_components: {
+      'firefox_with_web_components': {
         base: 'Firefox',
         prefs: {'dom.webcomponents.enabled': true}
       }

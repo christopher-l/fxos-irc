@@ -1,0 +1,10 @@
+/**
+ * Dialog
+ */
+button.danger {
+  color: var(--color-destructive) !important;
+}
+
+button.primary {
+  color: var(--highlight-color) !important;
+}

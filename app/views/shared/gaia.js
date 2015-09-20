@@ -1,49 +1,12 @@
 'use strict';
 /* global MutationObserver */
 
-var adapters = angular.module('irc.adapters');
+var gaia = angular.module('irc.views.gaia', []);
 
-// Bind to a long touch on mobile and right click on desktop.
-// From https://stackoverflow.com/a/15732476
-adapters.directive('ircContextMenu', ['$parse', function($parse) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var fn = $parse(attrs.ircContextMenu);
-      element.bind('contextmenu', function(event) {
-        scope.$apply(function() {
-          event.preventDefault();
-          fn(scope, {$event: event});
-        });
-      });
-    }
-  };
-}]);
-
-
-// Whenever "theme-group" changes, remove and reappend the "theme-group" and
-// "theme-color" meta tags to force the statusbar to apply the new colors.
-adapters.directive('ircThemeGroup',[function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      attrs.$observe('content', function() {
-        var parent = element.parent();
-        if (!parent[0]) { return; }
-        var themeColor = angular.element(
-            parent[0].querySelector('meta[name=theme-color]'));
-        element.remove();
-        themeColor.remove();
-        parent.append(element);
-        parent.append(themeColor);
-      });
-    }
-  };
-}]);
 
 // Evaluate a given expression when the "action" event is fired by the
 // object.
-adapters.directive('ircAction', function() {
+gaia.directive('ircAction', function() {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -54,8 +17,9 @@ adapters.directive('ircAction', function() {
   };
 });
 
+
 // Like ngOpen, but also update the module, as the attribute changes.
-adapters.directive('ircOpen', ['$parse', function($parse) {
+gaia.directive('ircOpen', ['$parse', function($parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -91,23 +55,9 @@ adapters.directive('ircOpen', ['$parse', function($parse) {
   };
 }]);
 
-// Bind the client-height property to a given scope variable.
-adapters.directive('ircClientHeight', ['$parse', function($parse) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var model = $parse(attrs.ircClientHeight);
-      scope.$watch(function() {
-        return element.prop('clientHeight');
-      }, function(value) {
-        model.assign(scope, value);
-      });
-    }
-  };
-}]);
 
 // Bind a gaia-switch element to a model.
-adapters.directive('ircSwitch', ['$parse', function($parse) {
+gaia.directive('ircSwitch', ['$parse', function($parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -128,12 +78,13 @@ adapters.directive('ircSwitch', ['$parse', function($parse) {
   };
 }]);
 
+
 // Wrap gaia-slider to include further attributes:
 //   model: Passed as ngModel to the input
 //   min:   The minimum input value
 //   max:   The maximum input value
 //   unit:  The unit appended to output field when shown to the user
-adapters.directive('ircSlider', ['$compile', '$parse',
+gaia.directive('ircSlider', ['$compile', '$parse',
     function($compile, $parse) {
   return {
     restrict: 'E',
@@ -167,8 +118,9 @@ adapters.directive('ircSlider', ['$compile', '$parse',
   };
 }]);
 
+
 // Bind a gaia-text-input to a model with the "model" attribute.
-adapters.directive('ircTextInput', ['$compile', function($compile) {
+gaia.directive('ircTextInput', ['$compile', function($compile) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -179,113 +131,9 @@ adapters.directive('ircTextInput', ['$compile', function($compile) {
   };
 }]);
 
-// Add a show/hide button to a gaia-text-input.
-adapters.directive('ircPassword', [function() {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var show = false;
-      function onShowButton() {
-        var start = input[0].selectionStart;
-        var end = input[0].selectionEnd;
-        show = !show;
-        if (show) {
-          showButton.text('hide');
-          attrs.$set('type', 'text');
-        } else {
-          showButton.text('show');
-          attrs.$set('type', 'password');
-        }
-        input[0].focus();
-        input[0].setSelectionRange(start, end);
-      }
-      var input = angular.element(element[0].els.input);
-      attrs.$set('type', 'password');
-      var showButton = angular.element('<button>show</button>');
-      showButton.css({
-        'position': 'absolute',
-        'right': '1rem',
-        'top': '0px',
-        'height': '40px',
-        'justify-content': 'center',
-        'color': 'var(--highlight-color)',
-        'font-style': 'italic',
-        'font-size': '14px',
-        'background': 'none',
-      });
-      input.css('padding-right', '4rem');
-      input.after(showButton);
-      showButton.on('click', onShowButton);
-    }
-  };
-}]);
-
-adapters.directive('ircComplete', ['$parse', function($parse) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var completions = $parse(attrs.ircComplete)(scope);
-      function complete() {
-        var oldStr = input[0].value;
-        var str = oldStr.toLowerCase();
-        var pos = input[0].selectionStart;
-        str = str.slice(0, pos);
-        var left = str.search(/\S+$/);
-        str = str.slice(left);
-
-        completions.some(function(user) {
-          var partUser = user.slice(0, str.length).toLowerCase();
-          if (partUser === str) {
-            var suffix = '';
-            if (left === 0) {
-              suffix += ',';
-            }
-            if (oldStr.slice(pos, pos+1) !== ' ') {
-              suffix += ' ';
-            }
-            var newStr = [
-              oldStr.slice(0, left),
-              user,
-              suffix,
-              oldStr.slice(pos)
-            ].join('');
-            input[0].value = newStr;
-            var newPos = left + user.length + suffix.length;
-            input[0].setSelectionRange(newPos, newPos);
-            input[0].focus();
-            return true;
-          }
-        });
-      }
-      var input = angular.element(element[0].els.input);
-      var completeButton =
-          angular.element('<button>&#8677;</button>');
-      completeButton.css({
-        'position': 'absolute',
-        'left': '.2rem',
-        'top': '0px',
-        'height': '38px',
-        'padding-bottom': '2px',
-        'font-size': '20px',
-        'font-family': 'droid sans fallback',
-        'background': 'none',
-      });
-      input.css('padding-left', '2rem');
-      input.after(completeButton);
-      completeButton.on('click', complete);
-      input[0].addEventListener('keydown', function(evt) {
-        var TABKEY = 9;
-        if (evt.keyCode === TABKEY) {
-          complete();
-          evt.preventDefault();
-        }
-      });
-    }
-  };
-}]);
 
 // Bind a gaia-checkbox to a model with the "model" attribute.
-adapters.directive('ircCheckbox', ['$parse', function($parse) {
+gaia.directive('ircCheckbox', ['$parse', function($parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -318,6 +166,7 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
   };
 }]);
 
+
 // Assign a model to a gaia-dialog, defining the following properties:
 //   open():      Open the dialog
 //   close():     Close the dialog
@@ -325,7 +174,7 @@ adapters.directive('ircCheckbox', ['$parse', function($parse) {
 //   currentText: Text of current selection for gaia-dialog-select
 // Provide an additional attribute 'model', that binds the selection of a
 // gaia-dialog-select.
-adapters.directive('ircDialog', ['$parse', function($parse) {
+gaia.directive('ircDialog', ['$parse', function($parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {

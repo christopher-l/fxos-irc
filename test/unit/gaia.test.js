@@ -1,90 +1,11 @@
 'use strict';
 
-describe('irc-context-menu', function() {
-
-  var scope;
-  var element;
-
-  beforeEach(module('irc.adapters'));
-
-  beforeEach(inject(function($compile, $rootScope) {
-    scope = $rootScope.$new();
-    scope.fun = jasmine.createSpy();
-    element = $compile('<div irc-context-menu="fun()"></div>')(scope);
-  }));
-
-  it('should evaluate its expression when "contextmenu" is fired', function() {
-    expect(scope.fun).not.toHaveBeenCalled();
-    element.triggerHandler('contextmenu');
-    expect(scope.fun).toHaveBeenCalled();
-  });
-
-});
-
-describe('irc-theme-group', function() {
-
-  beforeEach(module('irc.adapters'));
-
-  var scope;
-  var head;
-  var onThemeGroupRemove;
-  var onThemeColorRemove;
-  var onNotThemeColorRemove;
-
-  var updateTheme = function() {
-    scope.theme = 'new-theme';
-    scope.$digest();
-  };
-
-  beforeEach(inject(function($compile, $rootScope) {
-    scope = $rootScope.$new();
-    head = $compile('<head></head>')(scope);
-    var themeGroup =
-        $compile('<meta content="{{theme}}" irc-theme-group>')(scope);
-    var themeColor = $compile('<meta name="theme-color">')(scope);
-    var notThemeColor = $compile('<meta name="not-theme-color">')(scope);
-    head.append(themeGroup);
-    head.append(themeColor);
-    head.append(notThemeColor);
-    onThemeGroupRemove = jasmine.createSpy();
-    onThemeColorRemove = jasmine.createSpy();
-    onNotThemeColorRemove = jasmine.createSpy();
-    themeGroup.bind('$destroy', onThemeGroupRemove);
-    themeColor.bind('$destroy', onThemeColorRemove);
-    notThemeColor.bind('$destroy', onNotThemeColorRemove);
-  }));
-
-  it('should remove the theme group element as content changes', function() {
-    expect(onThemeGroupRemove).not.toHaveBeenCalled();
-    updateTheme();
-    expect(onThemeGroupRemove).toHaveBeenCalled();
-  });
-
-  it('should remove the theme color element as content changes', function() {
-    expect(onThemeColorRemove).not.toHaveBeenCalled();
-    updateTheme();
-    expect(onThemeColorRemove).toHaveBeenCalled();
-  });
-
-  it('should not remove other elements as content changes', function() {
-    updateTheme();
-    expect(onNotThemeColorRemove).not.toHaveBeenCalled();
-  });
-
-  it('should append the elements again', function() {
-    expect(head.children().length).toBe(3);
-    updateTheme();
-    expect(head.children().length).toBe(3);
-  });
-
-});
-
 describe('irc-action', function() {
 
   var scope;
   var element;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -103,12 +24,13 @@ describe('irc-action', function() {
 
 });
 
+
 describe('irc-open', function() {
 
   var scope;
   var drawer;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -149,41 +71,13 @@ describe('irc-open', function() {
 
 });
 
-describe('irc-client-height', function() {
-
-  var scope;
-  var outer;
-  var inner;
-
-  beforeEach(module('irc.adapters'));
-
-  beforeEach(inject(function($compile, $rootScope) {
-    scope = $rootScope.$new();
-    outer = $compile('<div irc-client-height="clientHeight"></div>')(scope);
-    inner = angular.element('<div></div>');
-    outer.append(inner);
-    scope.$digest();
-  }));
-
-  it('should initially have a height of 0', function() {
-    expect(scope.clientHeight).toBe(0);
-  });
-
-  /* It seems the geometry is not calculated here */
-  // it('should update the module', function() {
-  //   inner.css('height', '100px');
-  //   scope.$digest();
-  //   expect(scope.clientHeight).toBe(100);
-  // });
-
-});
 
 describe('irc-switch', function() {
 
   var scope;
   var element;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -206,13 +100,14 @@ describe('irc-switch', function() {
 
 });
 
+
 describe('irc-slider', function() {
 
   var scope;
   var slider;
   var input;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -250,13 +145,14 @@ describe('irc-slider', function() {
 
 });
 
+
 describe('irc-text-input', function() {
 
   var scope;
   var element;
   var input;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -280,12 +176,13 @@ describe('irc-text-input', function() {
 
 });
 
+
 describe('irc-checkbox', function() {
 
   var scope;
   var element;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -315,12 +212,13 @@ describe('irc-checkbox', function() {
 
 });
 
+
 describe('irc-dialog', function() {
 
   var scope;
   var element;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
@@ -390,12 +288,13 @@ describe('irc-dialog', function() {
 
 });
 
+
 describe('irc-dialog-select', function() {
 
   var scope;
   var element;
 
-  beforeEach(module('irc.adapters'));
+  beforeEach(module('irc.views.gaia'));
 
   beforeEach(inject(function($rootScope, $compile) {
     scope = $rootScope.$new();
