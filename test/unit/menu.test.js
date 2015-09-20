@@ -5,7 +5,7 @@ describe('irc-context-menu', function() {
   var scope;
   var element;
 
-  beforeEach(module('irc.views.menu'));
+  beforeEach(module('irc.views.menu.directives'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
@@ -28,7 +28,7 @@ describe('irc-client-height', function() {
   var outer;
   var inner;
 
-  beforeEach(module('irc.views.menu'));
+  beforeEach(module('irc.views.menu.directives'));
 
   beforeEach(inject(function($compile, $rootScope) {
     scope = $rootScope.$new();
