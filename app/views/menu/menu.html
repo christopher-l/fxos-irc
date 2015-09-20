@@ -1,0 +1,92 @@
+<gaia-drawer irc-open="drawer.open">
+  <div>
+
+    <section data-type="list" id="network-list">
+      <li ng-repeat="network in networks"
+          ng-attr-collapsed="{{network.collapsed || undefined}}">
+
+        <div class="network-entry"
+            ng-attr-status="{{network.status}}"
+            ng-attr-focused="{{network.focused || undefined}}"
+            ng-click="focus(network);"
+            irc-context-menu="network.dialog.open()">
+          <span class="collapse-indicator"
+                ng-click="network.collapsed = !network.collapsed;
+                          $event.stopPropagation();">
+            &#9660;
+          </span>
+          <span class="focus-indicator"></span>
+          <span class="network-text">
+            <div class="network-name">{{network.name}}</div>
+            <div class="network-info">{{network.status}}</div>
+          </span>
+          <span class="counter"
+                ng-attr-hidden="{{network.unreadCount == 0 || undefined}}">
+            {{network.unreadCount}}
+          </span>
+        </div>
+
+        <!-- Keep a wrapper div with unchanged height, so we can collapse and
+             restore the outer channel-list element. -->
+        <ul class="channel-list" style="--actual-height: {{chanListHeight}}">
+          <div irc-client-height="chanListHeight">
+
+            <li class="channel-entry"
+                ng-repeat="channel in network.channels"
+                ng-attr-active="{{channel.joined || undefined}}"
+                ng-attr-focused="{{channel.focused || undefined}}">
+              <span class="focus-indicator"></span>
+                    <!-- ng-click="network.channels.splice($index, 1)" -->
+              <span class="channel-text"
+                    ng-click="focus(channel)">
+                <div class="channel-name">#{{channel.name}}</div>
+                <div class="channel-info"></div>
+              </span>
+              <span class="counter"
+                    ng-attr-hidden="{{channel.unreadCount == 0 || undefined}}">
+                {{channel.unreadCount}}
+              </span>
+            </li>
+
+          </div>
+        </ul>
+      </li>
+    </section>
+
+    <div id="drawer-buttons">
+      <gaia-button id="add-network-button"
+          ui-sref="network-config">
+        <i data-icon="add"></i>
+      </gaia-button>
+      <gaia-button id="settings-button" ui-sref="settings">
+        <i data-icon="settings"></i>
+      </gaia-button>
+    </div>
+
+  </div>
+</gaia-drawer>
+
+
+<!-- Register a dialog per network entry, as ngIf is too slow for
+     updating a single one. -->
+<gaia-dialog-action ng-repeat="network in networks" irc-dialog="network.dialog">
+  <h1>{{network.name}}</h1>
+  <button ng-if="network.status=='connected'">
+    Disconnect
+  </button>
+  <button ng-if="network.status=='connecting'">
+    Cancel connection
+  </button>
+  <button ng-if="network.status=='disconnected'" class="primary">
+    Connect
+  </button>
+  <button ng-if="network.status=='connection lost'" class="primary">
+    Reconnect
+  </button>
+  <button ui-sref="network-config({index:$index})">Edit</button>
+  <button class="danger" ng-click="onDelete(network, $index)">Delete</button>
+</gaia-dialog-action>
+
+<gaia-dialog-confirm irc-dialog="confirmDialog">
+  Delete {{confirmDialog.toBeDeleted.name}}?
+</gaia-dialog-confirm>

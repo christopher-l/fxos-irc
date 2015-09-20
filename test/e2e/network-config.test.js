@@ -2,7 +2,7 @@
 
 describe('network-config', function() {
 
-  var uiView = element(by.css('body > div'));
+  var uiView = element(by.css('[ui-view=menu]'));
   var addNetworkButton = element(by.css('#add-network-button'));
   var networkItems = element.all(by.css('#network-list > li'));
   var title = element(by.css('h1'));
@@ -44,7 +44,6 @@ describe('network-config', function() {
   });
 
   it('should save a new network', function() {
-    // TODO: test config getter on network object
     browser.get('#/config/network/');
     browser.executeScript(function() {
       /* global document, CustomEvent*/

@@ -18,8 +18,16 @@ views.config(['$stateProvider', '$urlRouterProvider',
     .state('main', {
       url: '/',
       abstract: true,
-      templateUrl: 'views/main/main.html',
-      controller: 'MainCtrl',
+      views: {
+        '@': {
+          templateUrl: 'views/main/main.html',
+          controller: 'MainCtrl',
+        },
+        'menu@main': {
+          templateUrl: 'views/menu/menu.html',
+          controller: 'MenuCtrl',
+        }
+      },
       params: {
         drawer: {}
       }
