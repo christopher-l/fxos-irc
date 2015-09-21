@@ -15,7 +15,7 @@ completion.factory('completeString', [function() {
       var partUser = user.slice(0, part.length).toLowerCase();
       if (partUser === part) {
         var suffix = '';
-        if (left === 0) {
+        if (left <= 0) {
           suffix += ',';
         }
         if (str.slice(pos, pos+1) !== ' ') {
@@ -45,15 +45,17 @@ completion.directive('ircComplete', [
     function complete() {
       var oldStr = input[0].value;
       var oldPos = input[0].selectionStart;
-      var newStr = completeString(oldStr, oldPos, completions);
+      var newStr = completeString(oldStr, oldPos, completions, cycling);
       var newPos = oldPos + newStr.length - oldStr.length;
       input[0].value = newStr;
       input[0].setSelectionRange(newPos, newPos);
       input[0].focus();
+      cycling = true;
     }
 
     var completions = $parse(attrs.ircComplete)(scope);
     var input = angular.element(element[0].els.input);
+    var cycling = false;
 
     var completeButton =
         angular.element('<button>&#8677;</button>');
@@ -70,13 +72,15 @@ completion.directive('ircComplete', [
     input.css('padding-left', '2rem');
 
     input.after(completeButton);
-    
+
     completeButton.on('click', complete);
     input[0].addEventListener('keydown', function(evt) {
       var TABKEY = 9;
       if (evt.keyCode === TABKEY) {
         complete(input[0].value);
         evt.preventDefault();
+      } else {
+        cycling = false;
       }
     });
   }
