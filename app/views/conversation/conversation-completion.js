@@ -5,17 +5,20 @@ var completion = angular.module('irc.views.conversation.completion', []);
 
 completion.factory('completeString', [function() {
   var lastHit;
+  var part;
+  var left;
 
   function complete(str, pos, completions, cycling) {
-    var part = str.toLowerCase();
-    part = part.slice(0, pos);
-    var left = part.search(/\S+$/);
-    part = part.slice(left);
     var newStr;
 
     if (!cycling) {
-      completions.some(function(user) {
-        newStr = completeEntry(user);
+      part = str.toLowerCase();
+      part = part.slice(0, pos);
+      left = part.search(/\S+$/);
+      part = part.slice(left);
+
+      completions.some(function(entry) {
+        newStr = completeEntry(entry, part);
         if (newStr) { return true; }
       });
       if (!newStr) {
@@ -39,15 +42,22 @@ completion.factory('completeString', [function() {
 
     function cycle(current) {
       var index = completions.indexOf(current);
-      index = (index + 1) % completions.length;
-      var next = completions[index];
-      lastHit = next;
-      return next;
+      for (var i = 1; i <= completions.length; i++) {
+        var entry = completions[(i + index) % completions.length];
+        if (matches(entry, part)) {
+          lastHit = entry;
+          return entry;
+        }
+      }
     }
 
-    function completeEntry(entry) {
+    function matches(entry, part) {
       var partEntry = entry.slice(0, part.length).toLowerCase();
-      if (partEntry !== part) {
+      return partEntry === part;
+    }
+
+    function completeEntry(entry, part) {
+      if (!matches(entry, part)) {
         return false;
       }
       lastHit = entry;
