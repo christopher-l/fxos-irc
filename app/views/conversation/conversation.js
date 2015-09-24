@@ -6,5 +6,5 @@ var conversation = angular.module('irc.views.conversation', [
 
 
 conversation.controller('ConversationCtrl', ['$scope', function($scope) {
-  $scope.users = ['foo', 'bar', 'baz'];
+  $scope.users = ['Fooooo', 'bar', 'baz'];
 }]);

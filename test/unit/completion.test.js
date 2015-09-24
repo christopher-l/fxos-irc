@@ -80,8 +80,16 @@ describe('completion', function() {
     var str = 'bl';
     str = completeString(str, str.length, completions);
     expect(str).toBe('bl');
-    str = completeString(str, str.length, completions);
+    str = completeString(str, str.length, completions, true);
     expect(str).toBe('bl');
+  });
+
+  it('should cycle through single hit', function() {
+    var str = 'fo';
+    str = completeString(str, str.length, completions);
+    expect(str).toBe('Foo, ');
+    str = completeString(str, str.length, completions, true);
+    expect(str).toBe('Foo, ');
   });
 
 });
