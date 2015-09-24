@@ -76,4 +76,12 @@ describe('completion', function() {
     expect(str).toBe('foo bar');
   });
 
+  it('should not cycle on a non matching string', function() {
+    var str = 'bl';
+    str = completeString(str, str.length, completions);
+    expect(str).toBe('bl');
+    str = completeString(str, str.length, completions);
+    expect(str).toBe('bl');
+  });
+
 });

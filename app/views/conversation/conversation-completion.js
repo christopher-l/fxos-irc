@@ -4,33 +4,67 @@ var completion = angular.module('irc.views.conversation.completion', []);
 
 
 completion.factory('completeString', [function() {
-  function complete(str, pos, completions) {
+  var lastHit;
+
+  function complete(str, pos, completions, cycling) {
     var part = str.toLowerCase();
     part = part.slice(0, pos);
     var left = part.search(/\S+$/);
     part = part.slice(left);
     var newStr;
 
-    completions.some(function(user) {
-      var partUser = user.slice(0, part.length).toLowerCase();
-      if (partUser === part) {
-        var suffix = '';
-        if (left <= 0) {
-          suffix += ',';
-        }
+    if (!cycling) {
+      completions.some(function(user) {
+        newStr = completeEntry(user);
+        if (newStr) { return true; }
+      });
+      if (!newStr) {
+        lastHit = false;
+        return str;
+      }
+      return newStr;
+    } else if (lastHit) {
+      if (pos >= 2 && str.slice(pos-2, pos) === ', ') {
+        left = 0;
+        pos = pos - 2;
+      }
+      return [
+        str.slice(0, left),
+        cycle(lastHit),
+        str.slice(pos)
+      ].join('');
+    } else {
+      return str;
+    }
+
+    function cycle(current) {
+      var index = completions.indexOf(current);
+      index = (index + 1) % completions.length;
+      var next = completions[index];
+      lastHit = next;
+      return next;
+    }
+
+    function completeEntry(entry) {
+      var partEntry = entry.slice(0, part.length).toLowerCase();
+      if (partEntry !== part) {
+        return false;
+      }
+      lastHit = entry;
+      var suffix = '';
+      if (left <= 0) {
+        suffix += ',';
         if (str.slice(pos, pos+1) !== ' ') {
           suffix += ' ';
         }
-        newStr = [
-          str.slice(0, left),
-          user,
-          suffix,
-          str.slice(pos)
-        ].join('');
-        return true;
       }
-    });
-    return newStr;
+      return [
+        str.slice(0, left),
+        entry,
+        suffix,
+        str.slice(pos)
+      ].join('');
+    }
   }
   return complete;
 }]);
