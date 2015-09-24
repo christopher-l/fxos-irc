@@ -132,6 +132,19 @@ gaia.directive('ircTextInput', ['$compile', function($compile) {
 }]);
 
 
+// Bind a gaia-text-input-multiline to a model with the "model" attribute.
+gaia.directive('ircTextInputMultiline', ['$compile', function($compile) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var input = angular.element(element[0].els.field);
+      input.attr('ng-model', attrs.model);
+      $compile(input)(scope);
+    }
+  };
+}]);
+
+
 // Bind a gaia-checkbox to a model with the "model" attribute.
 gaia.directive('ircCheckbox', ['$parse', function($parse) {
   return {

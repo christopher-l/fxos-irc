@@ -110,10 +110,11 @@ completion.directive('ircComplete', [
       input[0].setSelectionRange(newPos, newPos);
       input[0].focus();
       cycling = true;
+      input.triggerHandler('input');
     }
 
     var completions = $parse(attrs.ircComplete)(scope);
-    var input = angular.element(element[0].els.input);
+    var input = angular.element(element[0].els.field);
     var cycling = false;
 
     var completeButton =
@@ -127,6 +128,7 @@ completion.directive('ircComplete', [
       'font-size': '20px',
       'font-family': 'droid sans fallback',
       'background': 'none',
+      'border': 'none',
     });
     input.css('padding-left', '50px');
 
