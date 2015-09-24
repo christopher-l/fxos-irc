@@ -7,8 +7,8 @@ var networkConfig = angular.module('irc.views.network-config', [
 
 
 networkConfig.controller('NetConfCtrl', [
-    '$scope', '$stateParams', 'networks', 'theme',
-    function($scope, $stateParams, networks, theme) {
+    '$scope', '$rootScope', '$stateParams', 'networks', 'theme',
+    function($scope, $rootScope, $stateParams, networks, theme) {
 
   $scope.type = 'settings';
   theme.setThemeClass('settings');
@@ -20,11 +20,34 @@ networkConfig.controller('NetConfCtrl', [
 
   $scope.isNew = network.new;
 
-  $scope.save = function() {
-    if (!$scope.network.port) {
-      $scope.network.port = $scope.network.tls ? 6697 : 6667;
-    }
-    network.applyConfig($scope.network);
+  $scope.onSave = function() {
+    save();
+    $rootScope.back();
   };
+
+  $scope.onClose = function() {
+    var changed = network.new ?
+        !angular.equals(network.getConfig(), $scope.network) :
+        !angular.equals(network.getConfig(), finalConfig($scope.network));
+    if (changed) {
+      $scope.confirmDialog.onConfirm = $rootScope.back;
+      $scope.confirmDialog.open();
+    } else {
+      $rootScope.back();
+    }
+  };
+
+  function save() {
+    var config = finalConfig($scope.network);
+    network.applyConfig(config);
+  }
+
+  function finalConfig(config) {
+    var cfg = angular.copy(config);
+    if (!cfg.port) {
+      cfg.port = cfg.tls ? 6697 : 6667;
+    }
+    return cfg;
+  }
 
 }]);

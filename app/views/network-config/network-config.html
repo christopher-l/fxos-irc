@@ -1,6 +1,6 @@
-<gaia-header action="close" irc-action="back()">
+<gaia-header action="close" irc-action="onClose()">
   <h1>{{isNew ? 'New Network' : network.name}}</h1>
-  <button ng-click="save(); back();">Save</button>
+  <button ng-click="onSave();">Save</button>
 </gaia-header>
 
 <div class="config">
@@ -80,3 +80,7 @@
     </li>
   </gaia-list>
 <div>
+
+<gaia-dialog-confirm irc-dialog="confirmDialog">
+  Discard changes?
+</gaia-dialog-confirm>

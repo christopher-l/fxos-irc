@@ -2,6 +2,8 @@
 
 describe('network-config', function() {
 
+  const DEFAULT_NETWORKS = 2;
+
   var uiView = element(by.css('[ui-view=menu]'));
   var addNetworkButton = element(by.css('#add-network-button'));
   var networkItems = element.all(by.css('#network-list > li'));
@@ -130,6 +132,60 @@ describe('network-config', function() {
     saveButton.click();
     expect(uiView.evaluate('networks[networks.length-1].port'))
         .toBe(6697);
+  });
+
+  describe('close action', function() {
+
+    var configView = element(by.css('[ui-view]'));
+    var confirmButton = element(by.buttonText('Confirm'));
+
+    beforeEach(function() {
+      this.helpers.setDefaultNetworks();
+    });
+
+    it('should close a new network', function() {
+      browser.get('#/config/network/');
+      configView.evaluate('onClose();');
+      expect(browser.getCurrentUrl()).toContain('show');
+      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+    });
+
+    it('should show a warning for edited new network', function() {
+      browser.get('#/config/network/');
+      browser.executeScript(function() {
+        /* global document, CustomEvent*/
+        var name = document.querySelector('[model="network.name"]');
+        name.value = 'Test Name';
+        name.els.input.dispatchEvent(new CustomEvent('input'));
+      });
+      configView.evaluate('onClose();');
+      expect(browser.getCurrentUrl()).toContain('config');
+      configView.evaluate('confirmDialog.onConfirm();');
+      expect(browser.getCurrentUrl()).toContain('show');
+      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+    });
+
+    it('should close an existing network', function() {
+      browser.get('#/config/network/0');
+      configView.evaluate('onClose();');
+      expect(browser.getCurrentUrl()).toContain('show');
+    });
+
+    it('should show a warning for edited existing network', function() {
+      browser.get('#/config/network/0');
+      browser.executeScript(function() {
+        /* global document, CustomEvent*/
+        var name = document.querySelector('[model="network.name"]');
+        name.value = 'Test Name';
+        name.els.input.dispatchEvent(new CustomEvent('input'));
+      });
+      configView.evaluate('onClose();');
+      expect(browser.getCurrentUrl()).toContain('config');
+      configView.evaluate('confirmDialog.onConfirm();');
+      expect(browser.getCurrentUrl()).toContain('show');
+      expect(uiView.evaluate('networks[0].name')).not.toBe('Test Name');
+    });
+
   });
 
 });
