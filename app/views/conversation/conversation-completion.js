@@ -120,15 +120,15 @@ completion.directive('ircComplete', [
         angular.element('<button>&#8677;</button>');
     completeButton.css({
       'position': 'absolute',
-      'left': '.2rem',
       'top': '0px',
       'height': '38px',
+      'width': '50px',
       'padding-bottom': '2px',
       'font-size': '20px',
       'font-family': 'droid sans fallback',
       'background': 'none',
     });
-    input.css('padding-left', '2rem');
+    input.css('padding-left', '50px');
 
     input.after(completeButton);
 
