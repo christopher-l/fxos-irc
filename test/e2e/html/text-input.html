@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="irc.views.gaia">
+<head>
+  <meta charset="utf-8">
+  <!-- Gaia components -->
+  <script src="/app/bower_components/gaia-component/gaia-component.js"></script>
+  <script src="/app/bower_components/gaia-text-input/gaia-text-input.js"></script>
+
+  <!-- Angular -->
+  <script src="/app/bower_components/angular/angular.js"></script>
+
+  <script src="/app/views/shared/gaia.js"></script>
+</head>
+
+<body>
+  <form name=form>
+    <gaia-text-input
+        irc-text-input model="input1" name="input1" pattern="[a-z]*">
+    </gaia-text-input>
+    <gaia-text-input
+        irc-text-input model="input2" name="input2" required>
+    </gaia-text-input>
+  </form>
+  <div id="monitor1">{{input1}}</div>
+</body>
+</html>

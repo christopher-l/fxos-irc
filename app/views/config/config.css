@@ -20,7 +20,7 @@ gaia-list {
   z-index: 1; /* needed for ripple effect */
 }
 
-.config > h2 {
+.config h2 {
   margin: 0px;
   padding: 0.3rem 2rem;
   font-size: 1rem;

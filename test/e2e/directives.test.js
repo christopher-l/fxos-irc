@@ -105,3 +105,63 @@ describe('gaia-dialog-select', function() {
   });
 
 });
+
+fdescribe('gaia-text-input', function() {
+
+  var body = element(by.css('body'));
+  var input1 = element(by.css('gaia-text-input[name="input1"]'));
+  var input2 = element(by.css('gaia-text-input[name="input2"]'));
+  var monitor1 = element(by.css('#monitor1'));
+
+  beforeEach(function() {
+    browser.get('/test/e2e/html/text-input.html');
+  });
+
+  it('should update the model', function() {
+    expect(monitor1.getText()).toBe('');
+    browser.executeScript(function() {
+      /* global document, CustomEvent*/
+      var input = document.querySelector('gaia-text-input[name="input1"]');
+      input.value = 'foo';
+      input.els.input.dispatchEvent(new CustomEvent('input'));
+    });
+    expect(monitor1.getText()).toBe('foo');
+  });
+
+  it('should update the input', function() {
+    expect(browser.executeScript(function() { /* global document */
+      return document.querySelector('gaia-text-input').value;
+    })).toBe('');
+    body.evaluate('input1 = "bar"; $digest();');
+    expect(browser.executeScript(function() { /* global document */
+      return document.querySelector('gaia-text-input').value;
+    })).toBe('bar');
+  });
+
+  it('should set the "required" attribute', function() {
+    expect(browser.executeScript(function() { /* global document */
+      return document.querySelector('gaia-text-input[name="input1"]').required;
+    })).toBe(false);
+    expect(browser.executeScript(function() { /* global document */
+      return document.querySelector('gaia-text-input[name="input2"]').required;
+    })).toBe(true);
+  });
+
+  it('should be present in form', function() {
+    expect(body.evaluate('form.input1')).toBeTruthy();
+    expect(body.evaluate('form.input2')).toBeTruthy();
+  });
+
+  it('should respect the "required" attribute', function() {
+    expect(body.evaluate('form.$error.required[0].$name')).toBe('input2');
+  });
+
+  it('should respect the "pattern" attribute', function() {
+    expect(body.evaluate('form.$error.pattern[0]')).toBeNull();
+    body.evaluate('input1 = "foo"; $digest();');
+    expect(body.evaluate('form.$error.pattern[0]')).toBeNull();
+    body.evaluate('input1 = "Foo"; $digest();');
+    expect(body.evaluate('form.$error.pattern[0].$name')).toBe('input1');
+  });
+
+});

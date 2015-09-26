@@ -126,6 +126,9 @@ gaia.directive('ircTextInput', ['$compile', function($compile) {
     link: function(scope, element, attrs) {
       var input = angular.element(element[0].els.input);
       input.attr('ng-model', attrs.model);
+      input.attr('name', attrs.name);
+      element[0].required = !!(attrs.required === '' || attrs.required);
+      input.attr('pattern', attrs.pattern);
       $compile(input)(scope);
     }
   };
