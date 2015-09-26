@@ -1,91 +1,89 @@
 <gaia-header action="close" irc-action="onClose()">
   <h1>{{isNew ? 'New Network' : network.name}}</h1>
-  <button ng-click="onSave();">Save</button>
+  <button ng-click="onSave();" ng-disabled="config.$invalid">Save</button>
 </gaia-header>
 
-<div class="config">
-  <form name=config>
-    <gaia-list>
-      <li>
-        <div flex>
-          <h3>Name</h3>
-          <gaia-text-input placeholder="e.g. Freenode"
-              irc-text-input model="network.name" required>
-          </gaia-text-input>
-        </div>
-      </li>
-      <li class="ripple">
-        <label flex for="auto-connect">
-          <h3>Auto Connect</h3>
-        </label>
-        <gaia-checkbox id="auto-connect"
-            irc-checkbox model="network.autoConnect">
-        </gaia-checkbox>
-      </li>
-    </gaia-list>
-    <h2>Server</h2>
-    <gaia-list>
-      <li>
-        <div flex>
-          <h3>Host</h3>
-          <!-- pattern from https://stackoverflow.com/a/106223 -->
-          <gaia-text-input id="host" placeholder="e.g. irc.freenode.net"
-              irc-text-input model="network.host" required
-              pattern="(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])">
-          </gaia-text-input>
-        </div>
-      </li>
-      <li flexbox>
-        <label flex>
-          <h3>Port</h3>
-          <!-- <p>Leave empty for default</p> -->
-        </label>
-        <gaia-text-input id="port" type="number" maxlength="5"
-            placeholder="{{network.tls ? 6697 : 6667}}"
-            irc-text-input model="network.port">
+<form class="config" name=config>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Name</h3>
+        <gaia-text-input placeholder="e.g. Freenode"
+            irc-text-input model="network.name" required>
         </gaia-text-input>
-      </li>
-      <li class="ripple">
-        <label flex for="tls">
-          <h3>Use TLS</h3>
-        </label>
-        <gaia-checkbox id="tls" irc-checkbox model="network.tls">
-        </gaia-checkbox>
-      </li>
-    </gaia-list>
-    <h2>Identity</h2>
-    <gaia-list>
-      <li>
-        <div flex>
-          <h3>Nick</h3>
-          <gaia-text-input id="nick"
-              irc-text-input model="network.nick" required
-              pattern="[\w\[\]\\`\^\{\|\}][\w\d;\[\]\\`\^\{\|\}\-]*"
-              >
-          </gaia-text-input>
-        </div>
-      </li>
-      <li>
-        <label flex>
-          <h3>User</h3>
-        </label>
-        <gaia-text-input id="user" placeholder="optional"
-            inputmode="verbatim"
-            irc-text-input model="network.user">
+      </div>
+    </li>
+    <li class="ripple">
+      <label flex for="auto-connect">
+        <h3>Auto Connect</h3>
+      </label>
+      <gaia-checkbox id="auto-connect"
+          irc-checkbox model="network.autoConnect">
+      </gaia-checkbox>
+    </li>
+  </gaia-list>
+  <h2>Server</h2>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Host</h3>
+        <!-- pattern from https://stackoverflow.com/a/106223 -->
+        <gaia-text-input id="host" placeholder="e.g. irc.freenode.net"
+            irc-text-input model="network.host" required
+            pattern="(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])">
         </gaia-text-input>
-      </li>
-      <li>
-        <label flex>
-          <h3>Password</h3>
-        </label>
-        <gaia-text-input id="password" placeholder="optional"
-            inputmode="verbatim"
-            irc-text-input model="network.password" irc-password>
+      </div>
+    </li>
+    <li flexbox>
+      <label flex>
+        <h3>Port</h3>
+        <!-- <p>Leave empty for default</p> -->
+      </label>
+      <gaia-text-input id="port" type="number" maxlength="5"
+          placeholder="{{network.tls ? 6697 : 6667}}"
+          irc-text-input model="network.port">
+      </gaia-text-input>
+    </li>
+    <li class="ripple">
+      <label flex for="tls">
+        <h3>Use TLS</h3>
+      </label>
+      <gaia-checkbox id="tls" irc-checkbox model="network.tls">
+      </gaia-checkbox>
+    </li>
+  </gaia-list>
+  <h2>Identity</h2>
+  <gaia-list>
+    <li>
+      <div flex>
+        <h3>Nick</h3>
+        <gaia-text-input id="nick"
+            irc-text-input model="network.nick" required
+            pattern="[\w\[\]\\`\^\{\|\}][\w\d;\[\]\\`\^\{\|\}\-]*"
+            >
         </gaia-text-input>
-      </li>
-    </gaia-list>
-  </form>
-<div>
+      </div>
+    </li>
+    <li>
+      <label flex>
+        <h3>User</h3>
+      </label>
+      <gaia-text-input id="user" placeholder="optional"
+          inputmode="verbatim"
+          irc-text-input model="network.user">
+      </gaia-text-input>
+    </li>
+    <li>
+      <label flex>
+        <h3>Password</h3>
+      </label>
+      <gaia-text-input id="password" placeholder="optional"
+          inputmode="verbatim"
+          irc-text-input model="network.password" irc-password>
+      </gaia-text-input>
+    </li>
+  </gaia-list>
+</form>
 
 <gaia-dialog-confirm irc-dialog="confirmDialog">
   Discard changes?
