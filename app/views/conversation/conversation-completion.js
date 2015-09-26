@@ -123,14 +123,14 @@ completion.directive('ircComplete', [
       'position': 'absolute',
       'top': '0px',
       'height': '38px',
-      'width': '50px',
+      'width': '40px',
       'padding-bottom': '2px',
       'font-size': '20px',
       'font-family': 'droid sans fallback',
       'background': 'none',
       'border': 'none',
     });
-    input.css('padding-left', '50px');
+    input.css('padding-left', '40px');
 
     input.after(completeButton);
 

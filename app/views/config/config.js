@@ -3,6 +3,23 @@
 var config = angular.module('irc.views.config', []);
 
 
+// Prevent for more than 5 numbers to be typed in.
+config.directive('ircPort', [function() {
+  function link(scope, element, attrs) {
+    var input = element[0].els.input;
+    input.addEventListener('keydown', function(evt) {
+      if (input.value.length >= 5 && /^[0-9]$/.test(evt.key)) {
+        evt.preventDefault();
+      }
+    });
+  }
+  return {
+    restrict: 'A',
+    link: link
+  };
+}]);
+
+
 // Add a show/hide button to a gaia-text-input.
 config.directive('ircPassword', [function() {
   function link(scope, element, attrs) {

@@ -129,6 +129,8 @@ gaia.directive('ircTextInput', ['$compile', function($compile) {
       input.attr('name', attrs.name);
       element[0].required = !!(attrs.required === '' || attrs.required);
       input.attr('pattern', attrs.pattern);
+      input.attr('minlength', attrs.minlength);
+      input.attr('maxlength', attrs.maxlength);
       $compile(input)(scope);
     }
   };

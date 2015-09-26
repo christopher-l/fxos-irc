@@ -39,8 +39,9 @@
         <h3>Port</h3>
         <!-- <p>Leave empty for default</p> -->
       </label>
-      <gaia-text-input id="port" type="number" maxlength="5"
+      <gaia-text-input id="port" type="number"
           placeholder="{{network.tls ? 6697 : 6667}}"
+          irc-port maxlength="5"
           irc-text-input model="network.port">
       </gaia-text-input>
     </li>
