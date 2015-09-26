@@ -106,7 +106,7 @@ describe('gaia-dialog-select', function() {
 
 });
 
-fdescribe('gaia-text-input', function() {
+describe('gaia-text-input', function() {
 
   var body = element(by.css('body'));
   var input1 = element(by.css('gaia-text-input[name="input1"]'));

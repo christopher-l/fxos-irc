@@ -45,6 +45,23 @@ describe('network-config', function() {
 
   });
 
+  function fillInMinimalConfig() {
+    browser.executeScript(function() {
+      /* global document, CustomEvent*/
+      var name = document.querySelector('[model="network.name"]');
+      name.value = 'Test Name';
+      name.els.input.dispatchEvent(new CustomEvent('input'));
+      document.querySelector('[model="network.autoConnect"]')
+          .click();
+      var host = document.querySelector('[model="network.host"]');
+      host.value = 'test.host';
+      host.els.input.dispatchEvent(new CustomEvent('input'));
+      var nick = document.querySelector('[model="network.nick"]');
+      nick.value = 'test-nick';
+      nick.els.input.dispatchEvent(new CustomEvent('input'));
+    });
+  }
+
   it('should save a new network', function() {
     browser.get('#/config/network/');
     browser.executeScript(function() {
@@ -113,6 +130,7 @@ describe('network-config', function() {
 
   it('should set the default port to 6667', function() {
     browser.get('#/config/network/');
+    fillInMinimalConfig();
     expect(browser.executeScript(function() {
       var port = document.querySelector('[model="network.port"]');
       return port.els.input.getAttribute('placeholder');
@@ -124,6 +142,7 @@ describe('network-config', function() {
 
   it('should set the default tls port to 6697', function() {
     browser.get('#/config/network/');
+    fillInMinimalConfig();
     tlsField.click();
     expect(browser.executeScript(function() {
       var port = document.querySelector('[model="network.port"]');
