@@ -117,6 +117,13 @@ describe('gaia-text-input', function() {
     browser.get('/test/e2e/html/text-input.html');
   });
 
+  fit('foo', function() {
+    input1.setInputText('ASFASDFASDF').then(function(text){
+      console.log(text);
+    });
+    expect(monitor1.getText()).toBe('foo');
+  });
+
   it('should update the model', function() {
     expect(monitor1.getText()).toBe('');
     browser.executeScript(function() {

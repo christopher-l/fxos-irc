@@ -19,7 +19,9 @@
     "inject": false,
     "browser": false,
     "element": false,
-    "by": false
+    "by": false,
+    "$": false,
+    "$$": false
   },
   "camelcase": true,
   "curly": true,
