@@ -127,7 +127,7 @@ describe('network-config', function() {
 
   });
 
-  fdescribe('close action', function() {
+  describe('close action', function() {
 
     var configView = element(by.css('[ui-view]'));
     var confirmButton = element(by.buttonText('Confirm'));

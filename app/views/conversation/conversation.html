@@ -1,3 +1,24 @@
+<section id="messages" style="font-size: {{fontSize}}pt;">
+  <div ng-repeat="message in messages"
+      ng-class="{highlight: message.highlight}">
+    <div ng-if="message.type === 'message'">
+      <div class="header">
+        <span class="user">{{message.user}}</span>
+        <span class="time">{{message.time}}</span>
+      </div>
+      <div class="content">
+        {{message.content}}
+      </div>
+    </div>
+    <div ng-if="message.type === 'disconnect'">
+      <div class="header">
+        <span class="info">{{message.user}} has disconnected.</span>
+        <span class="time">{{message.time}}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <gaia-text-input-multiline
     irc-message-input
     irc-complete="users">

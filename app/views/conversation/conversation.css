@@ -1,0 +1,58 @@
+#conversation {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--background);
+  color: var(--text-color);
+  line-height: normal;
+}
+
+#conversation > #messages {
+  flex: 1 1 0%;
+  margin: 0px 1rem;
+  overflow-y: auto;
+}
+
+#conversation > #messages > div:first-child {
+  margin-top: .6em;
+}
+
+#conversation > #messages > div {
+  margin-bottom: .6em;
+}
+
+#conversation > #messages .header {
+  display: flex;
+  line-height: 1.3;
+}
+
+#conversation > #messages .user,
+#conversation > #messages .info {
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 1rem;
+}
+
+#conversation > #messages .user {
+  color: var(--highlight-color);
+}
+
+#conversation > #messages > .highlight .user {
+  color: var(--color-destructive);
+}
+
+#conversation > #messages .info {
+  color: var(--text-color-minus);
+}
+
+#conversation > #messages .time {
+  color: var(--text-color-minus);
+}
+
+#conversation > gaia-text-input-multiline {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
