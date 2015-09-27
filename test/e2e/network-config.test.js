@@ -127,7 +127,7 @@ describe('network-config', function() {
 
   });
 
-  describe('close action', function() {
+  fdescribe('close action', function() {
 
     var configView = element(by.css('[ui-view]'));
     var confirmButton = element(by.buttonText('Confirm'));
@@ -138,6 +138,19 @@ describe('network-config', function() {
 
     it('should close a new network', function() {
       browser.get('#/config/network/');
+      configView.evaluate('onClose();');
+      expect(browser.getCurrentUrl()).toContain('show');
+      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+    });
+
+    it('should close a new network when back to original state', function() {
+      browser.get('#/config/network/');
+      nameField.setInputText('Test Name');
+      nameField.setInputText('');
+      userField.setInputText('testuser');
+      userField.setInputText('');
+      tlsField.click();
+      tlsField.click();
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('show');
       expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);

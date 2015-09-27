@@ -119,9 +119,18 @@ networks.factory('Network', [
       this._storage.data.splice(index, 1);
       this._storage.save();
     },
+    compareConfig: function(config) {
+      var self = this;
+      function isEqual(prop) {
+        return self._config[prop] ?
+            self._config[prop] === config[prop] :
+            !!self._config[prop] === !!config[prop];
+      }
+      return configProps.every(isEqual);
+    },
   };
 
-  [
+  var configProps = [
     'name',
     'autoConnect',
     'host',
@@ -130,7 +139,9 @@ networks.factory('Network', [
     'nick',
     'user',
     'password',
-  ].forEach(function(key) {
+  ];
+
+  configProps.forEach(function(key) {
     Object.defineProperty(Network.prototype, key, {
       get: function() {
         return this._config[key];

@@ -27,8 +27,8 @@ networkConfig.controller('NetConfCtrl', [
 
   $scope.onClose = function() {
     var changed = network.new ?
-        !angular.equals(network.getConfig(), $scope.network) :
-        !angular.equals(network.getConfig(), finalConfig($scope.network));
+        !network.compareConfig($scope.network) :
+        !network.compareConfig(finalConfig($scope.network));
     if (changed) {
       $scope.confirmDialog.onConfirm = $rootScope.back;
       $scope.confirmDialog.open();
