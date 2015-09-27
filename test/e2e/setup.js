@@ -1,5 +1,5 @@
 'use strict';
-/* global CustomEvent */
+/* global document, CustomEvent */
 
 beforeAll(function() {
 
@@ -69,21 +69,44 @@ beforeAll(function() {
     // return this.getWebElement().then(setInputTextFn);
   };
 
-  ElementArrayFinder.prototype.getInputText = function(text) {
-    function getInputText(element, text) {
+  ElementArrayFinder.prototype.getInputText = function() {
+    function getInputText(element) {
       return element.value;
     }
 
     function getInputTextFn(webElem) {
       return webElem.getDriver().executeScript(
-          getInputText, webElem, text);
+          getInputText, webElem);
     }
 
     return this.applyAction_(getInputTextFn);
   };
 
-  ElementFinder.prototype.getInputText = function(text) {
-    return this.elementArrayFinder_.getInputText(text).toElementFinder_();
+  ElementFinder.prototype.getInputText = function() {
+    return this.elementArrayFinder_.getInputText().toElementFinder_();
   };
+  
+  // var ProtractorBy = by.constructor;
+  //
+  // ProtractorBy.prototype.shadowCss = function(selector) {
+  //   function findByshadowCss(selector, using, rootSelector) {
+  //     using = using || document;
+  //     var elements = using.shadowRoot.querySelectorAll(selector);
+  //     if (elements.length) {
+  //       return elements;
+  //     }
+  //   }
+  //
+  //   return {
+  //     findElementsOverride: function(driver, using, rootSelector) {
+  //       return driver.findElements(
+  //           protractor.By.js(findByshadowCss,
+  //               selector, using, rootSelector));
+  //     },
+  //     toString: function toString() {
+  //       return 'by.shadowCss("' + selector + '")';
+  //     }
+  //   };
+  // };
 
 });
