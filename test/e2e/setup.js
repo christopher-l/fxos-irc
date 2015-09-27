@@ -1,11 +1,19 @@
 'use strict';
+/* global CustomEvent */
 
 beforeAll(function() {
 
+  /**
+   * Window Setup
+   */
   var WIDTH = 360;
   var HEIGHT = 640;
   browser.driver.manage().window().setSize(WIDTH, HEIGHT);
 
+
+  /**
+   * Helpers
+   */
   this.helpers = {
     setDefaultNetworks: function() {
       browser.get('');
@@ -17,41 +25,65 @@ beforeAll(function() {
     }
   };
 
-  /* from https://stackoverflow.com/a/25519113 */
+
+  /**
+   * Custom Actions
+   */
+  // from https://stackoverflow.com/a/25519113
   var ElementFinder = $('').constructor;
-  ElementFinder.prototype.foo = function() {
-    return this.getWebElement().then(function(el) {
-      return 'foo';
-    }, function(err) {
-      throw err;
-    });
+  var ElementArrayFinder = $$('').constructor;
+
+  ElementArrayFinder.prototype.getProperty = function(property) {
+    function getProperty(element, property) {
+      return element[property];
+    }
+
+    function getPropertyFn(webElem) {
+      return webElem.getDriver().executeScript(
+          getProperty, webElem, property);
+    }
+
+    return this.applyAction_(getPropertyFn);
   };
+
+  ElementFinder.prototype.getProperty = function(property) {
+    return this.elementArrayFinder_.getProperty(property).toElementFinder_();
+  };
+
+  ElementArrayFinder.prototype.setInputText = function(text) {
+    function setInputText(element, text) {
+      element.value = text;
+      element.els.input.dispatchEvent(new CustomEvent('input'));
+    }
+
+    function setInputTextFn(webElem) {
+      return webElem.getDriver().executeScript(
+          setInputText, webElem, text);
+    }
+
+    return this.applyAction_(setInputTextFn);
+  };
+
   ElementFinder.prototype.setInputText = function(text) {
-    return this.getWebElement().then(function(el) {
-      return browser.executeScript(function(params) {
-        /* global CustomEvent */
-        params.el.value = params.text;
-        // var args = [];
-        params.el.els.input.dispatchEvent(new CustomEvent('input'));
-        // for (var i in params.el.els.input) {
-        //   args.push(i);
-        // }
-        // return args;
-      }, {el: el, text: text});
-    }, function(err) {
-      throw err;
-    });
+    return this.elementArrayFinder_.setInputText(text).toElementFinder_();
+    // return this.getWebElement().then(setInputTextFn);
   };
 
-});
+  ElementArrayFinder.prototype.getInputText = function(text) {
+    function getInputText(element, text) {
+      return element.value;
+    }
 
-describe('foo', function() {
+    function getInputTextFn(webElem) {
+      return webElem.getDriver().executeScript(
+          getInputText, webElem, text);
+    }
 
-  var body = element(by.css('gaia-header'));
+    return this.applyAction_(getInputTextFn);
+  };
 
-  it('bar', function() {
-    browser.get('');
-    expect(body.bar()).toBe('foo');
-  });
+  ElementFinder.prototype.getInputText = function(text) {
+    return this.elementArrayFinder_.getInputText(text).toElementFinder_();
+  };
 
 });

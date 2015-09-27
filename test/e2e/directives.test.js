@@ -117,41 +117,21 @@ describe('gaia-text-input', function() {
     browser.get('/test/e2e/html/text-input.html');
   });
 
-  fit('foo', function() {
-    input1.setInputText('ASFASDFASDF').then(function(text){
-      console.log(text);
-    });
-    expect(monitor1.getText()).toBe('foo');
-  });
-
   it('should update the model', function() {
     expect(monitor1.getText()).toBe('');
-    browser.executeScript(function() {
-      /* global document, CustomEvent*/
-      var input = document.querySelector('gaia-text-input[name="input1"]');
-      input.value = 'foo';
-      input.els.input.dispatchEvent(new CustomEvent('input'));
-    });
+    input1.setInputText('foo');
     expect(monitor1.getText()).toBe('foo');
   });
 
   it('should update the input', function() {
-    expect(browser.executeScript(function() { /* global document */
-      return document.querySelector('gaia-text-input').value;
-    })).toBe('');
+    expect(input1.getInputText()).toBe('');
     body.evaluate('input1 = "bar"; $digest();');
-    expect(browser.executeScript(function() { /* global document */
-      return document.querySelector('gaia-text-input').value;
-    })).toBe('bar');
+    expect(input1.getInputText()).toBe('bar');
   });
 
   it('should set the "required" attribute', function() {
-    expect(browser.executeScript(function() { /* global document */
-      return document.querySelector('gaia-text-input[name="input1"]').required;
-    })).toBe(false);
-    expect(browser.executeScript(function() { /* global document */
-      return document.querySelector('gaia-text-input[name="input2"]').required;
-    })).toBe(true);
+    expect(input1.getProperty('required')).toBe(false);
+    expect(input2.getProperty('required')).toBe(true);
   });
 
   it('should be present in form', function() {
@@ -165,9 +145,9 @@ describe('gaia-text-input', function() {
 
   it('should respect the "pattern" attribute', function() {
     expect(body.evaluate('form.$error.pattern[0]')).toBeNull();
-    body.evaluate('input1 = "foo"; $digest();');
+    input1.setInputText('foo');
     expect(body.evaluate('form.$error.pattern[0]')).toBeNull();
-    body.evaluate('input1 = "Foo"; $digest();');
+    input1.setInputText('Foo');
     expect(body.evaluate('form.$error.pattern[0].$name')).toBe('input1');
   });
 
