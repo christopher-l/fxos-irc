@@ -22,7 +22,13 @@ beforeAll(function() {
         /* jshint maxlen: false */
         localStorage.networks = '[{"config":{"name":"Foo","autoConnect":true,"port":6667,"host":"foo.com","nick":"foouser"},"lastState":{"status":"disconnected","unreadCount":0,"focused":false,"collapsed":false},"channels":[{"config":{"name":"channel1"},"lastState":{"joined":true,"unreadCount":0,"focused":false}},{"config":{"name":"channel2"},"lastState":{"unreadCount":23,"joined":true,"focused":false}}]},{"config":{"name":"Bar","host":"bar.com","tls":true,"nick":"baruser","port":6697},"lastState":{"status":"disconnected","unreadCount":0,"focused":false,"collapsed":false},"channels":[{"config":{"name":"channel3","autoJoin":true},"lastState":{"unreadCount":0,"focused":false}},{"config":{"name":"channel4"},"lastState":{"unreadCount":0,"focused":false}}]}]';
       });
-    }
+    },
+    clickHeaderActionButton: function() {
+      var header = $('gaia-header').getWebElement();
+      header.getDriver().executeScript(function(header) {
+        header.onActionButtonClick();
+      }, header);
+    },
   };
 
 
@@ -48,6 +54,19 @@ beforeAll(function() {
 
   ElementFinder.prototype.getProperty = function(property) {
     return this.elementArrayFinder_.getProperty(property).toElementFinder_();
+  };
+
+  ElementArrayFinder.prototype.execute = function(script) {
+    function executeFn(webElem) {
+      return webElem.getDriver().executeScript(
+          script, webElem);
+    }
+
+    return this.applyAction_(executeFn);
+  };
+
+  ElementFinder.prototype.execute = function(script) {
+    return this.elementArrayFinder_.execute(script).toElementFinder_();
   };
 
   ElementArrayFinder.prototype.setInputText = function(text) {
@@ -85,7 +104,7 @@ beforeAll(function() {
   ElementFinder.prototype.getInputText = function() {
     return this.elementArrayFinder_.getInputText().toElementFinder_();
   };
-  
+
   // var ProtractorBy = by.constructor;
   //
   // ProtractorBy.prototype.shadowCss = function(selector) {

@@ -18,16 +18,22 @@ describe('network-config', function() {
   var userField = element(by.css('[model="network.user"]'));
   var passwordField = element(by.css('[model="network.password"]'));
 
+  function fillInMinimalConfig() {
+    nameField.setInputText('Test Name');
+    hostField.setInputText('test.host');
+    nickField.setInputText('test-nick');
+  }
+
   it('should open when clicking the "+" button', function() {
     browser.get('');
-    uiView.evaluate('drawer.open = true; $digest();');
+    this.helpers.clickHeaderActionButton();
     addNetworkButton.click();
     expect(browser.getCurrentUrl()).toContain('config/network/');
   });
 
   describe('new network', function() {
 
-    beforeAll(function() {
+    beforeEach(function() {
       browser.get('#/config/network/');
     });
 
@@ -35,122 +41,90 @@ describe('network-config', function() {
       expect(title.getText()).toBe('New Network');
     });
 
-    it('should have an empty name field', function() {
+    it('should have the correct defaults', function() {
       expect(nameField.getAttribute('value')).toBe('');
-    });
-
-    it('should have "Auto Connect" unchecked', function() {
       expect(autoConnectField.getAttribute('checked')).toBeFalsy();
+      expect(hostField.getAttribute('value')).toBe('');
+      expect(portField.getAttribute('value')).toBe('');
+      expect(tlsField.getAttribute('checked')).toBeFalsy();
+      expect(nickField.getAttribute('value')).toBe('');
+      expect(userField.getAttribute('value')).toBe('');
+      expect(passwordField.getAttribute('value')).toBe('');
     });
 
-  });
+    it('should save a new network', function() {
+      nameField.setInputText('Test Name');
+      autoConnectField.click();
+      hostField.setInputText('test.host');
+      portField.setInputText('1234');
+      tlsField.click();
+      nickField.setInputText('test-nick');
+      userField.setInputText('testuser');
+      passwordField.setInputText('testpass');
 
-  function fillInMinimalConfig() {
-    browser.executeScript(function() {
-      /* global document, CustomEvent*/
-      var name = document.querySelector('[model="network.name"]');
-      name.value = 'Test Name';
-      name.els.input.dispatchEvent(new CustomEvent('input'));
-      document.querySelector('[model="network.autoConnect"]')
-          .click();
-      var host = document.querySelector('[model="network.host"]');
-      host.value = 'test.host';
-      host.els.input.dispatchEvent(new CustomEvent('input'));
-      var nick = document.querySelector('[model="network.nick"]');
-      nick.value = 'test-nick';
-      nick.els.input.dispatchEvent(new CustomEvent('input'));
+      saveButton.click();
+
+      expect(uiView.evaluate('networks[networks.length-1].name'))
+          .toBe('Test Name');
+      expect(uiView.evaluate('networks[networks.length-1].autoConnect'))
+          .toBe(true);
+      expect(uiView.evaluate('networks[networks.length-1].host'))
+          .toBe('test.host');
+      expect(uiView.evaluate('networks[networks.length-1].port'))
+          .toBe(1234);
+      expect(uiView.evaluate('networks[networks.length-1].tls'))
+          .toBe(true);
+      expect(uiView.evaluate('networks[networks.length-1].nick'))
+          .toBe('test-nick');
+      expect(uiView.evaluate('networks[networks.length-1].user'))
+          .toBe('testuser');
+      expect(uiView.evaluate('networks[networks.length-1].password'))
+          .toBe('testpass');
+
+      this.helpers.clickHeaderActionButton();
+      var entry = networkItems.last().element(by.css('div.network-entry'));
+      browser.actions()
+          .mouseMove(entry)
+          .click(protractor.Button.RIGHT)
+          .perform();
+      var editButton = element.all(by.buttonText('Edit')).last();
+      editButton.click();
+
+      expect(nameField.getAttribute('value')).toBe('Test Name');
+      expect(autoConnectField.getAttribute('checked')).toBe('true');
+      expect(hostField.getAttribute('value')).toBe('test.host');
+      expect(portField.getAttribute('value')).toBe('1234');
+      expect(tlsField.getAttribute('checked')).toBe('true');
+      expect(nickField.getAttribute('value')).toBe('test-nick');
+      expect(userField.getAttribute('value')).toBe('testuser');
+      expect(passwordField.getAttribute('value')).toBe('testpass');
     });
-  }
 
-  it('should save a new network', function() {
-    browser.get('#/config/network/');
-    browser.executeScript(function() {
-      /* global document, CustomEvent*/
-      var name = document.querySelector('[model="network.name"]');
-      name.value = 'Test Name';
-      name.els.input.dispatchEvent(new CustomEvent('input'));
-      document.querySelector('[model="network.autoConnect"]')
-          .click();
-      var host = document.querySelector('[model="network.host"]');
-      host.value = 'test.host';
-      host.els.input.dispatchEvent(new CustomEvent('input'));
-      var port = document.querySelector('[model="network.port"]');
-      port.value = '1234';
-      port.els.input.dispatchEvent(new CustomEvent('input'));
-      document.querySelector('[model="network.tls"]')
-          .click();
-      var nick = document.querySelector('[model="network.nick"]');
-      nick.value = 'test-nick';
-      nick.els.input.dispatchEvent(new CustomEvent('input'));
-      var user = document.querySelector('[model="network.user"]');
-      user.value = 'testuser';
-      user.els.input.dispatchEvent(new CustomEvent('input'));
-      var password = document.querySelector('[model="network.password"]');
-      password.value = 'testpass';
-      password.els.input.dispatchEvent(new CustomEvent('input'));
+    it('should set the default port to 6667', function() {
+      fillInMinimalConfig();
+
+      expect(portField.execute(function(port) {
+        return port.els.input.getAttribute('placeholder');
+      })).toBe('6667');
+
+      saveButton.click();
+      expect(uiView.evaluate('networks[networks.length-1].port'))
+          .toBe(6667);
     });
-    saveButton.click();
 
-    expect(uiView.evaluate('networks[networks.length-1].name'))
-        .toBe('Test Name');
-    expect(uiView.evaluate('networks[networks.length-1].autoConnect'))
-        .toBe(true);
-    expect(uiView.evaluate('networks[networks.length-1].host'))
-        .toBe('test.host');
-    expect(uiView.evaluate('networks[networks.length-1].port'))
-        .toBe(1234);
-    expect(uiView.evaluate('networks[networks.length-1].tls'))
-        .toBe(true);
-    expect(uiView.evaluate('networks[networks.length-1].nick'))
-        .toBe('test-nick');
-    expect(uiView.evaluate('networks[networks.length-1].user'))
-        .toBe('testuser');
-    expect(uiView.evaluate('networks[networks.length-1].password'))
-        .toBe('testpass');
+    it('should set the default tls port to 6697', function() {
+      fillInMinimalConfig();
+      tlsField.click();
 
-    uiView.evaluate('drawer.open = true; $digest();');
-    var entry = networkItems.last().element(by.css('div.network-entry'));
-    browser.actions()
-        .mouseMove(entry)
-        .click(protractor.Button.RIGHT)
-        .perform();
-    var editButton = element.all(by.buttonText('Edit')).last();
-    editButton.click();
+      expect(portField.execute(function(port) {
+        return port.els.input.getAttribute('placeholder');
+      })).toBe('6697');
 
-    expect(nameField.getAttribute('value')).toBe('Test Name');
-    expect(autoConnectField.getAttribute('checked')).toBe('true');
-    expect(hostField.getAttribute('value')).toBe('test.host');
-    expect(portField.getAttribute('value')).toBe('1234');
-    expect(tlsField.getAttribute('checked')).toBe('true');
-    expect(nickField.getAttribute('value')).toBe('test-nick');
-    expect(userField.getAttribute('value')).toBe('testuser');
-    expect(passwordField.getAttribute('value')).toBe('testpass');
+      saveButton.click();
+      expect(uiView.evaluate('networks[networks.length-1].port'))
+          .toBe(6697);
+    });
 
-  });
-
-  it('should set the default port to 6667', function() {
-    browser.get('#/config/network/');
-    fillInMinimalConfig();
-    expect(browser.executeScript(function() {
-      var port = document.querySelector('[model="network.port"]');
-      return port.els.input.getAttribute('placeholder');
-    })).toBe('6667');
-    saveButton.click();
-    expect(uiView.evaluate('networks[networks.length-1].port'))
-        .toBe(6667);
-  });
-
-  it('should set the default tls port to 6697', function() {
-    browser.get('#/config/network/');
-    fillInMinimalConfig();
-    tlsField.click();
-    expect(browser.executeScript(function() {
-      var port = document.querySelector('[model="network.port"]');
-      return port.els.input.getAttribute('placeholder');
-    })).toBe('6697');
-    saveButton.click();
-    expect(uiView.evaluate('networks[networks.length-1].port'))
-        .toBe(6697);
   });
 
   describe('close action', function() {
@@ -171,12 +145,7 @@ describe('network-config', function() {
 
     it('should show a warning for edited new network', function() {
       browser.get('#/config/network/');
-      browser.executeScript(function() {
-        /* global document, CustomEvent*/
-        var name = document.querySelector('[model="network.name"]');
-        name.value = 'Test Name';
-        name.els.input.dispatchEvent(new CustomEvent('input'));
-      });
+      nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');
       configView.evaluate('confirmDialog.onConfirm();');
@@ -192,12 +161,7 @@ describe('network-config', function() {
 
     it('should show a warning for edited existing network', function() {
       browser.get('#/config/network/0');
-      browser.executeScript(function() {
-        /* global document, CustomEvent*/
-        var name = document.querySelector('[model="network.name"]');
-        name.value = 'Test Name';
-        name.els.input.dispatchEvent(new CustomEvent('input'));
-      });
+      nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');
       configView.evaluate('confirmDialog.onConfirm();');
