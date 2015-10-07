@@ -1,4 +1,5 @@
-<section id="messages" style="font-size: {{fontSize}}pt;">
+<section id="messages" style="font-size: {{fontSize}}pt;"
+    irc-messages="messageView">
   <div ng-repeat="message in messages"
       ng-class="{highlight: message.highlight}">
     <div ng-if="message.type === 'message'">
@@ -20,6 +21,6 @@
 </section>
 
 <gaia-text-input-multiline
-    irc-message-input
+    irc-message-input on-resize="messageView.scrollDown()"
     irc-complete="users">
 </gaia-text-input-multiline>

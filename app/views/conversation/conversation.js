@@ -50,24 +50,49 @@ conversation.controller('ConversationCtrl', ['$scope', 'settings',
 }]);
 
 conversation.directive('ircMessageInput', [function() {
-  var height = 0;
   function link(scope, element, attrs) {
-    var field = angular.element(element[0].els.field);
     // from https://stackoverflow.com/a/995374
-    field.css({
-      'min-height': '0px',
-    });
-    field.attr('rows', '1');
-    field.on('input', function(evt) {
-      field.css('height', 'auto');
+    var field = angular.element(element[0].els.field);
+    var height = 0;
+
+    function updateHeight() {
+      field.css('height', '0px');
       var newHeight = field[0].scrollHeight + 2;
       if (newHeight !== height) {
         element.css('height', newHeight + 'px');
+        scope.$eval(attrs.onResize);
       }
       field.css('height', '100%');
       height = newHeight;
-    });
+    }
+
+    field.css('min-height', '0px');
+    field.attr('rows', '1');
     element[0].els.inner.querySelector('.focus-2').style.display = 'none';
+
+    field.on('input', updateHeight);
+    updateHeight();
+  }
+  return {
+    restrict: 'A',
+    link: link
+  };
+}]);
+
+conversation.directive(
+    'ircMessages', [
+      '$parse', '$window',
+      function($parse, $window) {
+
+  function link(scope, element, attrs) {
+    var model = $parse(attrs.ircMessages);
+    if (!model(scope)) { model.assign(scope, {}); }
+    function scrollDown() {
+      element[0].scrollTo(0, element[0].scrollHeight);
+    }
+    model(scope).scrollDown = scrollDown;
+    setTimeout(scrollDown);
+    angular.element($window).bind('resize', scrollDown);
   }
   return {
     restrict: 'A',
