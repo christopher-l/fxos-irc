@@ -49,7 +49,9 @@ conversation.controller('ConversationCtrl', ['$scope', 'settings',
   ];
 }]);
 
-conversation.directive('ircMessageInput', [function() {
+conversation.directive(
+    'ircMessageInput', [
+      function() {
   function link(scope, element, attrs) {
     // from https://stackoverflow.com/a/995374
     var field = angular.element(element[0].els.field);
@@ -83,16 +85,37 @@ conversation.directive(
     'ircMessages', [
       '$parse', '$window',
       function($parse, $window) {
-
+  // Scroll down the element content initially.
+  // Functions:
+  //    updateScrollPos()   If the last position the user scrolled to was the
+  //                        bottom, scroll to the bottom now.
   function link(scope, element, attrs) {
     var model = $parse(attrs.ircMessages);
     if (!model(scope)) { model.assign(scope, {}); }
+    var maxScrollTop = 0;
+    var userScrolled = false;
     function scrollDown() {
       element[0].scrollTo(0, element[0].scrollHeight);
     }
-    model(scope).scrollDown = scrollDown;
-    setTimeout(scrollDown);
-    angular.element($window).bind('resize', scrollDown);
+    function updateMaxScroll() {
+      maxScrollTop = element[0].scrollHeight - element[0].offsetHeight;
+    }
+    function onResize() {
+      updateMaxScroll();
+      updateScrollPos();
+    }
+    function updateScrollPos() {
+      if (!userScrolled) {
+        scrollDown();
+      }
+    }
+    model(scope).updateScrollPos = updateScrollPos;
+    setTimeout(onResize);
+    angular.element($window).bind('resize', onResize);
+
+    element.on('scroll', function() {
+      userScrolled = element[0].scrollTop < maxScrollTop;
+    });
   }
   return {
     restrict: 'A',
