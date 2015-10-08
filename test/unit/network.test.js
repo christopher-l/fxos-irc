@@ -23,21 +23,25 @@ describe('Network', function() {
         },
         channels: []
       };
-      network = new Network(storageRef);
-      networks = ['fooo', network, 'baar'];
       storage = {
         data: ['foo', storageRef, 'bar'],
         save: jasmine.createSpy('storage.save')
       };
-      Network.prototype._networks = networks;
-      Network.prototype._storage = storage;
+      // networks = ['fooo', networks, 'baar']
+      networks = ['fooo'];
+      network = new Network(storageRef, storage, networks);
+      networks.push(network);
+      networks.push('baar');
+      Network.prototype._saveToDisk = storage.save.bind(storage);
     }));
 
     it('should have the correct properties', function() {
       expect(Object.keys(network)).toEqual([
-        '_state',
         '_storageRef',
         '_config',
+        '_storage',
+        '_volatile',
+        '_state',
         'channels'
       ]);
     });
@@ -125,22 +129,23 @@ describe('Network', function() {
   describe('newly created', function() {
 
     beforeEach(inject(function(Network) {
-      network = new Network();
       networks = ['fooo', 'baar'];
       storage = {
         data: ['foo', 'bar'],
         save: jasmine.createSpy('storage.save')
       };
-      Network.prototype._networks = networks;
-      Network.prototype._storage = storage;
+      network = new Network(null, storage, networks);
+      Network.prototype._saveToDisk = storage.save.bind(storage);
     }));
 
     it('should have the correct properties', function() {
       expect(Object.keys(network)).toEqual([
-        '_state',
         'new',
         '_config',
         '_storageRef',
+        '_storage',
+        '_volatile',
+        '_state',
         'channels'
       ]);
     });

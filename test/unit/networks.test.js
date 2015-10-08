@@ -58,7 +58,8 @@ describe('networks', function() {
 
     it('should be a new instance of Network', function() {
       expect(network).toBeDefined();
-      expect(network).toEqual(new Network());
+      expect(network).toEqual(
+          new Network(null, network._storage, network._volatile));
       expect(network instanceof Network).toBe(true);
     });
 
