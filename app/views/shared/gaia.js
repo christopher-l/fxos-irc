@@ -227,3 +227,45 @@ gaia.directive('ircDialog', ['$parse', function($parse) {
     }
   };
 }]);
+
+// Provide additional attribute:
+//   ircDisabled    Works like ngDisabled
+gaia.directive(
+    'ircValueSelector', [
+      '$parse',
+      function($parse) {
+
+  function disable(element) {
+    element.css({
+      color: 'var(--text-color)',
+      opacity: '0.5',
+      cursor: 'default',
+      pointerEvents: 'none',
+    });
+  }
+
+  function enable(element) {
+    element.css({
+      color: '',
+      opacity: '',
+      cursor: '',
+      pointerEvents: '',
+    });
+  }
+
+  function link(scope, element, attrs) {
+    var disabledModel = $parse(attrs.ircDisabled);
+    scope.$watch(disabledModel, function(value) {
+      if (value) {
+        disable(element);
+      } else {
+        enable(element);
+      }
+    });
+  }
+
+  return {
+    restrict: 'A',
+    link: link
+  };
+}]);

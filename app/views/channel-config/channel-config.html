@@ -9,7 +9,9 @@
     	<label flex>
     	  Network
     	</label>
-    	<gaia-value-selector ng-click="networkDialog.open()">
+    	<gaia-value-selector irc-value-selector
+          ng-click="networkDialog.open()"
+          irc-disabled="!isNew">
     	  {{networkDialog.currentText}}
     	</gaia-value-selector>
     </li>
