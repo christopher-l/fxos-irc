@@ -66,8 +66,8 @@ config.directive('ircPassword', [function() {
       input[0].setSelectionRange(start, end);
     });
 
-    // Set `focused` to true just a moment after input had the focus, so it can
-    // be restored after the button is clicked.
+    // Set `focused` to true for just a moment after input had the focus, so it
+    // can be restored after the button is clicked.
     input.on('blur', function() {
       focused = true;
       setTimeout(function() {
@@ -76,6 +76,22 @@ config.directive('ircPassword', [function() {
     });
   }
 
+  return {
+    restrict: 'A',
+    link: link
+  };
+}]);
+
+
+// Focus on page load if gived expression evaluates to true.  Intended for
+// gaia-text-input.
+config.directive('ircAutofocus', ['$parse', function($parse) {
+  function link(scope, element, attrs) {
+    var model = $parse(attrs.ircAutofocus);
+    if (model(scope)) {
+      element[0].focus();
+    }
+  }
   return {
     restrict: 'A',
     link: link
