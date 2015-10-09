@@ -58,7 +58,7 @@ describe('network-list', function() {
 
   });
 
-  describe('restore state', function() {
+  xdescribe('restore state', function() {
 
     beforeAll(function() {
       browser.get('');

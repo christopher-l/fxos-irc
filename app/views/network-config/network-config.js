@@ -26,7 +26,7 @@ networkConfig.controller('NetConfCtrl', [
   };
 
   $scope.onClose = function() {
-    var changed = network.new ?
+    var changed = network.isNew ?
         !network.compareConfig($scope.network) :
         !network.compareConfig(finalConfig($scope.network));
     if (changed) {

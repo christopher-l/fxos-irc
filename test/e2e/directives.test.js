@@ -135,8 +135,8 @@ describe('gaia-text-input', function() {
   });
 
   it('should be present in form', function() {
-    expect(body.evaluate('form.input1')).toBeTruthy();
-    expect(body.evaluate('form.input2')).toBeTruthy();
+    expect(body.evaluate('!!form.input1')).toBe(true);
+    expect(body.evaluate('!!form.input2')).toBe(true);
   });
 
   it('should respect the "required" attribute', function() {
