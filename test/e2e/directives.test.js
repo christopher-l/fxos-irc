@@ -96,7 +96,7 @@ describe('gaia-dialog-select', function() {
     expect(valueMonitor.getText()).toBe('bar');
   });
 
-  it('shoudl update currentText', function() {
+  it('should update currentText', function() {
     dialog.evaluate('dialog.open()');
     foo.click();
     expect(textMonitor.getText()).toBe('Foo!');

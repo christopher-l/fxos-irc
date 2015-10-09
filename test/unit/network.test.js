@@ -144,7 +144,7 @@ describe('Network', function() {
 
     it('should have the correct properties', function() {
       expect(Object.keys(network)).toEqual([
-        'new',
+        'isNew',
         '_config',
         '_storageRef',
         '_storage',
@@ -162,7 +162,7 @@ describe('Network', function() {
     });
 
     it('should be marked new', function() {
-      expect(network.new).toBe(true);
+      expect(network.isNew).toBe(true);
     });
 
     it('should initialize its state', function() {
@@ -184,7 +184,7 @@ describe('Network', function() {
 
     it('should lose its new property when saved', function() {
       network.save();
-      expect(network.new).toBeUndefined();
+      expect(network.isNew).toBeUndefined();
     });
 
   });

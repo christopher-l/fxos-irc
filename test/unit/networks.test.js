@@ -29,15 +29,15 @@ describe('networks', function() {
   });
 
   it('should add networks', function() {
-    networks.new().save();
+    networks.newNetwork().save();
     expect(networks.length).toBe(1);
-    networks.new().save();
+    networks.newNetwork().save();
     expect(networks.length).toBe(2);
   });
 
   it('should focus networks', function() {
-    networks.new().save();
-    networks.new().save();
+    networks.newNetwork().save();
+    networks.newNetwork().save();
     expect(networks[0].focused).toBe(false);
     expect(networks[1].focused).toBe(false);
     networks[1].focus();
@@ -53,13 +53,12 @@ describe('networks', function() {
     var network;
 
     beforeEach(inject(function(_Network_) {
-      network = networks.new();
+      network = networks.newNetwork();
     }));
 
     it('should be a new instance of Network', function() {
       expect(network).toBeDefined();
-      expect(network).toEqual(
-          new Network(null, network._storage, network._volatile));
+      expect(network).toEqual(new Network());
       expect(network instanceof Network).toBe(true);
     });
 

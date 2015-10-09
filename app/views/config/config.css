@@ -12,7 +12,7 @@
   opacity: 1;
 }
 
-gaia-list {
+div[ui-view] > gaia-list, form.config {
   flex-grow: 1;
   background-color: var(--background);
   -moz-user-select: none;
@@ -48,7 +48,7 @@ gaia-dialog-select {
   overflow-y: auto;
 }
 
-gaia-list h3, p {
+form.config label {
   padding-left: 1rem;
 }
 

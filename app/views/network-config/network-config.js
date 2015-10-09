@@ -15,10 +15,10 @@ networkConfig.controller('NetConfCtrl', [
 
   var network = $stateParams.index ?
       networks[$stateParams.index] :
-      networks.new();
+      networks.newNetwork();
   $scope.network = network.getConfig();
 
-  $scope.isNew = network.new;
+  $scope.isNew = network.isNew;
 
   $scope.onSave = function() {
     save();

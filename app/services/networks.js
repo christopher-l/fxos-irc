@@ -17,8 +17,8 @@ networks.factory(
     if (storageRef) {
       this._storageRef = storageRef;
       this._config = storageRef.config;
-    } else { // Network / Channel is new
-      this.new = true;
+    } else {
+      this.isNew = true;
       this._config = {};
       this._storageRef = {
         config: this._config,
@@ -63,7 +63,7 @@ networks.factory(
       this.save();
     },
     save: function() {
-      if (this.new) {
+      if (this.isNew) {
         this._create();
       }
       netData.storage.save();
@@ -88,7 +88,7 @@ networks.factory(
     _create: function() {
       this._volatile.push(this);
       this._storage.push(this._storageRef);
-      delete this.new;
+      delete this.isNew;
     },
   };
 
@@ -174,9 +174,11 @@ networks.factory(
 
   var Channel = function(storageRef, network) {
     Base.call(this, storageRef);
-    this._state = {};
+    this._state = {
+      unreadCount: 0,
+    };
     if (storageRef) {
-      this._state = storageRef.lastState;
+      // this._state = storageRef.lastState;
       this._setNetwork(network);
     }
   };
@@ -186,17 +188,17 @@ networks.factory(
 
   Channel.prototype._setNetwork = function(network) {
     this.network = network;
-    this._storage = this.network._storageRef;
-    this._volatile = this.network;
+    this._storage = this.network._storageRef.channels;
+    this._volatile = this.network.channels;
   };
 
   Channel.prototype.applyConfig = function(config) { // Override
-    if (this.new) {
+    if (this.isNew) {
       var network = netData.networks[config.networkIndex];
       this._setNetwork(network);
       delete config.networkIndex;
     }
-    Base.call.applyConfig(this);
+    Base.prototype.applyConfig.call(this, config);
   };
 
   Channel.prototype._configProps = [
@@ -319,8 +321,12 @@ networks.factory(
 
   netData.storage.save();
 
-  netData.networks.new = function() {
+  netData.networks.newNetwork = function() {
     return new Network();
+  };
+
+  netData.networks.newChannel = function() {
+    return new Channel();
   };
 
   return netData.networks;

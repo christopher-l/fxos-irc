@@ -7,7 +7,7 @@
   <gaia-list>
     <li>
       <div flex>
-        <h3>Name</h3>
+        <label>Name</label>
         <gaia-text-input placeholder="e.g. Freenode"
             irc-text-input model="network.name" required>
         </gaia-text-input>
@@ -26,7 +26,7 @@
   <gaia-list>
     <li>
       <div flex>
-        <h3>Host</h3>
+        <label>Host</label>
         <!-- pattern from https://stackoverflow.com/a/106223 -->
         <gaia-text-input id="host" placeholder="e.g. irc.freenode.net"
             irc-text-input model="network.host" required
@@ -57,7 +57,7 @@
   <gaia-list>
     <li>
       <div flex>
-        <h3>Nick</h3>
+        <label>Nick</label>
         <gaia-text-input id="nick"
             irc-text-input model="network.nick" required
             pattern="[\w\[\]\\`\^\{\|\}][\w\d;\[\]\\`\^\{\|\}\-]*"

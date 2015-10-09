@@ -6,6 +6,7 @@ var views = angular.module('irc.views', [
   'irc.views.main',
   'irc.views.settings',
   'irc.views.network-config',
+  'irc.views.channel-config',
 ]);
 
 
@@ -46,6 +47,11 @@ views.config(['$stateProvider', '$urlRouterProvider',
       url: '/config/network/:index',
       templateUrl: 'views/network-config/network-config.html',
       controller: 'NetConfCtrl'
+    })
+    .state('channel-config', {
+      url: '/config/channel/:networkIndex/:channelIndex',
+      templateUrl: 'views/channel-config/channel-config.html',
+      controller: 'ChanConfCtrl',
     });
 }]);
 

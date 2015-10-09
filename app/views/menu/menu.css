@@ -40,10 +40,17 @@ gaia-drawer > div {
   border-radius: 0px !important;
   background-color: var(--background) !important;
   box-shadow: none !important;
+  min-width: 0px !important;
 }
 
 #drawer-buttons gaia-button:not(:last-of-type) {
   border-right: solid 1px var(--border-color);
+}
+
+#drawer-buttons #add-channel-button {
+  font-size: 1.6rem !important;
+  font-style: normal !important;
+  font-weight: 500;
 }
 
 /**

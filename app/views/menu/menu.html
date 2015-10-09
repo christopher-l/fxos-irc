@@ -54,6 +54,11 @@
     </section>
 
     <div id="drawer-buttons">
+      <gaia-button id="add-channel-button"
+          ng-disabled="networks.length === 0"
+          ui-sref="channel-config({networkIndex:0})">
+        #
+      </gaia-button>
       <gaia-button id="add-network-button"
           ui-sref="network-config">
         <i data-icon="add"></i>

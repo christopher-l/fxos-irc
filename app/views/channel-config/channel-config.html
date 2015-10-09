@@ -1,0 +1,44 @@
+<gaia-header action="close" irc-action="onClose()">
+  <h1>{{isNew ? 'New Channel' : channel.name}}</h1>
+  <button ng-click="onSave();" ng-disabled="config.$invalid">Save</button>
+</gaia-header>
+
+<form class="config" name=config>
+  <gaia-list>
+    <li>
+    	<label flex>
+    	  Network
+    	</label>
+    	<gaia-value-selector ng-click="networkDialog.open()">
+    	  {{networkDialog.currentText}}
+    	</gaia-value-selector>
+    </li>
+    <li>
+      <div flex>
+        <label>Channel Name</label>
+        <gaia-text-input
+            irc-text-input model="channel.name" required>
+        </gaia-text-input>
+      </div>
+    </li>
+    <li class="ripple">
+      <label flex for="auto-join">
+        <h3>Auto Join</h3>
+      </label>
+      <gaia-checkbox id="auto-join"
+          irc-checkbox model="channel.autoJoin">
+      </gaia-checkbox>
+    </li>
+  </gaia-list>
+</form>
+
+<gaia-dialog-select irc-dialog="networkDialog" model="channel.networkIndex">
+  <h1>Network</h1>
+  <li ng-repeat="network in networks" value="{{$index}}">
+    {{network.name}}
+  </li>
+</gaia-dialog-select>
+
+<gaia-dialog-confirm irc-dialog="confirmDialog">
+  Discard changes?
+</gaia-dialog-confirm>
