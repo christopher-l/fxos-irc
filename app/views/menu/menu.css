@@ -48,7 +48,7 @@ gaia-drawer > div {
 }
 
 #drawer-buttons #add-channel-button {
-  font-size: 1.6rem !important;
+  font-size: 30px !important;
   font-style: normal !important;
   font-weight: 500;
 }
