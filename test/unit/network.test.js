@@ -11,7 +11,7 @@ describe('Network', function() {
 
   describe('from storage', function() {
 
-    beforeEach(inject(function(Network) {
+    beforeEach(module(function($provide) {
       storageRef = {
         config: {
           name: 'Foo',
@@ -27,12 +27,13 @@ describe('Network', function() {
         data: ['foo', storageRef, 'bar'],
         save: jasmine.createSpy('storage.save')
       };
-      // networks = ['fooo', networks, 'baar']
-      networks = ['fooo'];
-      network = new Network(storageRef, storage, networks);
-      networks.push(network);
-      networks.push('baar');
-      Network.prototype._saveToDisk = storage.save.bind(storage);
+      networks = ['fooo', 'nerwork', 'baar'];
+      $provide.value('netData', {storage: storage, networks: networks});
+    }));
+
+    beforeEach(inject(function(Network) {
+      network = new Network(storageRef);
+      networks[1] = network;
     }));
 
     it('should have the correct properties', function() {
@@ -82,7 +83,7 @@ describe('Network', function() {
 
     it('should save the changed state', function() {
       network.status = 'connected';
-      expect(network._storage.save).toHaveBeenCalled();
+      expect(storage.save).toHaveBeenCalled();
     });
 
     it('should give a copy of the config', function() {
@@ -102,9 +103,9 @@ describe('Network', function() {
 
     it('should save when applying a config', function() {
       var config = network.getConfig();
-      expect(network._storage.save).not.toHaveBeenCalled();
+      expect(storage.save).not.toHaveBeenCalled();
       network.applyConfig(config);
-      expect(network._storage.save).toHaveBeenCalled();
+      expect(storage.save).toHaveBeenCalled();
     });
 
     it('should save to storage', function() {
@@ -128,14 +129,17 @@ describe('Network', function() {
 
   describe('newly created', function() {
 
-    beforeEach(inject(function(Network) {
+    beforeEach(module(function($provide) {
       networks = ['fooo', 'baar'];
       storage = {
         data: ['foo', 'bar'],
         save: jasmine.createSpy('storage.save')
       };
-      network = new Network(null, storage, networks);
-      Network.prototype._saveToDisk = storage.save.bind(storage);
+      $provide.value('netData', {storage: storage, networks: networks});
+    }));
+
+    beforeEach(inject(function(Network) {
+      network = new Network();
     }));
 
     it('should have the correct properties', function() {

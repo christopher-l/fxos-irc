@@ -1,209 +1,106 @@
 'use strict';
 
 var networks = angular.module('irc.networks', [
-  'irc.storage'
+  'irc.storage',
 ]);
 
 
-var Base = function(storageRef, storage, volatile) {
-  if (storageRef) {
-    this._storageRef = storageRef;
-    this._config = storageRef.config;
-  } else { // Network / Channel is new
-    this.new = true;
-    this._config = {};
-    this._storageRef = {
-      config: this._config,
-    };
-  }
-  this._storage = storage;
-  this._volatile = volatile;
-};
-
-function defineConfigProps(proto, props) {
-  props.forEach(function(key) {
-    Object.defineProperty(proto, key, {
-      get: function() {
-        return this._config[key];
-      },
-      set: function(value) {
-        throw new Error('Tried to write access config.');
-      }
-    });
-  });
-}
-
-function defineStateProps(proto, props) {
-  props.forEach(function(key) {
-    Object.defineProperty(proto, key, {
-      get: function() {
-        return this._state[key];
-      },
-      set: function(value) {
-        this._state[key] = value;
-        this.save();
-      }
-    });
-  });
-}
-
-Base.prototype = {
-  getConfig: function() {
-    return angular.copy(this._config);
-  },
-  applyConfig: function(config) {
-    this._config = config;
-    this._storageRef.config = config;
-    this.save();
-  },
-  save: function() {
-    if (this.new) {
-      this._volatile.push(this);
-      this._storage.data.push(this._storageRef);
-      delete this.new;
-    }
-    this._saveToDisk();
-  },
-  delete: function() {
-    var index = this._volatile.indexOf(this);
-    this._volatile.splice(index, 1);
-    this._storage.data.splice(index, 1);
-    this._saveToDisk();
-  },
-  compareConfig: function(config) {
-    var self = this;
-    function isEqual(prop) {
-      return self._config[prop] ?
-          self._config[prop] === config[prop] :
-          !!self._config[prop] === !!config[prop];
-    }
-    return this._configProps.every(isEqual);
-  },
-};
-
-networks.factory('Channel', [function ChannelFactory() {
-
-  var Channel = function(storageRef) {
-    this._storageRef = storageRef;
-    this._config = storageRef.config;
-    this._state = storageRef.lastState;
-  };
-
-  Channel.prototype = {
-    save: angular.noop,
-  };
-
-  [
-    'name',
-    'autoJoin'
-  ].forEach(function(key) {
-    Object.defineProperty(Channel.prototype, key, {
-      get: function() {
-        return this._config[key];
-      },
-      set: function(value) {
-        throw new Error('Tried to write access channel config.');
-      }
-    });
-  });
-
-  [
-    'focused',
-    'joined',
-    'unreadCount',
-  ].forEach(function(key) {
-    Object.defineProperty(Channel.prototype, key, {
-      get: function() {
-        return this._state[key];
-      },
-      set: function(value) {
-        this._state[key] = value;
-        this.save();
-      }
-    });
-  });
-
-  return Channel;
-
-}]);
-
-
-/**
- * Network Service
- *
- * Provides a constructor for network objects.
- */
 networks.factory(
-    'Network', [
-      'Channel',
-      function NetworkFactory(Channel) {
+    'NetBase', [
+      'netData',
+      function NetBaseFactory(netData) {
 
-  var Network = function(storageRef, storage, volatile) {
-    Base.call(this, storageRef, storage, volatile);
-    // Set up state
-    this._state = {
-      status: 'disconnected',
-      unreadCount: 0,
-      focused: false,
-      collapsed: false,
-    };
+  var Base = function(storageRef) {
+    // Set up this._config and this._storageRef.
+    // this._state must be set up by implementation.
+    // this._storage and this._volatile must be set before first save.
     if (storageRef) {
-      this._state.collapsed = storageRef.lastState.collapsed;
-      if (storageRef.lastState.focused) {
-        this.focus();
-      }
+      this._storageRef = storageRef;
+      this._config = storageRef.config;
+    } else { // Network / Channel is new
+      this.new = true;
+      this._config = {};
+      this._storageRef = {
+        config: this._config,
+      };
     }
-    this._storageRef.lastState = this._state;
-    // Set up channels
-    if (!storageRef) {
-      this._storageRef.channels = [];
-    }
-    this.channels = [];
-    var self = this;
-    this._storageRef.channels.forEach(function(chan) {
-      self.channels.push(new Channel(chan));
+  };
+
+  Base.defineConfigProps = function(proto, props) {
+    props.forEach(function(key) {
+      Object.defineProperty(proto, key, {
+        get: function() {
+          return this._config[key];
+        },
+        set: function(value) {
+          throw new Error('Tried to write access config.');
+        }
+      });
     });
   };
 
-  Network.prototype = Object.create(Base.prototype);
-  Network.prototype.constructor = Network;
+  Base.defineStateProps = function(proto, props) {
+    props.forEach(function(key) {
+      Object.defineProperty(proto, key, {
+        get: function() {
+          return this._state[key];
+        },
+        set: function(value) {
+          this._state[key] = value;
+          this.save();
+        }
+      });
+    });
+  };
 
-  Network.prototype._configProps = [
-    'name',
-    'autoConnect',
-    'host',
-    'port',
-    'tls',
-    'nick',
-    'user',
-    'password',
-  ];
+  Base.prototype = {
+    getConfig: function() {
+      return angular.copy(this._config);
+    },
+    applyConfig: function(config) {
+      this._config = config;
+      this._storageRef.config = config;
+      this.save();
+    },
+    save: function() {
+      if (this.new) {
+        this._create();
+      }
+      netData.storage.save();
+    },
+    delete: function() {
+      var index = this._volatile.indexOf(this);
+      this._volatile.splice(index, 1);
+      this._storage.splice(index, 1);
+      netData.storage.save();
+    },
+    compareConfig: function(config) {
+      var self = this;
+      function isEqual(prop) {
+        /*jshint -W018 */
+        return self._config[prop] ?
+            self._config[prop] === config[prop] :
+            !!self._config[prop] === !!config[prop];
+        /*jshint +W018 */
+      }
+      return this._configProps.every(isEqual);
+    },
+    _create: function() {
+      this._volatile.push(this);
+      this._storage.push(this._storageRef);
+      delete this.new;
+    },
+  };
 
-  Network.prototype._stateProps = [
-    'status',
-    'unreadCount',
-    'focused',
-    'collapsed',
-  ];
-
-  defineConfigProps(Network.prototype, Network.prototype._configProps);
-  defineStateProps(Network.prototype, Network.prototype._stateProps);
-
-  return Network;
+  return Base;
 
 }]);
 
-
-/**
- * Networks Service
- *
- * Provides an array of all known networks.
- */
-networks.factory('networks', [
-    'Storage', 'Network', 'Channel',
-    function networksFactory(Storage, Network, Channel) {
-
-  var storage = new Storage('networks', [
+networks.service(
+    'netData', [
+      'Storage',
+      function netDataService(Storage) {
+  this.storage = new Storage('networks', [
     {
       config: {
         name: 'Foo',
@@ -265,9 +162,143 @@ networks.factory('networks', [
     }
   ]);
 
-  var networks = [];
+  this.networks = [];
 
-  var saveToDisk = storage.save.bind(storage);
+}]);
+
+networks.factory(
+    'Channel', [
+      'netData',
+      'NetBase',
+      function ChannelFactory(netData, Base) {
+
+  var Channel = function(storageRef, network) {
+    Base.call(this, storageRef);
+    this._state = {};
+    if (storageRef) {
+      this._state = storageRef.lastState;
+      this._setNetwork(network);
+    }
+  };
+
+  Channel.prototype = Object.create(Base.prototype);
+  Channel.prototype.constructor = Channel;
+
+  Channel.prototype._setNetwork = function(network) {
+    this.network = network;
+    this._storage = this.network._storageRef;
+    this._volatile = this.network;
+  };
+
+  Channel.prototype.applyConfig = function(config) { // Override
+    if (this.new) {
+      var network = netData.networks[config.networkIndex];
+      this._setNetwork(network);
+      delete config.networkIndex;
+    }
+    Base.call.applyConfig(this);
+  };
+
+  Channel.prototype._configProps = [
+    'name',
+    'autoJoin'
+  ];
+
+  Channel.prototype._stateProps = [
+    'focused',
+    'joined',
+    'unreadCount',
+  ];
+
+  Base.defineConfigProps(Channel.prototype, Channel.prototype._configProps);
+  Base.defineStateProps(Channel.prototype, Channel.prototype._stateProps);
+
+  return Channel;
+
+}]);
+
+
+/**
+ * Network Service
+ *
+ * Provides a constructor for network objects.
+ */
+networks.factory(
+    'Network', [
+      'netData',
+      'NetBase',
+      'Channel',
+      function NetworkFactory(netData, NetBase, Channel) {
+
+  var Network = function(storageRef) {
+    NetBase.call(this, storageRef);
+    this._storage = netData.storage.data;
+    this._volatile = netData.networks;
+    // Set up state
+    this._state = {
+      status: 'disconnected',
+      unreadCount: 0,
+      focused: false,
+      collapsed: false,
+    };
+    if (storageRef) {
+      this._state.collapsed = storageRef.lastState.collapsed;
+      if (storageRef.lastState.focused) {
+        this.focus();
+      }
+    }
+    this._storageRef.lastState = this._state;
+    // Set up channels
+    if (!storageRef) {
+      this._storageRef.channels = [];
+    }
+    this.channels = [];
+    var self = this;
+    this._storageRef.channels.forEach(function(chan) {
+      self.channels.push(new Channel(chan, self));
+    });
+  };
+
+  Network.prototype = Object.create(NetBase.prototype);
+  Network.prototype.constructor = Network;
+
+  Network.prototype._configProps = [
+    'name',
+    'autoConnect',
+    'host',
+    'port',
+    'tls',
+    'nick',
+    'user',
+    'password',
+  ];
+
+  Network.prototype._stateProps = [
+    'status',
+    'unreadCount',
+    'focused',
+    'collapsed',
+  ];
+
+  NetBase.defineConfigProps(Network.prototype, Network.prototype._configProps);
+  NetBase.defineStateProps(Network.prototype, Network.prototype._stateProps);
+
+  return Network;
+
+}]);
+
+
+/**
+ * Networks Service
+ *
+ * Provides an array of all known networks.
+ */
+networks.factory(
+    'networks', [
+      'netData', 'Network', 'Channel',
+      function networksFactory(netData, Network, Channel) {
+
+  var saveToDisk = netData.storage.save.bind(netData.storage);
   Network.prototype._saveToDisk = saveToDisk;
   Channel.prototype._saveToDisk = saveToDisk;
 
@@ -282,16 +313,16 @@ networks.factory('networks', [
   Network.prototype.focus = focus;
   Channel.prototype.focus = focus;
 
-  storage.data.forEach(function(net) {
-    networks.push(new Network(net, storage, networks));
+  netData.storage.data.forEach(function(net) {
+    netData.networks.push(new Network(net));
   });
 
-  storage.save();
+  netData.storage.save();
 
-  networks.new = function() {
-    return new Network(null, storage, networks);
+  netData.networks.new = function() {
+    return new Network();
   };
 
-  return networks;
+  return netData.networks;
 
 }]);
