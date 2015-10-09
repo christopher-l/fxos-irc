@@ -14,11 +14,6 @@ menu.controller('MenuCtrl', [
   $scope.drawer = $stateParams.drawer;
   $scope.networks = networks;
 
-  $scope.focus = function(obj) {
-    obj.focus();
-    if (obj.collapsed) { obj.collapsed = false; }
-  };
-
   $scope.onDelete = function(network) {
     network.dialog.close();
     $scope.confirmDialog.toBeDeleted = network;
@@ -26,6 +21,11 @@ menu.controller('MenuCtrl', [
     $scope.confirmDialog.onConfirm = function() {
       network.delete();
     };
+  };
+
+  $scope.onChanContext = function(channel) {
+    $scope.channelDialog.channel = channel;
+    $scope.channelDialog.open();
   };
 
 }]);

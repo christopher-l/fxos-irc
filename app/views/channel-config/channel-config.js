@@ -23,7 +23,7 @@ channelConfig.controller(
 
   $timeout(function() {
     // Give ngRepeat time to populate the list first
-    $scope.channel.networkIndex = $stateParams.networkIndex;
+    $scope.channel.networkIndex = $stateParams.networkIndex || '0';
   });
 
   $scope.isNew = channel.isNew;

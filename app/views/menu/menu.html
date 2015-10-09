@@ -34,7 +34,8 @@
             <li class="channel-entry"
                 ng-repeat="channel in network.channels"
                 ng-attr-active="{{channel.joined || undefined}}"
-                ng-attr-focused="{{channel.focused || undefined}}">
+                ng-attr-focused="{{channel.focused || undefined}}"
+                irc-context-menu="onChanContext(channel)">
               <span class="focus-indicator"></span>
                     <!-- ng-click="network.channels.splice($index, 1)" -->
               <span class="channel-text"
@@ -56,7 +57,7 @@
     <div id="drawer-buttons">
       <gaia-button id="add-channel-button"
           ng-disabled="networks.length === 0"
-          ui-sref="channel-config({networkIndex:0})">
+          ui-sref="channel-config({networkIndex:current.network.getIndex()})">
         #
       </gaia-button>
       <gaia-button id="add-network-button"
@@ -71,6 +72,18 @@
   </div>
 </gaia-drawer>
 
+<gaia-dialog-action irc-dialog="channelDialog">
+  <h1>{{channelDialog.channel.name}}</h1>
+  <button ui-sref="channel-config({
+      networkIndex:channelDialog.channel.network.getIndex(),
+      channelIndex:channelDialog.channel.getIndex()})">
+    Edit
+  </button>
+  <button class="danger"
+      ng-click="channelDialog.channel.delete(); channelDialog.close();">
+    Remove
+  </button>
+</gaia-dialog-action>
 
 <!-- Register a dialog per network entry, as ngIf is too slow for
      updating a single one. -->

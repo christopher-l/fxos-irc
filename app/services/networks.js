@@ -85,6 +85,9 @@ networks.factory(
       }
       return this._configProps.every(isEqual);
     },
+    getIndex: function() {
+      return this._volatile.indexOf(this);
+    },
     _create: function() {
       this._volatile.push(this);
       this._storage.push(this._storageRef);
@@ -172,7 +175,7 @@ networks.factory(
       'NetBase',
       function ChannelFactory(netData, Base) {
 
-  var Channel = function(storageRef, network) {
+  function Channel(storageRef, network) {
     Base.call(this, storageRef);
     this._state = {
       unreadCount: 0,
@@ -181,7 +184,7 @@ networks.factory(
       // this._state = storageRef.lastState;
       this._setNetwork(network);
     }
-  };
+  }
 
   Channel.prototype = Object.create(Base.prototype);
   Channel.prototype.constructor = Channel;
@@ -196,8 +199,8 @@ networks.factory(
     if (this.isNew) {
       var network = netData.networks[config.networkIndex];
       this._setNetwork(network);
-      delete config.networkIndex;
     }
+    delete config.networkIndex;
     Base.prototype.applyConfig.call(this, config);
   };
 
@@ -232,7 +235,7 @@ networks.factory(
       'Channel',
       function NetworkFactory(netData, NetBase, Channel) {
 
-  var Network = function(storageRef) {
+  function Network(storageRef) {
     NetBase.call(this, storageRef);
     this._storage = netData.storage.data;
     this._volatile = netData.networks;
@@ -245,9 +248,6 @@ networks.factory(
     };
     if (storageRef) {
       this._state.collapsed = storageRef.lastState.collapsed;
-      if (storageRef.lastState.focused) {
-        this.focus();
-      }
     }
     this._storageRef.lastState = this._state;
     // Set up channels
@@ -259,7 +259,7 @@ networks.factory(
     this._storageRef.channels.forEach(function(chan) {
       self.channels.push(new Channel(chan, self));
     });
-  };
+  }
 
   Network.prototype = Object.create(NetBase.prototype);
   Network.prototype.constructor = Network;
@@ -303,17 +303,6 @@ networks.factory(
   var saveToDisk = netData.storage.save.bind(netData.storage);
   Network.prototype._saveToDisk = saveToDisk;
   Channel.prototype._saveToDisk = saveToDisk;
-
-  var focus =  function() {
-    if (networks.current) {
-      networks.current.focused = false;
-    }
-    this.focused = true;
-    networks.current = this;
-  };
-
-  Network.prototype.focus = focus;
-  Channel.prototype.focus = focus;
 
   netData.storage.data.forEach(function(net) {
     netData.networks.push(new Network(net));

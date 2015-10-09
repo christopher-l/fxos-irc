@@ -35,19 +35,6 @@ describe('networks', function() {
     expect(networks.length).toBe(2);
   });
 
-  it('should focus networks', function() {
-    networks.newNetwork().save();
-    networks.newNetwork().save();
-    expect(networks[0].focused).toBe(false);
-    expect(networks[1].focused).toBe(false);
-    networks[1].focus();
-    expect(networks[0].focused).toBe(false);
-    expect(networks[1].focused).toBe(true);
-    networks[0].focus();
-    expect(networks[0].focused).toBe(true);
-    expect(networks[1].focused).toBe(false);
-  });
-
   describe('new network', function() {
 
     var network;
