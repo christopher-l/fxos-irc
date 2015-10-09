@@ -23,6 +23,13 @@ menu.controller('MenuCtrl', [
     };
   };
 
+  $scope.onRemove = function(channel) {
+    $scope.channelDialog.close();
+    channel.delete();
+    // One additional digest cycle, so it will notice the height
+    setTimeout(() => $scope.$digest());
+  };
+
   $scope.onChanContext = function(channel) {
     $scope.channelDialog.channel = channel;
     $scope.channelDialog.open();
