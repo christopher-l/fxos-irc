@@ -189,6 +189,7 @@ gaia.directive('ircCheckbox', ['$parse', function($parse) {
 //   open():      Open the dialog
 //   close():     Close the dialog
 //   onConfirm(): Gets called when user confirms
+//   onClose():   Gets called after the dialog closed
 //   currentText: Text of current selection for gaia-dialog-select
 // Provide an additional attribute 'model', that binds the selection of a
 // gaia-dialog-select.
@@ -200,9 +201,16 @@ gaia.directive('ircDialog', ['$parse', function($parse) {
       if (!model(scope)) { model.assign(scope, {}); }
       model(scope).open = () => element[0].open();
       model(scope).close = () => element[0].close();
+      // onConfirm
       if (element[0].els && element[0].els.submit) {
         angular.element(element[0].els.submit).bind('click', function() {
           scope.$apply(model(scope).onConfirm);
+        });
+      }
+      // onClose
+      if (model(scope).onClose) {
+        element.on('closed', function() {
+          scope.$apply(model(scope).onClose);
         });
       }
       // Bindings for gaia-dialog-select
