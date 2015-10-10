@@ -12,6 +12,10 @@ describe('network-list', function() {
   var networkEntry = networkItem.element(by.css('div.network-entry'));
   var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
 
+  beforeAll(function() {
+    this.helpers.setDefaultNetworks();
+  });
+
   beforeEach(function() {
     browser.get('');
     uiView.evaluate('drawer.open = true; $digest();');

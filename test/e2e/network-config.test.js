@@ -83,6 +83,7 @@ describe('network-config', function() {
 
       this.helpers.clickHeaderActionButton();
       var entry = networkItems.last().element(by.css('div.network-entry'));
+      // browser.sleep('100');
       browser.actions()
           .mouseMove(entry)
           .click(protractor.Button.RIGHT)

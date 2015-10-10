@@ -1,0 +1,5 @@
+- Network / Channel Config:
+  - Confirm discard changes
+  - Reconnect / Join on change
+  - Automatically join new channel
+  - Hide saved passwords

@@ -1,3 +1,10 @@
+/**
+ * Services:
+ *   networks   Provide an array of known networks.
+ *
+ * Other services serve the implementation of the above and should not be used
+ * publicly.
+ */
 'use strict';
 
 var networks = angular.module('irc.networks', [
@@ -5,6 +12,29 @@ var networks = angular.module('irc.networks', [
 ]);
 
 
+/**
+ * netData
+ *
+ * Provides stored and volatile data on networks.
+ *
+ * The volatile array is referenced by the networks service, too.  However there
+ * exists a dependency cycle: networks depends on Network and Network depends on
+ * the networks array.  Hence this service.
+ */
+networks.service(
+    'netData', [
+      'Storage',
+      function netDataService(Storage) {
+  this.storage = new Storage('networks', []);
+  this.networks = [];
+}]);
+
+
+/**
+ * NetBase
+ *
+ * A base class to Network and Channel.
+ */
 networks.factory(
     'NetBase', [
       'netData',
@@ -99,76 +129,12 @@ networks.factory(
 
 }]);
 
-networks.service(
-    'netData', [
-      'Storage',
-      function netDataService(Storage) {
-  this.storage = new Storage('networks', [
-    {
-      config: {
-        name: 'Foo',
-        autoConnect: true,
-      },
-      lastState: {
-        status: 'connected',
-        unreadCount: 0,
-      },
-      channels: [
-        {
-          config: {
-            name: 'channel1',
-          },
-          lastState: {
-            joined: true,
-            unreadCount: 0,
-            focused: true,
-          }
-        },
-        {
-          config: {
-            name: 'channel2',
-          },
-          lastState : {
-            unreadCount: 23,
-            joined: true,
-          }
-        }
-      ]
-    },
-    {
-      config: {
-        name: 'Bar',
-      },
-      lastState: {
-        status: 'connection lost',
-        unreadCount: 32,
-      },
-      channels: [
-        {
-          config: {
-            name: 'channel3',
-            autoJoin: true,
-          },
-          lastState: {
-            unreadCount: 0,
-          }
-        },
-        {
-          config: {
-            name: 'channel4',
-          },
-          lastState: {
-            unreadCount: 0,
-          }
-        }
-      ]
-    }
-  ]);
 
-  this.networks = [];
-
-}]);
-
+/**
+ * Channel
+ *
+ * Constructor of channel objects referenced by networks.
+ */
 networks.factory(
     'Channel', [
       'netData',
@@ -226,7 +192,7 @@ networks.factory(
 /**
  * Network Service
  *
- * Provides a constructor for network objects.
+ * Constructor of network objects inside the networks array.
  */
 networks.factory(
     'Network', [
