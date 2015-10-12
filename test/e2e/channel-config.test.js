@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('channel-config', function() {
+describe('channel-config', function() {
 
   var menuView = $('[ui-view="menu"]');
   var addChannelButton = $('#add-channel-button');
