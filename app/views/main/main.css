@@ -18,3 +18,10 @@ body > div[ui-view] {
 body > div[ui-view][type=main].ng-animate {
   z-index: -10;
 }
+
+#user-count {
+  border: solid 1px var(--gaia-header-button-color) !important;
+  padding: 10px;
+  border-radius: 5px;
+  transition: opacity 200ms 0ms !important;
+}

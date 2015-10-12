@@ -1,6 +1,10 @@
 <gaia-header action="menu" irc-action="drawer.open = !drawer.open">
   <h1>{{title}}</h1>
-  <button data-icon="contacts"></button>
+  <button>
+    <div id="user-count" style="opacity: {{drawer.open ? 0 : 1}}">
+      42
+    </div>
+  </button>
 </gaia-header>
 
 <div ui-view="menu"></div>
