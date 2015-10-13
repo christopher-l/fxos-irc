@@ -42,6 +42,8 @@ main.controller('MainCtrl', [
     '$scope', '$stateParams', 'theme',
     function MainCtrl($scope, $stateParams, theme) {
 
+  console.log('MAIN')
+
   $scope.type = 'main';
   theme.setThemeClass('main');
 

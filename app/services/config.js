@@ -9,15 +9,19 @@ config.factory(
       '$rootScope',
       '$q',
       '$state',
+      'theme',
       function GenericConfigFactory(
           $rootScope,
           $q,
-          $state) {
+          $state,
+          theme) {
 
   function Config() {}
 
   Config.prototype = {
     open: function() {
+      $rootScope.configOpen = true;
+      theme.setThemeClass('settings');
       var self = this;
       var deferred = $q(function(resolve, reject) {
         self.resolve = resolve;
@@ -26,7 +30,8 @@ config.factory(
       return deferred;
     },
     close: function(success) {
-      $rootScope.back();
+      theme.setThemeClass('main');
+      $rootScope.configOpen = false;
       if (success) {
         this.resolve();
       } else {
@@ -57,7 +62,6 @@ config.factory(
   NetworkConfig.prototype.open = function(network) {
     this.network = network || networks.newNetwork();
     this.config = this.network.getConfig();
-    $state.go('network-config');
     return GenericConfig.prototype.open();
   };
 

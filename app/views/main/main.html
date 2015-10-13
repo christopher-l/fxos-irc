@@ -10,3 +10,6 @@
 <div ui-view="menu"></div>
 
 <div ui-view id="conversation"></div>
+
+<div ui-view="netconf" class="config-view {{theme.settings}}"
+    ng-if="configOpen"></div>

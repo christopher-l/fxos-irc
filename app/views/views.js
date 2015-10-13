@@ -13,46 +13,46 @@ var views = angular.module('irc.views', [
 views.config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise('/show/foo/bar');
+  $urlRouterProvider.otherwise('/');
 
   $stateProvider
-    .state('main', {
-      url: '/',
-      abstract: true,
-      views: {
-        '@': {
-          templateUrl: 'views/main/main.html',
-          controller: 'MainCtrl',
+      .state('main', {
+        url: '/',
+        abstract: true,
+        reloadOnSearch: false,
+        views: {
+          '@': {
+            templateUrl: 'views/main/main.html',
+            controller: 'MainCtrl',
+          },
+          'menu@main': {
+            templateUrl: 'views/menu/menu.html',
+            controller: 'MenuCtrl',
+          },
+          'netconf@main': {
+            templateUrl: 'views/network-config/network-config.html',
+            controller: 'NetConfCtrl'
+          }
         },
-        'menu@main': {
-          templateUrl: 'views/menu/menu.html',
-          controller: 'MenuCtrl',
+        params: {
+          drawer: {}
         }
-      },
-      params: {
-        drawer: {}
-      }
-    })
-    .state('main.conversation', {
-      url: 'show/:network/:channel',
-      templateUrl: 'views/conversation/conversation.html',
-      controller: 'ConversationCtrl'
-    })
-    .state('settings', {
-      url: '/settings',
-      templateUrl: 'views/settings/settings.html',
-      controller: 'SettingsCtrl'
-    })
-    .state('network-config', {
-      url: '/config/network/:index',
-      templateUrl: 'views/network-config/network-config.html',
-      controller: 'NetConfCtrl'
-    })
-    .state('channel-config', {
-      url: '/config/channel/:networkIndex/:channelIndex',
-      templateUrl: 'views/channel-config/channel-config.html',
-      controller: 'ChanConfCtrl',
-    });
+      })
+      .state('main.conversation', {
+        url: '',
+        templateUrl: 'views/conversation/conversation.html',
+        controller: 'ConversationCtrl'
+      })
+      .state('settings', {
+        url: '/settings',
+        templateUrl: 'views/settings/settings.html',
+        controller: 'SettingsCtrl'
+      })
+      .state('channel-config', {
+        url: '/config/channel/:networkIndex/:channelIndex',
+        templateUrl: 'views/channel-config/channel-config.html',
+        controller: 'ChanConfCtrl',
+      });
 }]);
 
 

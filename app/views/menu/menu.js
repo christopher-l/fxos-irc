@@ -62,18 +62,15 @@ menu.controller(
   $scope.onAddNetwork = function() {
     networkConfig.open()
         .then(function() {
-          console.log('save');
         }, function() {
-          console.log('close');
         });
   };
 
   $scope.onEditNetork = function(network) {
     networkConfig.open(network)
         .then(function() {
-          console.log('save');
         }, function() {
-          console.log('close');
+          $scope.confirmDialog.open();
         });
   };
 

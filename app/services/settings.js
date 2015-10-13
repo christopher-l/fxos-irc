@@ -104,7 +104,18 @@ settings.service('theme', ['settings', function Theme(settings) {
     },
     'color': {
       value: 'var(--header-background)'
-    }
+    },
+    // TODO document
+    'main': {
+      get: function() {
+        return currentTheme.main;
+      }
+    },
+    'settings': {
+      get: function() {
+        return currentTheme.settings;
+      }
+    },
   });
 
 }]);

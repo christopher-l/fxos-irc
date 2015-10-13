@@ -23,6 +23,8 @@ networkConfig.controller(
           networkConfig,
           theme) {
 
+  console.log('NETWORK CONFIG')
+
   $scope.type = 'settings';
   theme.setThemeClass('settings');
 
