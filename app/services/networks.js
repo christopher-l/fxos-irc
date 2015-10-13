@@ -163,11 +163,16 @@ networks.factory(
 
   Channel.prototype.applyConfig = function(config) { // Override
     if (this.isNew) {
-      var network = netData.networks[config.networkIndex];
-      this._setNetwork(network);
+      this._setNetwork(config.network);
     }
-    delete config.networkIndex;
+    delete config.network;
     Base.prototype.applyConfig.call(this, config);
+  };
+
+  Channel.prototype.getConfig = function() { // Override
+    var config = Base.prototype.getConfig.call(this);
+    config.network = this.network;
+    return config;
   };
 
   Channel.prototype._configProps = [

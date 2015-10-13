@@ -57,11 +57,11 @@
     <div id="drawer-buttons">
       <gaia-button id="add-channel-button"
           ng-disabled="networks.length === 0"
-          ui-sref="channel-config({networkIndex:current.network.getIndex()})">
+          ng-click="onAddChannel()">
         #
       </gaia-button>
       <gaia-button id="add-network-button"
-          ui-sref="network-config">
+          ng-click="onAddNetwork()">
         <i data-icon="add"></i>
       </gaia-button>
       <gaia-button id="settings-button" ui-sref="settings">
@@ -81,9 +81,7 @@
   <button ng-if="channelDialog.channel.joined">
     Part
   </button>
-  <button ui-sref="channel-config({
-      networkIndex:channelDialog.channel.network.getIndex(),
-      channelIndex:channelDialog.channel.getIndex()})">
+  <button ng-click="onEditChannel(channelDialog.channel)">
     Edit
   </button>
   <button class="danger"
@@ -108,10 +106,10 @@
       class="primary">
     Reconnect
   </button>
-  <button ui-sref="network-config({index:networkDialog.network.getIndex()})">
+  <button ng-click="onEditNetork(networkDialog.network)">
     Edit
   </button>
-  <button class="danger" ng-click="onDelete">Delete</button>
+  <button class="danger" ng-click="onDelete()">Delete</button>
 </gaia-dialog-action>
 
 <gaia-dialog-confirm irc-dialog="confirmDialog">

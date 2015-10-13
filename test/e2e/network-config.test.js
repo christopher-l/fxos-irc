@@ -24,17 +24,38 @@ describe('network-config', function() {
     nickField.setInputText('test-nick');
   }
 
-  it('should open when clicking the "+" button', function() {
-    browser.get('');
-    this.helpers.clickHeaderActionButton();
+  function openNewNetwork() {
+    uiView.evaluate('drawer.open = true; $digest();');
     addNetworkButton.click();
-    expect(browser.getCurrentUrl()).toContain('config/network/');
-  });
+  }
+
+  function editNetwork(index) {
+      uiView.evaluate('drawer.open = true; $digest();');
+      var item;
+      if (index === 'last') {
+        item = networkItems.last();
+      } else {
+        item = networkItems.get(index);
+      }
+      var entry = item.$('div.network-entry');
+      browser.actions()
+          .mouseMove(entry)
+          .click(protractor.Button.RIGHT)
+          .perform();
+      var editButton = $('[irc-dialog="networkDialog"]')
+          .element(by.buttonText('Edit'));
+      editButton.click();
+  }
 
   describe('new network', function() {
 
     beforeEach(function() {
-      browser.get('#/config/network/');
+      browser.get('');
+      openNewNetwork();
+    });
+
+    it('should open when clicking the "+" button', function() {
+      expect(browser.getCurrentUrl()).toContain('config/network/');
     });
 
     it('should have the title "New Network"', function() {
@@ -81,15 +102,7 @@ describe('network-config', function() {
       expect(uiView.evaluate('networks[networks.length-1].password'))
           .toBe('testpass');
 
-      this.helpers.clickHeaderActionButton();
-      var entry = networkItems.last().element(by.css('div.network-entry'));
-      // browser.sleep('100');
-      browser.actions()
-          .mouseMove(entry)
-          .click(protractor.Button.RIGHT)
-          .perform();
-      var editButton = element.all(by.buttonText('Edit')).last();
-      editButton.click();
+      editNetwork('last');
 
       expect(nameField.getAttribute('value')).toBe('Test Name');
       expect(autoConnectField.getAttribute('checked')).toBe('true');
@@ -135,17 +148,18 @@ describe('network-config', function() {
 
     beforeEach(function() {
       this.helpers.setDefaultNetworks();
+      browser.get('');
     });
 
     it('should close a new network', function() {
-      browser.get('#/config/network/');
+      openNewNetwork();
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('show');
       expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
     });
 
     it('should close a new network when back to original state', function() {
-      browser.get('#/config/network/');
+      openNewNetwork();
       nameField.setInputText('Test Name');
       nameField.setInputText('');
       userField.setInputText('testuser');
@@ -158,7 +172,7 @@ describe('network-config', function() {
     });
 
     it('should show a warning for edited new network', function() {
-      browser.get('#/config/network/');
+      openNewNetwork();
       nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');
@@ -168,13 +182,13 @@ describe('network-config', function() {
     });
 
     it('should close an existing network', function() {
-      browser.get('#/config/network/0');
+      editNetwork(0);
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('show');
     });
 
     it('should show a warning for edited existing network', function() {
-      browser.get('#/config/network/0');
+      editNetwork(0);
       nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');

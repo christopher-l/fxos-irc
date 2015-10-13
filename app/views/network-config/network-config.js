@@ -2,20 +2,31 @@
 
 var networkConfig = angular.module('irc.views.network-config', [
   'ui.router',
+  'irc.config',
   'irc.views.config',
 ]);
 
 
-networkConfig.controller('NetConfCtrl', [
-    '$scope', '$rootScope', '$stateParams', 'networks', 'theme',
-    function($scope, $rootScope, $stateParams, networks, theme) {
+networkConfig.controller(
+    'NetConfCtrl', [
+      '$scope',
+      '$rootScope',
+      '$stateParams',
+      'networks',
+      'networkConfig',
+      'theme',
+      function NetConfCtrl(
+          $scope,
+          $rootScope,
+          $stateParams,
+          networks,
+          networkConfig,
+          theme) {
 
   $scope.type = 'settings';
   theme.setThemeClass('settings');
 
-  var network = $stateParams.index ?
-      networks[$stateParams.index] :
-      networks.newNetwork();
+  var network = networkConfig.network || networks.newNetwork();
   $scope.network = network.getConfig();
 
   $scope.isNew = network.isNew;
@@ -30,16 +41,21 @@ networkConfig.controller('NetConfCtrl', [
         !network.compareConfig($scope.network) :
         !network.compareConfig(finalConfig($scope.network));
     if (changed) {
-      $scope.confirmDialog.onConfirm = $rootScope.back;
+      $scope.confirmDialog.onConfirm = close;
       $scope.confirmDialog.open();
     } else {
-      $rootScope.back();
+      close();
     }
   };
 
+  function close() {
+    networkConfig.close();
+  }
+
   function save() {
-    var config = finalConfig($scope.network);
-    network.applyConfig(config);
+    var conf = finalConfig($scope.network);
+    network.applyConfig(conf);
+    networkConfig.resolve();
   }
 
   function finalConfig(config) {

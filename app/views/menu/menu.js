@@ -3,13 +3,26 @@
 var menu = angular.module('irc.views.menu', [
   'ui.router',
   'irc.networks',
+  'irc.config',
   'irc.views.menu.directives',
 ]);
 
 
-menu.controller('MenuCtrl', [
-    '$scope', '$stateParams', '$timeout', 'networks',
-    function MenuCtrl($scope, $stateParams, $timeout, networks) {
+menu.controller(
+    'MenuCtrl', [
+      '$scope',
+      '$stateParams',
+      '$timeout',
+      'networks',
+      'networkConfig',
+      'channelConfig',
+      function MenuCtrl(
+          $scope,
+          $stateParams,
+          $timeout,
+          networks,
+          networkConfig,
+          channelConfig) {
 
   $scope.drawer = $stateParams.drawer;
   $scope.networks = networks;
@@ -46,6 +59,24 @@ menu.controller('MenuCtrl', [
     };
   };
 
+  $scope.onAddNetwork = function() {
+    networkConfig.open()
+        .then(function() {
+          console.log('save');
+        }, function() {
+          console.log('close');
+        });
+  };
+
+  $scope.onEditNetork = function(network) {
+    networkConfig.open(network)
+        .then(function() {
+          console.log('save');
+        }, function() {
+          console.log('close');
+        });
+  };
+
   // Channels
   $scope.onChanClick = function(channel) {
     $scope.focus(channel);
@@ -68,6 +99,14 @@ menu.controller('MenuCtrl', [
     channel.delete();
     // One additional digest cycle, so it will notice the height
     setTimeout(() => $scope.$digest());
+  };
+
+  $scope.onAddChannel = function() {
+    channelConfig.open(null, $scope.current.network || networks[0]);
+  };
+
+  $scope.onEditChannel = function(channel) {
+    channelConfig.open(channel);
   };
 
 }]);

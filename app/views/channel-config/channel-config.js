@@ -8,25 +8,39 @@ var channelConfig = angular.module('irc.views.channel-config', [
 
 channelConfig.controller(
     'ChanConfCtrl', [
-      '$scope', '$rootScope', '$stateParams', '$timeout', 'networks', 'theme',
-      function($scope, $rootScope, $stateParams, $timeout, networks, theme) {
+      '$scope',
+      '$rootScope',
+      '$stateParams',
+      '$timeout',
+      'networks',
+      'channelConfig',
+      'theme',
+      function channelConfigCtrl(
+          $scope,
+          $rootScope,
+          $stateParams,
+          $timeout,
+          networks,
+          channelConfig,
+          theme) {
 
   $scope.type = 'settings';
   theme.setThemeClass('settings');
 
   $scope.networks = networks;
 
-  var channel = $stateParams.channelIndex ?
-      networks[$stateParams.networkIndex].channels[$stateParams.channelIndex] :
-      networks.newChannel();
-  $scope.channel = channel.getConfig();
+  $scope.channel = channelConfig.config;
 
-  $timeout(function() {
-    // Give ngRepeat time to populate the list first
-    $scope.channel.networkIndex = $stateParams.networkIndex || '0';
+  Object.defineProperty($scope, 'networkIndex', {
+    get: function() {
+      return $scope.channel.network.getIndex().toString();
+    },
+    set: function(value) {
+      $scope.channel.network = networks[value];
+    }
   });
 
-  $scope.isNew = channel.isNew;
+  $scope.isNew = channelConfig.channel.isNew;
 
   $scope.onSave = function() {
     save();
@@ -34,11 +48,11 @@ channelConfig.controller(
   };
 
   $scope.onClose = function() {
-    $rootScope.back();
+    channelConfig.close();
   };
 
   function save() {
-    channel.applyConfig($scope.channel);
+    channelConfig.channel.applyConfig($scope.channel);
   }
 
 }]);

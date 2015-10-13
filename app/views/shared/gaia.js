@@ -214,6 +214,15 @@ gaia.directive('ircDialog', ['$parse', function($parse) {
         });
       }
       // Bindings for gaia-dialog-select
+      function updateView(value) {
+        element[0].clearSelected();
+        [].forEach.call(element.find('li'), function(item) {
+          if (item.getAttribute('value') === value) {
+            item.setAttribute('aria-selected', true);
+            model(scope).currentText = item.innerHTML;
+          }
+        });
+      }
       if (attrs.model) {
         var selectModel = $parse(attrs.model);
         element.bind('change', function(evt) {
@@ -222,14 +231,11 @@ gaia.directive('ircDialog', ['$parse', function($parse) {
             model(scope).currentText = evt.detail.value;
           });
         });
-        scope.$watch(selectModel, function(value) {
-          element[0].clearSelected();
-          [].forEach.call(element.find('li'), function(item) {
-            if (item.getAttribute('value') === value) {
-              item.setAttribute('aria-selected', true);
-              model(scope).currentText = item.innerHTML;
-            }
-          });
+        scope.$watch(selectModel, updateView);
+        // Hack to initially update after ngRepeat finished
+        setTimeout(function() {
+          var value = selectModel(scope);
+          updateView(value);
         });
       }
     }

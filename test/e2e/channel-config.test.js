@@ -14,17 +14,16 @@ describe('channel-config', function() {
     this.helpers.setDefaultNetworks();
   });
 
-  it('should open when clicking the "#" button', function() {
-    browser.get('');
-    this.helpers.clickHeaderActionButton();
-    addChannelButton.click();
-    expect(browser.getCurrentUrl()).toContain('config/channel/');
-  });
-
   describe('new channel', function() {
 
     beforeEach(function() {
-      browser.get('#/config/channel//');
+      browser.get('');
+      this.helpers.clickHeaderActionButton();
+      addChannelButton.click();
+    });
+
+    it('should open when clicking the "#" button', function() {
+      expect(browser.getCurrentUrl()).toContain('config/channel/');
     });
 
     it('should have the title "New Channel"', function() {
