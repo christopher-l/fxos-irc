@@ -193,7 +193,7 @@ gaia.directive('ircCheckbox', ['$parse', function($parse) {
 //   currentText: Text of current selection for gaia-dialog-select
 // Provide an additional attribute 'model', that binds the selection of a
 // gaia-dialog-select.
-gaia.directive('ircDialog', ['$parse', function($parse) {
+gaia.directive('ircDialog', ['$parse','$timeout', function($parse, $timeout) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -233,7 +233,7 @@ gaia.directive('ircDialog', ['$parse', function($parse) {
         });
         scope.$watch(selectModel, updateView);
         // Hack to initially update after ngRepeat finished
-        setTimeout(function() {
+        $timeout(function() {
           var value = selectModel(scope);
           updateView(value);
         });
