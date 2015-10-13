@@ -25,14 +25,14 @@ config.factory(
       });
       return deferred;
     },
-    close: function() {
+    close: function(success) {
       $rootScope.back();
-      this.reject();
+      if (success) {
+        this.resolve();
+      } else {
+        this.reject();
+      }
     },
-    save: function() {
-      $rootScope.back();
-      this.resolve();
-    }
   };
 
   return Config;
@@ -42,9 +42,11 @@ config.factory(
 config.factory(
     'networkConfig', [
       '$state',
+      'networks',
       'GenericConfig',
       function networkConfigFactory(
           $state,
+          networks,
           GenericConfig) {
 
   function NetworkConfig(network) {}
@@ -53,9 +55,15 @@ config.factory(
   NetworkConfig.prototype.constructor = NetworkConfig;
 
   NetworkConfig.prototype.open = function(network) {
-    this.network = network;
+    this.network = network || networks.newNetwork();
+    this.config = this.network.getConfig();
     $state.go('network-config');
     return GenericConfig.prototype.open();
+  };
+
+  NetworkConfig.prototype.save = function() {
+    this.network.applyConfig(this.config);
+    this.close(true);
   };
 
   return new NetworkConfig();
@@ -85,6 +93,11 @@ config.factory(
     }
     $state.go('channel-config');
     return GenericConfig.prototype.open();
+  };
+
+  ChannelConfig.prototype.save = function() {
+    this.channel.applyConfig(this.config);
+    this.close(true);
   };
 
   return new ChannelConfig();

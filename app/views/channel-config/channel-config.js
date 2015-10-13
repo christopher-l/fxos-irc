@@ -43,16 +43,11 @@ channelConfig.controller(
   $scope.isNew = channelConfig.channel.isNew;
 
   $scope.onSave = function() {
-    save();
-    $rootScope.back();
+    channelConfig.save();
   };
 
   $scope.onClose = function() {
     channelConfig.close();
   };
-
-  function save() {
-    channelConfig.channel.applyConfig($scope.channel);
-  }
 
 }]);

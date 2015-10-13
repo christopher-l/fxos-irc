@@ -26,14 +26,13 @@ networkConfig.controller(
   $scope.type = 'settings';
   theme.setThemeClass('settings');
 
-  var network = networkConfig.network || networks.newNetwork();
-  $scope.network = network.getConfig();
+  var network = networkConfig.network;
+  $scope.network = networkConfig.config;
 
   $scope.isNew = network.isNew;
 
   $scope.onSave = function() {
     save();
-    $rootScope.back();
   };
 
   $scope.onClose = function() {
@@ -53,9 +52,8 @@ networkConfig.controller(
   }
 
   function save() {
-    var conf = finalConfig($scope.network);
-    network.applyConfig(conf);
-    networkConfig.resolve();
+    networkConfig.config = finalConfig($scope.network);
+    networkConfig.save();
   }
 
   function finalConfig(config) {
