@@ -72,7 +72,9 @@
   </div>
 </gaia-drawer>
 
-<gaia-dialog-action irc-dialog="channelDialog">
+<gaia-dialog-action irc-dialog="channelDialog"
+    on-closed="Ctrl.onChannelDialogClosed()"
+    >
   <h1>{{channelDialog.channel.name}}</h1>
   <button ng-if="channelDialog.channel && !channelDialog.channel.joined"
       class="primary">
@@ -90,7 +92,9 @@
   </button>
 </gaia-dialog-action>
 
-<gaia-dialog-action irc-dialog="networkDialog">
+<gaia-dialog-action irc-dialog="networkDialog"
+    on-closed="Ctrl.onNetworkDialogClosed()"
+    >
   <h1>{{networkDialog.network.name}}</h1>
   <button ng-if="networkDialog.network.status=='connected'">
     Disconnect
@@ -112,6 +116,8 @@
   <button class="danger" ng-click="onDelete()">Delete</button>
 </gaia-dialog-action>
 
-<gaia-dialog-confirm irc-dialog="confirmDialog">
+<gaia-dialog-confirm irc-dialog="confirmDialog"
+    on-confirm="confirmDialog.toBeDeleted.delete()"
+    >
   Delete {{confirmDialog.toBeDeleted.name}}?
 </gaia-dialog-confirm>

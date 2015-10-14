@@ -12,6 +12,7 @@ menu.directive('ircMenuView', [function() {
     restrict: 'E',
     templateUrl: 'views/menu/menu.html',
     controller: 'MenuCtrl',
+    controllerAs: 'Ctrl',
     link: link,
   };
 
@@ -58,14 +59,14 @@ menu.controller(
     }
   };
 
-  $scope.networkDialog = {};
-
   $scope.onNetContext = function(network) {
     $scope.networkDialog.network = network;
-    $scope.networkDialog.open();
+    $timeout(function() {
+      $scope.networkDialog.open();
+    });
   };
 
-  $scope.networkDialog.onClose = function() {
+  this.onNetworkDialogClosed = function() {
     $scope.networkDialog.network = null;
   };
 
@@ -80,6 +81,7 @@ menu.controller(
   };
 
   $scope.onAddNetwork = function() {
+    $scope.networkDialog.close();
     networkConfig.open()
         .then(function() {
         }, function() {
@@ -87,6 +89,7 @@ menu.controller(
   };
 
   $scope.onEditNetork = function(network) {
+    $scope.networkDialog.close();
     networkConfig.open(network)
         .then(function() {
         }, function() {
@@ -100,14 +103,12 @@ menu.controller(
     channel.joined = true;
   };
 
-  $scope.channelDialog = {};
-
   $scope.onChanContext = function(channel) {
     $scope.channelDialog.channel = channel;
     $scope.channelDialog.open();
   };
 
-  $scope.channelDialog.onClose = function() {
+  this.onChannelDialogClosed = function() {
     $scope.channelDialog.channel = null;
   };
 
@@ -115,14 +116,16 @@ menu.controller(
     $scope.channelDialog.close();
     channel.delete();
     // One additional digest cycle, so it will notice the height
-    setTimeout(() => $scope.$digest());
+    $timeout();
   };
 
   $scope.onAddChannel = function() {
+    $scope.channelDialog.close();
     channelConfig.open(null, $scope.current.network || networks[0]);
   };
 
   $scope.onEditChannel = function(channel) {
+    $scope.channelDialog.close();
     channelConfig.open(channel);
   };
 

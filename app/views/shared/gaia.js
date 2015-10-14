@@ -188,29 +188,33 @@ gaia.directive('ircCheckbox', ['$parse', function($parse) {
 // Assign a model to a gaia-dialog, defining the following properties:
 //   open():      Open the dialog
 //   close():     Close the dialog
-//   onConfirm(): Gets called when user confirms
-//   onClose():   Gets called after the dialog closed
 //   currentText: Text of current selection for gaia-dialog-select
-// Provide an additional attribute 'model', that binds the selection of a
-// gaia-dialog-select.
+// Provide the following attributes:
+//   model:       Model to selection values of gaia-dialog-select
+//   on-confirm:  Will be evaluated when user confirms
+//   on-closed:   Will be evaluated after the dialog closed
 gaia.directive('ircDialog', ['$parse','$timeout', function($parse, $timeout) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
       var model = $parse(attrs.ircDialog);
-      if (!model(scope)) { model.assign(scope, {}); }
+      model.assign(scope, {});
       model(scope).open = () => element[0].open();
       model(scope).close = () => element[0].close();
       // onConfirm
-      if (element[0].els && element[0].els.submit) {
+      if (element[0].els && element[0].els.submit && attrs.onConfirm) {
         angular.element(element[0].els.submit).bind('click', function() {
-          scope.$apply(model(scope).onConfirm);
+          $timeout(function() {
+            scope.$apply(attrs.onConfirm);
+          });
         });
       }
-      // onClose
-      if (model(scope).onClose) {
+      // onClosed
+      if (attrs.onClosed) {
         element.on('closed', function() {
-          scope.$apply(model(scope).onClose);
+          $timeout(function() {
+            scope.$apply(attrs.onClosed);
+          });
         });
       }
       // Bindings for gaia-dialog-select
