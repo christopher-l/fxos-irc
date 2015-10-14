@@ -12,7 +12,16 @@ menu.directive('ircMenuView', [function() {
     restrict: 'E',
     templateUrl: 'views/menu/menu.html',
     controller: 'MenuCtrl',
+    link: link,
   };
+
+  // Avoid screen flickering on load
+  function link(scope, element, attrs) {
+    element.css('opacity', 0);
+    setTimeout(function() {
+      element.css('opacity', '');
+    }, 1000);
+  }
 }]);
 
 
@@ -31,11 +40,6 @@ menu.controller(
           networkConfig,
           channelConfig,
           settingsHandler) {
-
-  // Avoid flickering on application load
-  setTimeout(function() {
-    $scope.finishedLoading = true;
-  });
 
   $scope.networks = networks;
 

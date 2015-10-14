@@ -283,3 +283,11 @@ gaia.directive(
     link: link
   };
 }]);
+
+
+// Tell gaia-icons not to complain about missing screen reader support for now
+gaia.directive('i', [function() {
+  return function(scope, element, attrs) {
+    attrs.$set('aria-hidden', true);
+  };
+}]);

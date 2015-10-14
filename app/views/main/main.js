@@ -22,7 +22,7 @@ main.directive('ircMainView', [function() {
         </button>
       </gaia-header>
 
-      <irc-menu-view ng-show="finishedLoading"></irc-menu-view>
+      <irc-menu-view></irc-menu-view>
       <irc-conversation-view></irc-conversation-view>
     `,
   };
@@ -30,12 +30,7 @@ main.directive('ircMainView', [function() {
 
 
 main.controller('MainCtrl', [
-    '$scope', 'theme',
-    function MainCtrl($scope, theme) {
-
-  $scope.type = 'main';
-  theme.setThemeClass('main');
-
-  $scope.drawer = {};
+    '$scope',
+    function MainCtrl($scope) {
 
 }]);
