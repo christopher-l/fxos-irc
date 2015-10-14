@@ -16,7 +16,7 @@ conversation.directive('ircConversationView', [function() {
 
 conversation.controller('ConversationCtrl', ['$scope', 'settings',
     function($scope, settings) {
-  $scope.fontSize = settings.data.fontSize;
+  $scope.settings = settings.data;
   $scope.users = ['Fooooo', 'bar', 'baz'];
   $scope.messages = [
     {
