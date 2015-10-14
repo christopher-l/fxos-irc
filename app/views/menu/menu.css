@@ -1,18 +1,18 @@
 /**
  * Drawer
  */
-gaia-drawer {
+irc-menu-view gaia-drawer {
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: 1;
 }
 
-gaia-drawer[open] {
+irc-menu-view gaia-drawer[open] {
   pointer-events: auto !important;
 }
 
-gaia-drawer > div {
+irc-menu-view gaia-drawer > div {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 200px);
@@ -21,12 +21,12 @@ gaia-drawer > div {
   background-color: var(--text-input-background, var(--background));
 }
 
-#network-list {
+irc-menu-view #network-list {
   flex: 1 1 0%;
   overflow-y: scroll;
 }
 
-#drawer-buttons {
+irc-menu-view #drawer-buttons {
   position: relative;
   display: flex;
   margin-top: -1px;
@@ -34,7 +34,7 @@ gaia-drawer > div {
   z-index: 3;
 }
 
-#drawer-buttons gaia-button {
+irc-menu-view #drawer-buttons gaia-button {
   flex: 1 1 0%;
   margin: 0px !important;
   border-radius: 0px !important;
@@ -43,11 +43,11 @@ gaia-drawer > div {
   min-width: 0px !important;
 }
 
-#drawer-buttons gaia-button:not(:last-of-type) {
+irc-menu-view #drawer-buttons gaia-button:not(:last-of-type) {
   border-right: solid 1px var(--border-color);
 }
 
-#drawer-buttons #add-channel-button {
+irc-menu-view #drawer-buttons #add-channel-button {
   font-size: 30px !important;
   font-style: normal !important;
   font-weight: 500;
@@ -56,7 +56,7 @@ gaia-drawer > div {
 /**
  * Network List
  */
-#network-list > li {
+irc-menu-view #network-list > li {
   position: relative;
   overflow: hidden;
   margin: 0;
@@ -67,8 +67,8 @@ gaia-drawer > div {
   cursor: pointer;
 }
 
-.network-entry,
-.channel-entry {
+irc-menu-view .network-entry,
+irc-menu-view .channel-entry {
   position: relative;
   display: flex;
   height: 3.5rem;
@@ -77,12 +77,12 @@ gaia-drawer > div {
   border-bottom: solid 1px var(--border-color);
 }
 
-.network-entry {
+irc-menu-view .network-entry {
   background-color: var(--background-minus-minus, var(--color-iota));
   z-index: 2;
 }
 
-.collapse-indicator {
+irc-menu-view .collapse-indicator {
   position: absolute;
   font-size: 1.5rem;
   width: 3rem;
@@ -91,7 +91,7 @@ gaia-drawer > div {
   transition: transform 200ms 0ms;
 }
 
-.focus-indicator {
+irc-menu-view .focus-indicator {
   border-radius: .5rem;
   width: .5rem;
   height: .5rem;
@@ -100,13 +100,13 @@ gaia-drawer > div {
   margin-right: .5rem;
 }
 
-.network-entry[focused] > .focus-indicator,
-.channel-entry[focused] > .focus-indicator {
+irc-menu-view .network-entry[focused] > .focus-indicator,
+irc-menu-view .channel-entry[focused] > .focus-indicator {
   background-color: var(--highlight-color);
 }
 
-.network-text,
-.channel-text {
+irc-menu-view .network-text,
+irc-menu-view .channel-text {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -114,36 +114,36 @@ gaia-drawer > div {
   overflow: hidden;
 }
 
-.network-name,
-.channel.name {
+irc-menu-view .network-name,
+irc-menu-view .channel.name {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
-.network-info,
-.channel-info {
+irc-menu-view .network-info,
+irc-menu-view .channel-info {
   font-size: .8rem;
 }
 
-[status=connected] .network-info {
+irc-menu-view [status=connected] .network-info {
   color: var(--color-preffered);
 }
 
-[status=connecting] .network-info {
+irc-menu-view [status=connecting] .network-info {
   color: var(--color-warning);
 }
 
-[status='connection lost'] .network-info {
+irc-menu-view [status='connection lost'] .network-info {
   color: var(--color-destructive);
 }
 
 
-:not([active]) > .channel-text {
+irc-menu-view :not([active]) > .channel-text {
   color: var(--text-color-minus);
 }
 
-.counter {
+irc-menu-view .counter {
   border-radius: 1rem;
   height: 1.5rem;
   margin: 1rem 0 1rem .5rem;
@@ -154,11 +154,11 @@ gaia-drawer > div {
   text-indent: 0;
 }
 
-.counter[hiudden] {
+irc-menu-view .counter[hidden] {
   display: none;
 }
 
-.channel-list {
+irc-menu-view .channel-list {
   padding: 0;
   margin: 0;
   transition: height 200ms 0ms ease, transform 200ms 0ms ease;
@@ -167,11 +167,11 @@ gaia-drawer > div {
   background-color: var(--text-input-background, var(--background));
 }
 
-#network-list > li[collapsed] .channel-list {
+irc-menu-view #network-list > li[collapsed] .channel-list {
   height: 0;
   transform: translateY( calc(var(--actual-height) * -1px) );
 }
 
-#network-list > li[collapsed] .collapse-indicator {
+irc-menu-view #network-list > li[collapsed] .collapse-indicator {
   transform: rotate(-90deg);
 }

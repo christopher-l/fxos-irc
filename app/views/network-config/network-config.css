@@ -1,10 +1,10 @@
-gaia-list #port {
+irc-network-config-view #port {
   width: 5rem !important;
   margin: 0px !important;
 }
 
-gaia-list #user,
-gaia-list #password {
+irc-network-config-view #user,
+irc-network-config-view #password {
   width: calc(100% - 7rem);
   margin: 0px !important;
 }

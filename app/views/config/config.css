@@ -1,3 +1,6 @@
+/**
+ * Container
+ */
 irc-config-view {
   position: absolute;
   top: 0px;
@@ -27,8 +30,11 @@ irc-config-view > * {
 }
 
 
-
-irc-config-view  gaia-list, form.config {
+/**
+ * Settings + Configs
+ */
+irc-config-view gaia-list,
+irc-config-view form {
   flex-grow: 1;
   background-color: var(--background);
   -moz-user-select: none;
@@ -36,7 +42,7 @@ irc-config-view  gaia-list, form.config {
   z-index: 1; /* needed for ripple effect */
 }
 
-.config h2 {
+irc-config-view h2 {
   margin: 0px;
   padding: 0.3rem 2rem;
   font-size: 1rem;
@@ -45,33 +51,25 @@ irc-config-view  gaia-list, form.config {
   color: var(--text-color);
 }
 
-gaia-list > li > label {
+irc-config-view gaia-list > li > label {
   background: none;
   display: flex;
   min-height: 42px;
   align-items: center;
 }
 
-gaia-list gaia-slider {
+irc-config-view gaia-slider {
   margin: 0px !important;
 }
 
-gaia-dialog-select {
-  z-index: 1;
-}
-
-.config {
-  overflow-y: auto;
-}
-
-form.config label {
-  padding-left: 1rem;
-}
-
-gaia-list emph {
-  font-weight: bold;
-}
-
-gaia-list gaia-text-input {
+irc-config-view gaia-text-input {
   margin: .5rem 0px !important;
+}
+
+
+/**
+ * Configs
+ */
+irc-config-view form.config label {
+  padding-left: 1rem;
 }

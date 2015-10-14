@@ -1,10 +1,11 @@
-/**
- * Dialog
- */
+/* Dialog */
 button.danger {
   color: var(--color-destructive) !important;
 }
-
 button.primary {
   color: var(--highlight-color) !important;
+}
+
+gaia-dialog-select {
+  z-index: 1;
 }
