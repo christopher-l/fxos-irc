@@ -1,31 +1,32 @@
 'use strict';
 
 var channelConfig = angular.module('irc.views.channel-config', [
-  'ui.router',
   'irc.views.config',
 ]);
+
+
+channelConfig.directive('ircChannelConfigView',[function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/channel-config/channel-config.html',
+    controller: 'ChanConfCtrl',
+  };
+}]);
 
 
 channelConfig.controller(
     'ChanConfCtrl', [
       '$scope',
       '$rootScope',
-      '$stateParams',
       '$timeout',
       'networks',
       'channelConfig',
-      'theme',
       function channelConfigCtrl(
           $scope,
           $rootScope,
-          $stateParams,
           $timeout,
           networks,
-          channelConfig,
-          theme) {
-
-  $scope.type = 'settings';
-  theme.setThemeClass('settings');
+          channelConfig) {
 
   $scope.networks = networks;
 

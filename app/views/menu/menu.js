@@ -1,31 +1,47 @@
 'use strict';
 
 var menu = angular.module('irc.views.menu', [
-  'ui.router',
   'irc.networks',
   'irc.config',
   'irc.views.menu.directives',
 ]);
 
 
+menu.directive('ircMenuView', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/menu/menu.html',
+    controller: 'MenuCtrl',
+  };
+}]);
+
+
 menu.controller(
     'MenuCtrl', [
       '$scope',
-      '$stateParams',
       '$timeout',
       'networks',
       'networkConfig',
       'channelConfig',
+      'settingsHandler',
       function MenuCtrl(
           $scope,
-          $stateParams,
           $timeout,
           networks,
           networkConfig,
-          channelConfig) {
+          channelConfig,
+          settingsHandler) {
 
-  $scope.drawer = $stateParams.drawer;
+  // Avoid flickering on application load
+  setTimeout(function() {
+    $scope.finishedLoading = true;
+  });
+
   $scope.networks = networks;
+
+  $scope.openSettings = function() {
+    settingsHandler.open();
+  };
 
   // Networks
   $scope.onNetClick = function(network) {

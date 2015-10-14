@@ -1,27 +1,25 @@
 'use strict';
 
 var config = angular.module('irc.config', [
-  'ui.router',
+  'irc.settings',
 ]);
 
 config.factory(
     'GenericConfig', [
       '$rootScope',
       '$q',
-      '$state',
       'theme',
       function GenericConfigFactory(
           $rootScope,
           $q,
-          $state,
           theme) {
 
   function Config() {}
 
   Config.prototype = {
     open: function() {
-      $rootScope.configOpen = true;
       theme.setThemeClass('settings');
+      $rootScope.configOpen = this.constructor.name;
       var self = this;
       var deferred = $q(function(resolve, reject) {
         self.resolve = resolve;
@@ -46,11 +44,9 @@ config.factory(
 
 config.factory(
     'networkConfig', [
-      '$state',
       'networks',
       'GenericConfig',
       function networkConfigFactory(
-          $state,
           networks,
           GenericConfig) {
 
@@ -62,7 +58,7 @@ config.factory(
   NetworkConfig.prototype.open = function(network) {
     this.network = network || networks.newNetwork();
     this.config = this.network.getConfig();
-    return GenericConfig.prototype.open();
+    return GenericConfig.prototype.open.call(this);
   };
 
   NetworkConfig.prototype.save = function() {
@@ -76,11 +72,9 @@ config.factory(
 
 config.factory(
     'channelConfig', [
-      '$state',
       'networks',
       'GenericConfig',
       function channelConfigFactory(
-          $state,
           networks,
           GenericConfig) {
 
@@ -95,8 +89,7 @@ config.factory(
     if (this.channel.isNew) {
       this.config.network = network;
     }
-    $state.go('channel-config');
-    return GenericConfig.prototype.open();
+    return GenericConfig.prototype.open.call(this);
   };
 
   ChannelConfig.prototype.save = function() {
@@ -105,4 +98,19 @@ config.factory(
   };
 
   return new ChannelConfig();
+}]);
+
+
+config.factory(
+    'settingsHandler', [
+      'GenericConfig',
+      function channelConfigFactory(
+          GenericConfig) {
+
+  function Settings(channel) {}
+
+  Settings.prototype = Object.create(GenericConfig.prototype);
+  Settings.prototype.constructor = Settings;
+
+  return new Settings();
 }]);

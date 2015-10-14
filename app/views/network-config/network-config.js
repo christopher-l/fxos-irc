@@ -1,32 +1,31 @@
 'use strict';
 
 var networkConfig = angular.module('irc.views.network-config', [
-  'ui.router',
   'irc.config',
   'irc.views.config',
 ]);
+
+
+networkConfig.directive('ircNetworkConfigView',[function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/network-config/network-config.html',
+    controller: 'NetConfCtrl',
+  };
+}]);
 
 
 networkConfig.controller(
     'NetConfCtrl', [
       '$scope',
       '$rootScope',
-      '$stateParams',
       'networks',
       'networkConfig',
-      'theme',
       function NetConfCtrl(
           $scope,
           $rootScope,
-          $stateParams,
           networks,
-          networkConfig,
-          theme) {
-
-  console.log('NETWORK CONFIG')
-
-  $scope.type = 'settings';
-  theme.setThemeClass('settings');
+          networkConfig) {
 
   var network = networkConfig.network;
   $scope.network = networkConfig.config;

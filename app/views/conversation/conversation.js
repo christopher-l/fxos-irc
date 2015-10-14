@@ -5,6 +5,15 @@ var conversation = angular.module('irc.views.conversation', [
 ]);
 
 
+conversation.directive('ircConversationView', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/conversation/conversation.html',
+    controller: 'ConversationCtrl',
+  };
+}]);
+
+
 conversation.controller('ConversationCtrl', ['$scope', 'settings',
     function($scope, settings) {
   $scope.fontSize = settings.data.fontSize;

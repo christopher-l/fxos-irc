@@ -1,22 +1,9 @@
-body {
-  overflow-x: hidden;
-  overflow-y: hidden;
-  font-family: fira sans, droid sans fallback;
-  font-weight: normal;
-}
-
-body > div[ui-view] {
+irc-main-view {
   position: absolute;
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  transition-duration: 200ms;
-  transition-property: none;
-}
-
-body > div[ui-view][type=main].ng-animate {
-  z-index: -10;
 }
 
 #user-count {

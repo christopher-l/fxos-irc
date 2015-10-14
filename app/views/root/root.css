@@ -1,0 +1,6 @@
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  font-family: fira sans, droid sans fallback;
+  font-weight: normal;
+}

@@ -1,26 +1,34 @@
-.config-view {
+irc-config-view {
   position: absolute;
   top: 0px;
+  left: 0px;
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   z-index: 10;
   transition-duration: 200ms;
   transition-property: opacity;
 }
 
-.config-view.ng-enter,
-.config-view.ng-leave.ng-leave-active {
+irc-config-view.ng-enter,
+irc-config-view.ng-leave.ng-leave-active {
   opacity: 0;
 }
 
-.config-view.ng-enter.ng-enter-active,
-.config-view.ng-leave {
+irc-config-view.ng-enter.ng-enter-active,
+irc-config-view.ng-leave {
   opacity: 1;
 }
 
-div[ui-view="config"] > gaia-list, form.config {
+irc-config-view > * {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+irc-config-view  gaia-list, form.config {
   flex-grow: 1;
   background-color: var(--background);
   -moz-user-select: none;

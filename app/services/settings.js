@@ -96,6 +96,8 @@ settings.service('theme', ['settings', function Theme(settings) {
     themeClass = value;
   };
 
+  this.setThemeClass('main');
+
   Object.defineProperties(this, {
     'group': {
       get: function() {
