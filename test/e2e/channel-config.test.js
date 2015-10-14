@@ -2,13 +2,18 @@
 
 describe('channel-config', function() {
 
-  var menuView = $('[ui-view="menu"]');
+  var menuView = $('irc-menu-view');
+  var configView = $('irc-channel-config-view');
   var addChannelButton = $('#add-channel-button');
-  var title = $('gaia-header > h1');
-  var saveButton = $('button');
-  var networkField = $('gaia-value-selector');
-  var nameField = $('[model="channel.name"]');
-  var autoJoinField = $('[model="channel.autoJoin"]');
+  var title = configView.$('gaia-header > h1');
+  var saveButton = configView.$('button');
+  var networkField = configView.$('gaia-value-selector');
+  var nameField = configView.$('[model="channel.name"]');
+  var autoJoinField = configView.$('[model="channel.autoJoin"]');
+
+  function isConfigOpen() {
+    return configView.isPresent();
+  }
 
   beforeAll(function() {
     this.helpers.setDefaultNetworks();
@@ -23,7 +28,7 @@ describe('channel-config', function() {
     });
 
     it('should open when clicking the "#" button', function() {
-      expect(browser.getCurrentUrl()).toContain('config/channel/');
+      expect(isConfigOpen()).toBe(true);
     });
 
     it('should have the title "New Channel"', function() {
@@ -68,7 +73,7 @@ describe('channel-config', function() {
     it('should save a channel to a chosen network', function() {
       networkField.click();
       expect($('gaia-dialog-select').isDisplayed()).toBe(true);
-      element(by.cssContainingText('li', 'Bar')).click();
+      configView.element(by.cssContainingText('li', 'Bar')).click();
 
       nameField.setInputText('bar-channel');
       autoJoinField.click();

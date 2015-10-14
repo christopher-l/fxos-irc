@@ -24,7 +24,7 @@ beforeAll(function() {
       });
     },
     clickHeaderActionButton: function() {
-      var header = $('gaia-header').getWebElement();
+      var header = $$('gaia-header').last().getWebElement();
       header.getDriver().executeScript(function(header) {
         header.onActionButtonClick();
       }, header);
