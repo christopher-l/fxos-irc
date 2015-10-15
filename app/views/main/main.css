@@ -1,4 +1,4 @@
-irc-main-view {
+#main-view {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -6,7 +6,7 @@ irc-main-view {
   flex-direction: column;
 }
 
-#user-count {
+#main-view #user-count {
   border: solid 1px var(--gaia-header-button-color) !important;
   padding: 10px;
   border-radius: 5px;

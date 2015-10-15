@@ -1,4 +1,4 @@
-irc-conversation-view {
+#conversation-view {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -8,27 +8,27 @@ irc-conversation-view {
   line-height: normal;
 }
 
-irc-conversation-view > #messages {
+#conversation-view > #messages {
   flex: 1 1 0%;
   margin: 0px 1rem;
   overflow-y: auto;
 }
 
-irc-conversation-view > #messages > div:first-child {
+#conversation-view > #messages > div:first-child {
   margin-top: .6em;
 }
 
-irc-conversation-view > #messages > div {
+#conversation-view > #messages > div {
   margin-bottom: .6em;
 }
 
-irc-conversation-view > #messages .header {
+#conversation-view > #messages .header {
   display: flex;
   line-height: 1.3;
 }
 
-irc-conversation-view > #messages .user,
-irc-conversation-view > #messages .info {
+#conversation-view > #messages .user,
+#conversation-view > #messages .info {
   flex-grow: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -36,23 +36,23 @@ irc-conversation-view > #messages .info {
   padding-right: 1rem;
 }
 
-irc-conversation-view > #messages .user {
+#conversation-view > #messages .user {
   color: var(--highlight-color);
 }
 
-irc-conversation-view > #messages > .highlight .user {
+#conversation-view > #messages > .highlight .user {
   color: var(--color-destructive);
 }
 
-irc-conversation-view > #messages .info {
+#conversation-view > #messages .info {
   color: var(--text-color-minus);
 }
 
-irc-conversation-view > #messages .time {
+#conversation-view > #messages .time {
   color: var(--text-color-minus);
 }
 
-irc-conversation-view > gaia-text-input-multiline {
+#conversation-view > gaia-text-input-multiline {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }

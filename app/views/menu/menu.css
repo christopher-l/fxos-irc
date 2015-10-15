@@ -1,18 +1,18 @@
 /**
  * Drawer
  */
-irc-menu-view gaia-drawer {
+#menu-view gaia-drawer {
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: 1;
 }
 
-irc-menu-view gaia-drawer[open] {
+#menu-view gaia-drawer[open] {
   pointer-events: auto !important;
 }
 
-irc-menu-view gaia-drawer > div {
+#menu-view gaia-drawer > div {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 200px);
@@ -21,12 +21,12 @@ irc-menu-view gaia-drawer > div {
   background-color: var(--text-input-background, var(--background));
 }
 
-irc-menu-view #network-list {
+#menu-view #network-list {
   flex: 1 1 0%;
   overflow-y: scroll;
 }
 
-irc-menu-view #drawer-buttons {
+#menu-view #drawer-buttons {
   position: relative;
   display: flex;
   margin-top: -1px;
@@ -34,7 +34,7 @@ irc-menu-view #drawer-buttons {
   z-index: 3;
 }
 
-irc-menu-view #drawer-buttons gaia-button {
+#menu-view #drawer-buttons gaia-button {
   flex: 1 1 0%;
   margin: 0px !important;
   border-radius: 0px !important;
@@ -43,11 +43,11 @@ irc-menu-view #drawer-buttons gaia-button {
   min-width: 0px !important;
 }
 
-irc-menu-view #drawer-buttons gaia-button:not(:last-of-type) {
+#menu-view #drawer-buttons gaia-button:not(:last-of-type) {
   border-right: solid 1px var(--border-color);
 }
 
-irc-menu-view #drawer-buttons #add-channel-button {
+#menu-view #drawer-buttons #add-channel-button {
   font-size: 30px !important;
   font-style: normal !important;
   font-weight: 500;
@@ -56,7 +56,7 @@ irc-menu-view #drawer-buttons #add-channel-button {
 /**
  * Network List
  */
-irc-menu-view #network-list > li {
+#menu-view #network-list > li {
   position: relative;
   overflow: hidden;
   margin: 0;
@@ -67,8 +67,8 @@ irc-menu-view #network-list > li {
   cursor: pointer;
 }
 
-irc-menu-view .network-entry,
-irc-menu-view .channel-entry {
+#menu-view .network-entry,
+#menu-view .channel-entry {
   position: relative;
   display: flex;
   height: 3.5rem;
@@ -77,12 +77,12 @@ irc-menu-view .channel-entry {
   border-bottom: solid 1px var(--border-color);
 }
 
-irc-menu-view .network-entry {
+#menu-view .network-entry {
   background-color: var(--background-minus-minus, var(--color-iota));
   z-index: 2;
 }
 
-irc-menu-view .collapse-indicator {
+#menu-view .collapse-indicator {
   position: absolute;
   font-size: 1.5rem;
   width: 3rem;
@@ -91,7 +91,7 @@ irc-menu-view .collapse-indicator {
   transition: transform 200ms 0ms;
 }
 
-irc-menu-view .focus-indicator {
+#menu-view .focus-indicator {
   border-radius: .5rem;
   width: .5rem;
   height: .5rem;
@@ -100,13 +100,13 @@ irc-menu-view .focus-indicator {
   margin-right: .5rem;
 }
 
-irc-menu-view .network-entry[focused] > .focus-indicator,
-irc-menu-view .channel-entry[focused] > .focus-indicator {
+#menu-view .network-entry[focused] > .focus-indicator,
+#menu-view .channel-entry[focused] > .focus-indicator {
   background-color: var(--highlight-color);
 }
 
-irc-menu-view .network-text,
-irc-menu-view .channel-text {
+#menu-view .network-text,
+#menu-view .channel-text {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -114,36 +114,36 @@ irc-menu-view .channel-text {
   overflow: hidden;
 }
 
-irc-menu-view .network-name,
-irc-menu-view .channel.name {
+#menu-view .network-name,
+#menu-view .channel.name {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
-irc-menu-view .network-info,
-irc-menu-view .channel-info {
+#menu-view .network-info,
+#menu-view .channel-info {
   font-size: .8rem;
 }
 
-irc-menu-view [status=connected] .network-info {
+#menu-view [status=connected] .network-info {
   color: var(--color-preffered);
 }
 
-irc-menu-view [status=connecting] .network-info {
+#menu-view [status=connecting] .network-info {
   color: var(--color-warning);
 }
 
-irc-menu-view [status='connection lost'] .network-info {
+#menu-view [status='connection lost'] .network-info {
   color: var(--color-destructive);
 }
 
 
-irc-menu-view :not([active]) > .channel-text {
+#menu-view :not([active]) > .channel-text {
   color: var(--text-color-minus);
 }
 
-irc-menu-view .counter {
+#menu-view .counter {
   border-radius: 1rem;
   height: 1.5rem;
   margin: 1rem 0 1rem .5rem;
@@ -154,11 +154,11 @@ irc-menu-view .counter {
   text-indent: 0;
 }
 
-irc-menu-view .counter[hidden] {
+#menu-view .counter[hidden] {
   display: none;
 }
 
-irc-menu-view .channel-list {
+#menu-view .channel-list {
   padding: 0;
   margin: 0;
   transition: height 200ms 0ms ease, transform 200ms 0ms ease;
@@ -167,11 +167,11 @@ irc-menu-view .channel-list {
   background-color: var(--text-input-background, var(--background));
 }
 
-irc-menu-view #network-list > li[collapsed] .channel-list {
+#menu-view #network-list > li[collapsed] .channel-list {
   height: 0;
   transform: translateY( calc(var(--actual-height) * -1px) );
 }
 
-irc-menu-view #network-list > li[collapsed] .collapse-indicator {
+#menu-view #network-list > li[collapsed] .collapse-indicator {
   transform: rotate(-90deg);
 }

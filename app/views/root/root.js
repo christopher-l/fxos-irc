@@ -3,20 +3,20 @@
 var root = angular.module('irc.views.root', [
 ]);
 
-root.directive('ircRootView',[function() {
-  return {
-    restrict: 'A',
-    controller: 'RootCtrl',
-    template: `
-      <irc-main-view></irc-main-view>
+root.controller(
+    'RootCtrl', [
+      '$scope',
+      '$state',
+      '$previousState',
+      function($scope, $state, $previousState) {
 
-      <irc-config-view
-          ng-if="configOpen"
-          class="{{theme.settings}}"
-          >
-      </irc-config-view>
-    `,
+  $scope.$state = $state;
+  $scope.back = function() {
+    if ($previousState.get()) {
+      $previousState.go();
+    } else {
+      $state.go('main');
+    }
   };
-}]);
 
-root.controller('RootCtrl', [function() {}]);
+}]);

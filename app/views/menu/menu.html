@@ -57,15 +57,15 @@
     <div id="drawer-buttons">
       <gaia-button id="add-channel-button"
           ng-disabled="networks.length === 0"
-          ng-click="onAddChannel()">
+          ui-sref="channel-config">
         #
       </gaia-button>
       <gaia-button id="add-network-button"
-          ng-click="onAddNetwork()">
-        <i data-icon="add"></i>
+          ui-sref="network-config">
+        <i data-icon="add" aria-label="Add Network"></i>
       </gaia-button>
-      <gaia-button id="settings-button" ng-click="openSettings()">
-        <i data-icon="settings"></i>
+      <gaia-button id="settings-button" ui-sref="settings">
+        <i data-icon="settings" aria-label="Settings"></i>
       </gaia-button>
     </div>
 

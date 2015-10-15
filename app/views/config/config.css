@@ -1,40 +1,35 @@
 /**
  * Container
  */
-irc-config-view {
+#config-view {
   position: absolute;
   top: 0px;
   left: 0px;
   height: 100%;
   width: 100%;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
   transition-duration: 200ms;
   transition-property: opacity;
 }
 
-irc-config-view.ng-enter,
-irc-config-view.ng-leave.ng-leave-active {
+#config-view.ng-enter,
+#config-view.ng-leave.ng-leave-active {
   opacity: 0;
 }
 
-irc-config-view.ng-enter.ng-enter-active,
-irc-config-view.ng-leave {
+#config-view.ng-enter.ng-enter-active,
+#config-view.ng-leave {
   opacity: 1;
-}
-
-irc-config-view > * {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 
 /**
  * Settings + Configs
  */
-irc-config-view gaia-list,
-irc-config-view form {
+#config-view gaia-list,
+#config-view form {
   flex-grow: 1;
   background-color: var(--background);
   -moz-user-select: none;
@@ -42,7 +37,7 @@ irc-config-view form {
   z-index: 1; /* needed for ripple effect */
 }
 
-irc-config-view h2 {
+#config-view h2 {
   margin: 0px;
   padding: 0.3rem 2rem;
   font-size: 1rem;
@@ -51,18 +46,18 @@ irc-config-view h2 {
   color: var(--text-color);
 }
 
-irc-config-view gaia-list > li > label {
+#config-view gaia-list > li > label {
   background: none;
   display: flex;
   min-height: 42px;
   align-items: center;
 }
 
-irc-config-view gaia-slider {
+#config-view gaia-slider {
   margin: 0px !important;
 }
 
-irc-config-view gaia-text-input {
+#config-view gaia-text-input {
   margin: .5rem 0px !important;
 }
 
@@ -70,6 +65,6 @@ irc-config-view gaia-text-input {
 /**
  * Configs
  */
-irc-config-view form.config label {
+#config-view form.config label {
   padding-left: 1rem;
 }

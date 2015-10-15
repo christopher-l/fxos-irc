@@ -7,25 +7,6 @@ var menu = angular.module('irc.views.menu', [
 ]);
 
 
-menu.directive('ircMenuView', [function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/menu/menu.html',
-    controller: 'MenuCtrl',
-    controllerAs: 'Ctrl',
-    link: link,
-  };
-
-  // Avoid screen flickering on load
-  function link(scope, element, attrs) {
-    element.css('opacity', 0);
-    setTimeout(function() {
-      element.css('opacity', '');
-    }, 1000);
-  }
-}]);
-
-
 menu.controller(
     'MenuCtrl', [
       '$scope',
