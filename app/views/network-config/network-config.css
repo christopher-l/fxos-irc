@@ -1,10 +1,10 @@
-irc-network-config-view #port {
+.network-config #port {
   width: 5rem !important;
   margin: 0px !important;
 }
 
-irc-network-config-view #user,
-irc-network-config-view #password {
+.network-config #user,
+.network-config #password {
   width: calc(100% - 7rem);
   margin: 0px !important;
 }

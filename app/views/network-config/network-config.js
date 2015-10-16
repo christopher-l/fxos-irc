@@ -1,39 +1,31 @@
 'use strict';
 
 var networkConfig = angular.module('irc.views.network-config', [
-  'irc.config',
   'irc.views.config',
 ]);
-
-
-networkConfig.directive('ircNetworkConfigView',[function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/network-config/network-config.html',
-    controller: 'NetConfCtrl',
-  };
-}]);
 
 
 networkConfig.controller(
     'NetConfCtrl', [
       '$scope',
       '$rootScope',
+      '$stateParams',
       'networks',
-      'networkConfig',
       function NetConfCtrl(
           $scope,
           $rootScope,
-          networks,
-          networkConfig) {
+          $stateParams,
+          networks) {
 
-  var network = networkConfig.network;
-  $scope.network = networkConfig.config;
-
+  var network = networks.find(function(network) {
+    return network.name === $stateParams.network;
+  }) || networks.newNetwork();
+  $scope.network = network.getConfig();
   $scope.isNew = network.isNew;
 
   $scope.onSave = function() {
-    save();
+    network.applyConfig(finalConfig($scope.network));
+    $scope.back();
   };
 
   $scope.onClose = function() {
@@ -41,21 +33,11 @@ networkConfig.controller(
         !network.compareConfig($scope.network) :
         !network.compareConfig(finalConfig($scope.network));
     if (changed) {
-      $scope.confirmDialog.onConfirm = close;
       $scope.confirmDialog.open();
     } else {
-      close();
+      $scope.back();
     }
   };
-
-  function close() {
-    networkConfig.close();
-  }
-
-  function save() {
-    networkConfig.config = finalConfig($scope.network);
-    networkConfig.save();
-  }
 
   function finalConfig(config) {
     var cfg = angular.copy(config);

@@ -45,7 +45,6 @@
   <script src="services/networks.js"></script>
   <script src="services/settings.js"></script>
   <script src="services/storage.js"></script>
-  <script src="services/config.js"></script>
 
   <script src="views/title/title.js"></script>
 
@@ -85,11 +84,16 @@
 
 <body ng-controller="RootCtrl">
 
-  <div ui-view="main" id="main-view" class="{{theme.main}}"></div>
+  <div
+      ui-view="main"
+      id="main-view"
+      class="{{theme.main}}">
+  </div>
+
   <div
       ui-view
       id="config-view"
-      class="{{theme.settings}}"
+      class="{{theme.settings}} {{$state.current.name}}"
       ng-show="!$state.includes('main')">
   </div>
 

@@ -5,50 +5,47 @@ var channelConfig = angular.module('irc.views.channel-config', [
 ]);
 
 
-channelConfig.directive('ircChannelConfigView',[function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/channel-config/channel-config.html',
-    controller: 'ChanConfCtrl',
-  };
-}]);
-
-
 channelConfig.controller(
     'ChanConfCtrl', [
       '$scope',
-      '$rootScope',
       '$timeout',
+      '$stateParams',
       'networks',
-      'channelConfig',
       function channelConfigCtrl(
           $scope,
-          $rootScope,
           $timeout,
-          networks,
-          channelConfig) {
+          $stateParams,
+          networks) {
+
+  var network = networks.find(function(network) {
+    return network.name === $stateParams.network;
+  }) || networks[0];
+  var channel = network.channels.find(function(channel) {
+    return channel.name === $stateParams.channel;
+  }) || networks.newChannel();
 
   $scope.networks = networks;
-
-  $scope.channel = channelConfig.config;
+  $scope.channel = channel.getConfig();
 
   Object.defineProperty($scope, 'networkIndex', {
     get: function() {
-      return $scope.channel.network.getIndex().toString();
+      return network.getIndex().toString();
     },
     set: function(value) {
-      $scope.channel.network = networks[value];
+      network = networks[value];
     }
   });
 
-  $scope.isNew = channelConfig.channel.isNew;
+  $scope.isNew = channel.isNew;
 
   $scope.onSave = function() {
-    channelConfig.save();
+    $scope.channel.network = network;
+    channel.applyConfig($scope.channel);
+    $scope.back();
   };
 
   $scope.onClose = function() {
-    channelConfig.close();
+    $scope.back();
   };
 
 }]);

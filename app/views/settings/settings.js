@@ -2,7 +2,6 @@
 
 var settings = angular.module('irc.views.settings', [
   'irc.settings',
-  'irc.config'
 ]);
 
 
@@ -16,14 +15,10 @@ settings.directive('ircSettingsView', [function() {
 
 
 settings.controller('SettingsCtrl', [
-    '$scope', 'settings', 'settingsHandler',
-    function($scope, settings, settingsHandler) {
+    '$scope', 'settings',
+    function($scope, settings) {
 
   $scope.settings = settings.data;
-
-  $scope.close = function() {
-    settingsHandler.close();
-  };
 
   $scope.$watch('settings', settings.apply, true);
 }]);

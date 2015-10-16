@@ -47,12 +47,12 @@ views.config(['$stateProvider', '$urlRouterProvider',
         controller: 'SettingsCtrl'
       })
       .state('network-config', {
-        url: '/config/network/:networkIndex/:channelIndex',
+        url: '/config/network/:network',
         templateUrl: 'views/network-config/network-config.html',
         controller: 'NetConfCtrl',
       })
       .state('channel-config', {
-        url: '/config/channel/:networkIndex/:channelIndex',
+        url: '/config/channel/:network/:channel',
         templateUrl: 'views/channel-config/channel-config.html',
         controller: 'ChanConfCtrl',
       });

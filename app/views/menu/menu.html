@@ -57,7 +57,7 @@
     <div id="drawer-buttons">
       <gaia-button id="add-channel-button"
           ng-disabled="networks.length === 0"
-          ui-sref="channel-config">
+          ui-sref="channel-config({network:current.network.name})">
         #
       </gaia-button>
       <gaia-button id="add-network-button"
@@ -83,7 +83,12 @@
   <button ng-if="channelDialog.channel.joined">
     Part
   </button>
-  <button ng-click="onEditChannel(channelDialog.channel)">
+  <button
+      ui-sref="channel-config({
+        network:channelDialog.channel.network.name,
+        channel:channelDialog.channel.name
+      })"
+      on-click="close">
     Edit
   </button>
   <button class="danger"
@@ -110,7 +115,9 @@
       class="primary">
     Reconnect
   </button>
-  <button ng-click="onEditNetork(networkDialog.network)">
+  <button
+      ui-sref="network-config({network:networkDialog.network.name})"
+      on-click="close">
     Edit
   </button>
   <button class="danger" ng-click="onDelete()">Delete</button>

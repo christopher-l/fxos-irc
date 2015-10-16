@@ -2,7 +2,6 @@
 
 var menu = angular.module('irc.views.menu', [
   'irc.networks',
-  'irc.config',
   'irc.views.menu.directives',
 ]);
 
@@ -12,22 +11,12 @@ menu.controller(
       '$scope',
       '$timeout',
       'networks',
-      'networkConfig',
-      'channelConfig',
-      'settingsHandler',
       function MenuCtrl(
           $scope,
           $timeout,
-          networks,
-          networkConfig,
-          channelConfig,
-          settingsHandler) {
+          networks) {
 
   $scope.networks = networks;
-
-  $scope.openSettings = function() {
-    settingsHandler.open();
-  };
 
   // Networks
   $scope.onNetClick = function(network) {
@@ -61,22 +50,6 @@ menu.controller(
     };
   };
 
-  $scope.onAddNetwork = function() {
-    $scope.networkDialog.close();
-    networkConfig.open()
-        .then(function() {
-        }, function() {
-        });
-  };
-
-  $scope.onEditNetork = function(network) {
-    $scope.networkDialog.close();
-    networkConfig.open(network)
-        .then(function() {
-        }, function() {
-          $scope.confirmDialog.open();
-        });
-  };
 
   // Channels
   $scope.onChanClick = function(channel) {

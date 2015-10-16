@@ -3,26 +3,6 @@
 var config = angular.module('irc.views.config', []);
 
 
-config.directive('ircConfigView',[function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'views/config/config.html',
-    controller: 'ConfigCtrl',
-  };
-}]);
-
-
-config.controller(
-    'ConfigCtrl', [
-      'theme',
-      function(
-          theme) {
-
-  theme.setThemeClass('settings');
-
-}]);
-
-
 // Prevent for more than 5 numbers to be typed in.
 config.directive('ircPort', [function() {
   function link(scope, element, attrs) {
