@@ -220,70 +220,59 @@ describe('irc-dialog', function() {
 
   beforeEach(module('irc.views.gaia'));
 
-  beforeEach(inject(function($rootScope) {
+  beforeEach(inject(function($rootScope, $compile) {
     scope = $rootScope.$new();
     element = angular.element('<div irc-dialog="dialog"></div>');
+    scope.dialog = { foo: 'bar' };
+    element = $compile(element)(scope);
+    element[0].open = jasmine.createSpy();
+    element[0].close = jasmine.createSpy();
   }));
 
-  describe('base', function() {
-
-    beforeEach(inject(function($compile) {
-      scope.dialog = { foo: 'bar' };
-      element = $compile(element)(scope);
-      element[0].open = jasmine.createSpy();
-      element[0].close = jasmine.createSpy();
-    }));
-
-    it('should register the open function', function() {
-      expect(element[0].open).not.toHaveBeenCalled();
-      scope.dialog.open();
-      expect(element[0].open).toHaveBeenCalled();
-    });
-
-    it('should register the close function', function() {
-      expect(element[0].close).not.toHaveBeenCalled();
-      scope.dialog.close();
-      expect(element[0].close).toHaveBeenCalled();
-    });
-
-    it('should leave properties intact', function() {
-      expect(scope.dialog.foo).toBe('bar');
-    });
-
+  it('should register the open function', function() {
+    expect(element[0].open).not.toHaveBeenCalled();
+    scope.dialog.open();
+    expect(element[0].open).toHaveBeenCalled();
   });
 
-  describe('confirm', function() {
+  it('should register the close function', function() {
+    expect(element[0].close).not.toHaveBeenCalled();
+    scope.dialog.close();
+    expect(element[0].close).toHaveBeenCalled();
+  });
 
-    var submit;
+  it('should overwrite given object', function() {
+    expect(scope.dialog.foo).toBeUndefined();
+  });
 
-    beforeEach(inject(function($compile) {
-      submit = angular.element('<div></div>');
-      element[0].els = { submit: submit[0] };
-      element = $compile(element)(scope);
-      scope.dialog.onConfirm = jasmine.createSpy();
-    }));
+});
 
-    it('should register submit', function() {
-      expect(scope.dialog.onConfirm).not.toHaveBeenCalled();
-      submit.triggerHandler('click');
-      expect(scope.dialog.onConfirm).toHaveBeenCalled();
-    });
 
-    it('should change onSubmit function', function() {
-      var oldSpy = scope.dialog.onConfirm;
-      var newSpy = jasmine.createSpy();
-      submit.triggerHandler('click');
-      expect(oldSpy.calls.count()).toBe(1);
-      expect(newSpy.calls.count()).toBe(0);
-      submit.triggerHandler('click');
-      expect(oldSpy.calls.count()).toBe(2);
-      expect(newSpy.calls.count()).toBe(0);
-      scope.dialog.onConfirm = newSpy;
-      submit.triggerHandler('click');
-      expect(oldSpy.calls.count()).toBe(2);
-      expect(newSpy.calls.count()).toBe(1);
-    });
+describe('irc-dialog-confirm', function() {
 
+  var scope;
+  var submit;
+
+  beforeEach(module('irc.views.gaia'));
+
+  beforeEach(module(function($provide) {
+    $provide.value('$timeout', (fn) => fn());
+  }));
+
+  beforeEach(inject(function($rootScope, $compile) {
+    scope = $rootScope.$new();
+    var element = angular.element(
+        '<div irc-dialog="dialog" on-confirm="confirm()"></div>');
+    submit = angular.element('<div></div>');
+    element[0].els = { submit: submit[0] };
+    element = $compile(element)(scope);
+    scope.confirm = jasmine.createSpy();
+  }));
+
+  it('should register submit', function() {
+    expect(scope.confirm).not.toHaveBeenCalled();
+    submit.triggerHandler('click');
+    expect(scope.confirm).toHaveBeenCalled();
   });
 
 });
