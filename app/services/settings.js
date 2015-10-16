@@ -57,10 +57,12 @@ settings.factory('settings', ['$rootScope', 'Storage',
  * Registeres itself on the darkTheme settings property.
  *
  * Exposes the following properties:
- *   group:  String that can be used as css class and in html header.  E.g.
- *           'theme-communications'.
- *   color:  String intendet for use in html header to set the color of the
- *           status bar.
+ *   group:    String that can be used as css class and in html header.  E.g.
+ *             'theme-communications'.
+ *   color:    String intendet for use in html header to set the color of the
+ *             status bar.
+ *   main,
+ *   settings: Same as group, but irgnores the set theme class.
  *
  * Provides the following means of setting the theme:
  *   setThemeClass(): Change between main and settings theme.  Takes a String
@@ -96,8 +98,6 @@ settings.service('theme', ['settings', function Theme(settings) {
     themeClass = value;
   };
 
-  this.setThemeClass('main');
-
   Object.defineProperties(this, {
     'group': {
       get: function() {
@@ -107,7 +107,6 @@ settings.service('theme', ['settings', function Theme(settings) {
     'color': {
       value: 'var(--header-background)'
     },
-    // TODO document
     'main': {
       get: function() {
         return currentTheme.main;

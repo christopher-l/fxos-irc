@@ -8,7 +8,8 @@ root.controller(
       '$scope',
       '$state',
       '$previousState',
-      function($scope, $state, $previousState) {
+      'theme',
+      function($scope, $state, $previousState, theme) {
 
   $scope.$state = $state;
   $scope.back = function() {
@@ -18,5 +19,13 @@ root.controller(
       $state.go('main');
     }
   };
+
+  $scope.$on('$stateChangeSuccess', function(event, toState) {
+    if (toState.name.match(/^main/)) {
+      theme.setThemeClass('main');
+    } else {
+      theme.setThemeClass('settings');
+    }
+  });
 
 }]);
