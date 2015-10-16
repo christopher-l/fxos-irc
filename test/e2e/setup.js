@@ -39,6 +39,32 @@ beforeAll(function() {
   var ElementFinder = $('').constructor;
   var ElementArrayFinder = $$('').constructor;
 
+  ElementArrayFinder.prototype.hasAttribute = function(attribute) {
+    function hasAttribute(element, attribute) {
+      return element.hasAttribute(attribute);
+    }
+
+    function hasAttributeFn(webElem) {
+      return webElem.getDriver().executeScript(
+          hasAttribute, webElem, attribute);
+    }
+
+    return this.applyAction_(hasAttributeFn);
+  };
+
+  ElementFinder.prototype.hasAttribute = function(attribute) {
+    return this.elementArrayFinder_.hasAttribute(attribute).toElementFinder_();
+  };
+
+  ElementArrayFinder.prototype.execute = function(script) {
+    function executeFn(webElem) {
+      return webElem.getDriver().executeScript(
+          script, webElem);
+    }
+
+    return this.applyAction_(executeFn);
+  };
+
   ElementArrayFinder.prototype.getProperty = function(property) {
     function getProperty(element, property) {
       return element[property];

@@ -3,7 +3,7 @@
 describe('drawer', function() {
 
   var body = element(by.css('body'));
-  var uiView = element(by.css('body > div'));
+  var uiView = element(by.css('#main-view'));
   var drawer = element(by.css('gaia-drawer'));
   var header = element(by.css('gaia-header'));
 
@@ -35,33 +35,33 @@ describe('drawer', function() {
   });
 
   it('should open when clicking the menu button', function() {
-    expect(drawer.getAttribute('open')).toBeFalsy();
+    expect(drawer.hasAttribute('open')).toBeFalsy();
     clickMenuButton();
-    expect(drawer.getAttribute('open')).toBeTruthy();
+    expect(drawer.hasAttribute('open')).toBeTruthy();
   });
 
   it('should close when clicking the menu button again', function() {
     clickMenuButton();
-    expect(drawer.getAttribute('open')).toBeTruthy();
+    expect(drawer.hasAttribute('open')).toBeTruthy();
     clickMenuButton();
-    expect(drawer.getAttribute('open')).toBeFalsy();
+    expect(drawer.hasAttribute('open')).toBeFalsy();
   });
 
   it('should close when clicking the blurred area beneath it', function() {
     clickBottom();
-    expect(drawer.getAttribute('open')).toBeFalsy();
+    expect(drawer.hasAttribute('open')).toBeFalsy();
     clickMenuButton();
-    expect(drawer.getAttribute('open')).toBeTruthy();
+    expect(drawer.hasAttribute('open')).toBeTruthy();
     clickBottom();
-    expect(drawer.getAttribute('open')).toBeFalsy();
+    expect(drawer.hasAttribute('open')).toBeFalsy();
   });
 
   it('should still open after closing by clicking beneath', function() {
     clickMenuButton();
     clickBottom();
-    expect(drawer.getAttribute('open')).toBeFalsy();
+    expect(drawer.hasAttribute('open')).toBeFalsy();
     clickMenuButton();
-    expect(drawer.getAttribute('open')).toBeTruthy();
+    expect(drawer.hasAttribute('open')).toBeTruthy();
   });
 
   it('should update the scope variable', function() {
@@ -76,7 +76,7 @@ describe('drawer', function() {
     expect(uiView.evaluate('drawer.open')).toBeFalsy();
     uiView.evaluate('drawer.open = true; $digest();');
     expect(uiView.evaluate('drawer.open')).toBeTruthy();
-    expect(drawer.getAttribute('open')).toBeTruthy();
+    expect(drawer.hasAttribute('open')).toBeTruthy();
   });
 
 });
