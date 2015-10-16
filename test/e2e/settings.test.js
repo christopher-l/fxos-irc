@@ -2,7 +2,7 @@
 
 describe('settings', function() {
 
-  var uiView = element(by.css('body > div'));
+  var uiView = element(by.css('#main-view'));
   var doneButton = element(by.css('gaia-header button'));
   var settingsButton = element(by.css('gaia-button#settings-button'));
   var themeSwitch = element(by.css('gaia-switch'));
