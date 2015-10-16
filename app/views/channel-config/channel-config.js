@@ -39,13 +39,25 @@ channelConfig.controller(
   $scope.isNew = channel.isNew;
 
   $scope.onSave = function() {
-    $scope.channel.network = network;
-    channel.applyConfig($scope.channel);
+    channel.applyConfig(finalConfig($scope.channel), network);
     $scope.back();
   };
 
   $scope.onClose = function() {
-    $scope.back();
+    var changed = !channel.compareConfig($scope.channel);
+    if (changed) {
+      $scope.confirmDialog.open();
+    } else {
+      $scope.back();
+    }
   };
+
+  function finalConfig(config) {
+    var cfg = angular.copy(config);
+    if (cfg.name.match(/^#/)) {
+      cfg.name = cfg.name.slice(1);
+    }
+    return cfg;
+  }
 
 }]);

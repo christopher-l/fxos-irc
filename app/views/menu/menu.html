@@ -75,7 +75,7 @@
 <gaia-dialog-action irc-dialog="channelDialog"
     on-closed="Ctrl.onChannelDialogClosed()"
     >
-  <h1>{{channelDialog.channel.name}}</h1>
+  <h1>#{{channelDialog.channel.name}}</h1>
   <button ng-if="channelDialog.channel && !channelDialog.channel.joined"
       class="primary">
     Join

@@ -1,5 +1,5 @@
 <gaia-header action="close" irc-action="onClose()">
-  <h1>{{isNew ? 'New Channel' : channel.name}}</h1>
+  <h1>{{isNew ? 'New Channel' : '#' + channel.name}}</h1>
   <button ng-click="onSave();" ng-disabled="config.$invalid">Save</button>
 </gaia-header>
 

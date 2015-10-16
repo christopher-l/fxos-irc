@@ -1,5 +1,6 @@
 - Network / Channel Config:
   - Confirm discard changes
+  - Reject existing names
   - Reconnect / Join on change
   - Automatically join new channel
   - Hide saved passwords

@@ -161,18 +161,11 @@ networks.factory(
     this._volatile = this.network.channels;
   };
 
-  Channel.prototype.applyConfig = function(config) { // Override
+  Channel.prototype.applyConfig = function(config, network) { // Override
     if (this.isNew) {
-      this._setNetwork(config.network);
+      this._setNetwork(network);
     }
-    delete config.network;
     Base.prototype.applyConfig.call(this, config);
-  };
-
-  Channel.prototype.getConfig = function() { // Override
-    var config = Base.prototype.getConfig.call(this);
-    config.network = this.network;
-    return config;
   };
 
   Channel.prototype._configProps = [
