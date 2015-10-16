@@ -2,8 +2,8 @@
 
 describe('channel-config', function() {
 
-  var menuView = $('irc-menu-view');
-  var configView = $('irc-channel-config-view');
+  var menuView = $('#menu-view');
+  var configView = $('#config-view');
   var addChannelButton = $('#add-channel-button');
   var title = configView.$('gaia-header > h1');
   var saveButton = configView.$('button');

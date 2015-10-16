@@ -4,19 +4,20 @@ describe('network-config', function() {
 
   const DEFAULT_NETWORKS = 2;
 
-  var uiView = element(by.css('[ui-view=menu]'));
-  var addNetworkButton = element(by.css('#add-network-button'));
-  var networkItems = element.all(by.css('#network-list > li'));
-  var title = element(by.css('h1'));
-  var saveButton = element(by.css('button'));
-  var nameField = element(by.css('[model="network.name"]'));
-  var autoConnectField = element(by.css('[model="network.autoConnect"]'));
-  var hostField = element(by.css('[model="network.host"]'));
-  var portField = element(by.css('[model="network.port"]'));
-  var tlsField = element(by.css('[model="network.tls"]'));
-  var nickField = element(by.css('[model="network.nick"]'));
-  var userField = element(by.css('[model="network.user"]'));
-  var passwordField = element(by.css('[model="network.password"]'));
+  var menuView = $('#menu-view');
+  var configView = $('#config-view');
+  var addNetworkButton = $('#add-network-button');
+  var networkItems = $$('#network-list > li');
+  var title = configView.$('gaia-header > h1');
+  var saveButton = configView.$('button');
+  var nameField = configView.$('[model="network.name"]');
+  var autoConnectField = configView.$('[model="network.autoConnect"]');
+  var hostField = configView.$('[model="network.host"]');
+  var portField = configView.$('[model="network.port"]');
+  var tlsField = configView.$('[model="network.tls"]');
+  var nickField = configView.$('[model="network.nick"]');
+  var userField = configView.$('[model="network.user"]');
+  var passwordField = configView.$('[model="network.password"]');
 
   function fillInMinimalConfig() {
     nameField.setInputText('Test Name');
@@ -25,12 +26,12 @@ describe('network-config', function() {
   }
 
   function openNewNetwork() {
-    uiView.evaluate('drawer.open = true; $digest();');
+    menuView.evaluate('drawer.open = true; $digest();');
     addNetworkButton.click();
   }
 
   function editNetwork(index) {
-      uiView.evaluate('drawer.open = true; $digest();');
+      menuView.evaluate('drawer.open = true; $digest();');
       var item;
       if (index === 'last') {
         item = networkItems.last();
@@ -85,21 +86,21 @@ describe('network-config', function() {
 
       saveButton.click();
 
-      expect(uiView.evaluate('networks[networks.length-1].name'))
+      expect(menuView.evaluate('networks[networks.length-1].name'))
           .toBe('Test Name');
-      expect(uiView.evaluate('networks[networks.length-1].autoConnect'))
+      expect(menuView.evaluate('networks[networks.length-1].autoConnect'))
           .toBe(true);
-      expect(uiView.evaluate('networks[networks.length-1].host'))
+      expect(menuView.evaluate('networks[networks.length-1].host'))
           .toBe('test.host');
-      expect(uiView.evaluate('networks[networks.length-1].port'))
+      expect(menuView.evaluate('networks[networks.length-1].port'))
           .toBe(1234);
-      expect(uiView.evaluate('networks[networks.length-1].tls'))
+      expect(menuView.evaluate('networks[networks.length-1].tls'))
           .toBe(true);
-      expect(uiView.evaluate('networks[networks.length-1].nick'))
+      expect(menuView.evaluate('networks[networks.length-1].nick'))
           .toBe('test-nick');
-      expect(uiView.evaluate('networks[networks.length-1].user'))
+      expect(menuView.evaluate('networks[networks.length-1].user'))
           .toBe('testuser');
-      expect(uiView.evaluate('networks[networks.length-1].password'))
+      expect(menuView.evaluate('networks[networks.length-1].password'))
           .toBe('testpass');
 
       editNetwork('last');
@@ -122,7 +123,7 @@ describe('network-config', function() {
       })).toBe('6667');
 
       saveButton.click();
-      expect(uiView.evaluate('networks[networks.length-1].port'))
+      expect(menuView.evaluate('networks[networks.length-1].port'))
           .toBe(6667);
     });
 
@@ -135,7 +136,7 @@ describe('network-config', function() {
       })).toBe('6697');
 
       saveButton.click();
-      expect(uiView.evaluate('networks[networks.length-1].port'))
+      expect(menuView.evaluate('networks[networks.length-1].port'))
           .toBe(6697);
     });
 
@@ -143,8 +144,13 @@ describe('network-config', function() {
 
   describe('close action', function() {
 
-    var configView = element(by.css('[ui-view]'));
-    var confirmButton = element(by.buttonText('Confirm'));
+    var confirmDialog = configView.$('gaia-dialog-confirm');
+
+    function confirm() {
+      confirmDialog.execute(function(dialog){
+        dialog.els.submit.dispatchEvent(new Event('click'));
+      });
+    }
 
     beforeEach(function() {
       this.helpers.setDefaultNetworks();
@@ -154,8 +160,8 @@ describe('network-config', function() {
     it('should close a new network', function() {
       openNewNetwork();
       configView.evaluate('onClose();');
-      expect(browser.getCurrentUrl()).toContain('show');
-      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+      expect(browser.getCurrentUrl()).not.toContain('config');
+      expect(menuView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
     });
 
     it('should close a new network when back to original state', function() {
@@ -167,8 +173,8 @@ describe('network-config', function() {
       tlsField.click();
       tlsField.click();
       configView.evaluate('onClose();');
-      expect(browser.getCurrentUrl()).toContain('show');
-      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+      expect(browser.getCurrentUrl()).not.toContain('config');
+      expect(menuView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
     });
 
     it('should show a warning for edited new network', function() {
@@ -176,15 +182,15 @@ describe('network-config', function() {
       nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');
-      configView.evaluate('confirmDialog.onConfirm();');
-      expect(browser.getCurrentUrl()).toContain('show');
-      expect(uiView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
+      confirm();
+      expect(browser.getCurrentUrl()).not.toContain('config');
+      expect(menuView.evaluate('networks.length')).toBe(DEFAULT_NETWORKS);
     });
 
     it('should close an existing network', function() {
       editNetwork(0);
       configView.evaluate('onClose();');
-      expect(browser.getCurrentUrl()).toContain('show');
+      expect(browser.getCurrentUrl()).not.toContain('config');
     });
 
     it('should show a warning for edited existing network', function() {
@@ -192,9 +198,9 @@ describe('network-config', function() {
       nameField.setInputText('Test Name');
       configView.evaluate('onClose();');
       expect(browser.getCurrentUrl()).toContain('config');
-      configView.evaluate('confirmDialog.onConfirm();');
-      expect(browser.getCurrentUrl()).toContain('show');
-      expect(uiView.evaluate('networks[0].name')).not.toBe('Test Name');
+      confirm();
+      expect(browser.getCurrentUrl()).not.toContain('config');
+      expect(menuView.evaluate('networks[0].name')).not.toBe('Test Name');
     });
 
   });
