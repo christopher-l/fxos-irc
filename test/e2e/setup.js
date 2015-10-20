@@ -16,7 +16,6 @@ beforeAll(function() {
    */
   this.helpers = {
     setDefaultNetworks: function() {
-      browser.get('');
       browser.executeScript(function() {
         /* global localStorage */
         /* jshint maxlen: false */

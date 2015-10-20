@@ -11,24 +11,50 @@ describe('channel-config', function() {
   var nameField = configView.$('[model="channel.name"]');
   var autoJoinField = configView.$('[model="channel.autoJoin"]');
 
+  var self;
+  var newChannelUrl = '#/config/channel//';
+
+  function openNewChannel() {
+    browser.get(newChannelUrl);
+  }
+
   function isConfigOpen() {
-    return configView.isPresent();
+    var deferred = protractor.promise.defer();
+    browser.getCurrentUrl().then(function(url) {
+      var result = url.includes('#/config/channel/');
+      deferred.fulfill(result);
+    });
+    return deferred.promise;
+  }
+
+  function editChannel(network, channel) {
+    browser.get('#/config/channel/' + network + '/' + channel);
   }
 
   beforeAll(function() {
+    self = this;
+    browser.get('');
     this.helpers.setDefaultNetworks();
   });
+
+  afterEach(function() {
+    this.helpers.setDefaultNetworks();
+  });
+
 
   describe('new channel', function() {
 
     beforeEach(function() {
-      browser.get('');
-      this.helpers.clickHeaderActionButton();
-      addChannelButton.click();
+      openNewChannel();
     });
 
     it('should open when clicking the "#" button', function() {
+      browser.get('');
+      expect(isConfigOpen()).toBe(false);
+      this.helpers.clickHeaderActionButton();
+      addChannelButton.click();
       expect(isConfigOpen()).toBe(true);
+      expect(browser.getCurrentUrl()).toContain(newChannelUrl);
     });
 
     it('should have the title "New Channel"', function() {
@@ -108,6 +134,75 @@ describe('channel-config', function() {
 
     expect(menuView.evaluate('networks[1].channels[0].name'))
         .toBe('channel3-new');
+  });
+
+
+  describe('close action', function() {
+
+    var confirmDialog = configView.$('gaia-dialog-confirm');
+
+    function close() {
+      configView.evaluate('onClose();');
+    }
+
+    function confirm() {
+      confirmDialog.execute(function(dialog){
+        /* global Event */
+        dialog.els.submit.dispatchEvent(new Event('click'));
+      });
+    }
+
+    beforeEach(function() {
+      this.helpers.setDefaultNetworks();
+    });
+
+    it('should close a new channel', function() {
+      openNewChannel();
+      close();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[0].channels.length')).toBe(2);
+    });
+
+    it('should close a new channel when back to original state', function() {
+      openNewChannel();
+      nameField.setInputText('testchannel');
+      nameField.setInputText('');
+      autoJoinField.click();
+      autoJoinField.click();
+      close();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[0].channels.length')).toBe(2);
+    });
+
+    it('should show a warning for edited new channel', function() {
+      openNewChannel();
+      nameField.setInputText('testchannel');
+      close();
+      expect(isConfigOpen()).toBe(true);
+      confirm();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[0].channels.length')).toBe(2);
+    });
+
+    it('should close an existing channel', function() {
+      editChannel('Foo', 'channel1');
+      expect(isConfigOpen()).toBe(true);
+      close();
+      expect(isConfigOpen()).toBe(false);
+    });
+
+    it('should show a warning for edited existing channel', function() {
+      editChannel('Foo', 'channel1');
+      nameField.setInputText('testchannel');
+      close();
+      expect(isConfigOpen()).toBe(true);
+      confirm();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[0].channels[0].name'))
+          .toBe('channel1');
+    });
+
+
   });
 
 });

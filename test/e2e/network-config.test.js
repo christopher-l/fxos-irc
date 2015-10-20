@@ -31,27 +31,40 @@ describe('network-config', function() {
   }
 
   function editNetwork(index) {
-      menuView.evaluate('drawer.open = true; $digest();');
-      var item;
-      if (index === 'last') {
-        item = networkItems.last();
-      } else {
-        item = networkItems.get(index);
-      }
-      var entry = item.$('div.network-entry');
-      browser.actions()
-          .mouseMove(entry)
-          .click(protractor.Button.RIGHT)
-          .perform();
-      var editButton = $('[irc-dialog="networkDialog"]')
-          .element(by.buttonText('Edit'));
-      editButton.click();
+    menuView.evaluate('drawer.open = true; $digest();');
+    var item;
+    if (index === 'last') {
+      item = networkItems.last();
+    } else {
+      item = networkItems.get(index);
+    }
+    var entry = item.$('div.network-entry');
+    browser.actions()
+        .mouseMove(entry)
+        .click(protractor.Button.RIGHT)
+        .perform();
+    var editButton = $('[irc-dialog="networkDialog"]')
+        .element(by.buttonText('Edit'));
+    editButton.click();
   }
+
+
+  beforeAll(function() {
+    browser.get('');
+    this.helpers.setDefaultNetworks();
+  });
+
+  afterEach(function() {
+    this.helpers.setDefaultNetworks();
+  });
+
+  beforeEach(function() {
+    browser.get('');
+  });
 
   describe('new network', function() {
 
     beforeEach(function() {
-      browser.get('');
       openNewNetwork();
     });
 
@@ -148,14 +161,10 @@ describe('network-config', function() {
 
     function confirm() {
       confirmDialog.execute(function(dialog){
+        /* global Event */
         dialog.els.submit.dispatchEvent(new Event('click'));
       });
     }
-
-    beforeEach(function() {
-      this.helpers.setDefaultNetworks();
-      browser.get('');
-    });
 
     it('should close a new network', function() {
       openNewNetwork();
