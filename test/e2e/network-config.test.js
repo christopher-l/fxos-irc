@@ -238,6 +238,23 @@ describe('network-config', function() {
       expect(menuView.evaluate('networks.length')).toBe(2);
     });
 
+    it('should save change to new name', function() {
+      editNetwork(0);
+      nameField.setInputText('Baz');
+      saveButton.click();
+      expect(alertDialog.isPresent()).toBe(false);
+      expect(menuView.evaluate('networks[0].name')).toBe('Baz');
+    });
+
+    it('should show a dialog when saving change to taken name', function() {
+      editNetwork(0);
+      nameField.setInputText('Bar');
+      saveButton.click();
+      expect(alertDialog.isPresent()).toBe(true);
+      expect(alertDialog.isDisplayed()).toBe(true);
+      expect(menuView.evaluate('networks[0].name')).toBe('Foo');
+    });
+
   });
 
 });
