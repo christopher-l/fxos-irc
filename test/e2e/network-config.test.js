@@ -214,4 +214,30 @@ describe('network-config', function() {
 
   });
 
+  describe('save action', function() {
+
+    var alertDialog = configView.$('gaia-dialog-alert');
+
+    it('should save when name is new', function() {
+      expect(menuView.evaluate('networks.length')).toBe(2);
+      openNewNetwork();
+      fillInMinimalConfig();
+      saveButton.click();
+      expect(alertDialog.isPresent()).toBe(false);
+      expect(menuView.evaluate('networks[2].name')).toBe('Test Name');
+    });
+
+    it('should show a dialog when name is taken', function() {
+      openNewNetwork();
+      fillInMinimalConfig();
+      nameField.setInputText('Bar');
+      expect(alertDialog.isDisplayed()).toBe(false);
+      saveButton.click();
+      expect(alertDialog.isPresent()).toBe(true);
+      expect(alertDialog.isDisplayed()).toBe(true);
+      expect(menuView.evaluate('networks.length')).toBe(2);
+    });
+
+  });
+
 });

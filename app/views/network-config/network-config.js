@@ -24,6 +24,10 @@ networkConfig.controller(
   $scope.isNew = network.isNew;
 
   $scope.onSave = function() {
+    if (nameExists()) {
+      $scope.alertDialog.open();
+      return;
+    }
     network.applyConfig(finalConfig($scope.network));
     $scope.back();
   };
@@ -45,6 +49,12 @@ networkConfig.controller(
       cfg.port = cfg.tls ? 6697 : 6667;
     }
     return cfg;
+  }
+
+  function nameExists() {
+    return networks.some(function(net) {
+      return  net !== network && net.name === $scope.network.name;
+    });
   }
 
 }]);
