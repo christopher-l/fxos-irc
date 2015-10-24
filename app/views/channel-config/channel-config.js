@@ -59,7 +59,7 @@ channelConfig.controller(
       $scope.alertDialog.open();
       return;
     }
-    channel.applyConfig(finalConfig($scope.channel), network);
+    channel.applyConfig($scope.channel, network);
     $scope.back();
   };
 
@@ -72,18 +72,9 @@ channelConfig.controller(
     }
   };
 
-  function finalConfig(config) {
-    var cfg = angular.copy(config);
-    if (cfg.name.match(/^#/)) {
-      cfg.name = cfg.name.slice(1);
-    }
-    return cfg;
-  }
-
   function nameExists() {
-    var name = finalConfig($scope.channel).name;
     return network.channels.some(function(chan) {
-      return chan !== channel && chan.name === name;
+      return chan !== channel && chan.name === $scope.channel.name;
     });
   }
 
