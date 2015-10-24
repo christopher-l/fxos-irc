@@ -8,7 +8,7 @@ describe('channel-config', function() {
   var title = configView.$('gaia-header > h1');
   var saveButton = configView.$('button');
   var networkField = configView.$('gaia-value-selector');
-  var nameField = configView.$('[model="channel.name"]');
+  var nameField = configView.$('[model="channelName"]');
   var autoJoinField = configView.$('[model="channel.autoJoin"]');
 
   var self;
@@ -63,7 +63,7 @@ describe('channel-config', function() {
 
     it('should have the correct defaults', function() {
       expect(networkField.getText()).toBe('Foo');
-      expect(nameField.getAttribute('value')).toBe('');
+      expect(nameField.getAttribute('value')).toBe('#');
       expect(autoJoinField.getAttribute('checked')).toBeFalsy();
     });
 
@@ -122,7 +122,7 @@ describe('channel-config', function() {
     $('[irc-dialog="channelDialog"]').element(by.buttonText('Edit')).click();
 
     expect(networkField.getText()).toBe('Bar');
-    expect(nameField.getAttribute('value')).toBe('channel3');
+    expect(nameField.getAttribute('value')).toBe('#channel3');
     expect(autoJoinField.getAttribute('checked')).toBeTruthy();
 
     networkField.click();

@@ -38,6 +38,20 @@ channelConfig.controller(
     }
   });
 
+  Object.defineProperty($scope, 'channelName', {
+    get: function() {
+      return '#' + ($scope.channel.name || '');
+    },
+    set: function(value) {
+      if (!value) {
+        value = '';
+      } else if (value.match(/^#/)) {
+        value = value.slice(1);
+      }
+      $scope.channel.name = value;
+    }
+  });
+
   $scope.isNew = channel.isNew;
 
   $scope.onSave = function() {

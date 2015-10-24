@@ -97,3 +97,36 @@ config.directive('ircAutofocus', ['$parse', function($parse) {
     link: link
   };
 }]);
+
+
+// The Channel Config Controller forces the input field to always have a '#'
+// before the actual name.  This directive compensates when the user tries to
+// delete the '#' or write in front of it.
+config.directive('ircChannelName', [function() {
+  var BACKSPACE = 8;
+  var input;
+  return {
+    restrict: 'A',
+    link: link
+  };
+  function link(scope, element, attrs) {
+    input = element[0].els.input;
+    input.addEventListener('keydown', onInput);
+  }
+  function onInput(evt) {
+    var start = input.selectionStart;
+    var end = input.selectionEnd;
+    // Don't delete it
+    if (evt.keyCode === BACKSPACE && start === 1 && end === 1) {
+      evt.preventDefault();
+    // If parts of the name are going to be overwritten, except the '#'
+    } else if (start === 0 && end > 0) {
+      input.setSelectionRange(1, end);
+    // If something should be done in front if the '#', move the cursor behind
+    // it instead
+    } else if (start === 0 && end === 0) {
+      evt.preventDefault();
+      input.setSelectionRange(1, 1);
+    }
+  }
+}]);
