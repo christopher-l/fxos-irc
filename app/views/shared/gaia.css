@@ -6,6 +6,7 @@ button.primary {
   color: var(--highlight-color) !important;
 }
 
+gaia-dialog-alert,
 gaia-dialog-select,
 gaia-dialog-action {
   z-index: 1;

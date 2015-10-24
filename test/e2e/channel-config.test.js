@@ -202,6 +202,84 @@ describe('channel-config', function() {
           .toBe('channel1');
     });
 
+  });
+
+  describe('save action', function() {
+
+    var alertDialog = configView.$('gaia-dialog-alert');
+
+    it('should save a new channel (network preselected)', function() {
+      openNewChannel();
+      nameField.setInputText('channel3');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[0].channels[2].name'))
+          .toBe('channel3');
+    });
+
+    it('should show a dialog when channel exists (network preselected)',
+        function() {
+      openNewChannel();
+      nameField.setInputText('channel2');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(true);
+      expect(alertDialog.isDisplayed()).toBe(true);
+    });
+
+    it('should save a new channel (network selected)', function() {
+      openNewChannel();
+      networkField.click();
+      configView.element(by.cssContainingText('li', 'Bar')).click();
+      nameField.setInputText('channel1');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[1].channels[2].name'))
+          .toBe('channel1');
+    });
+
+    it('should show a dialog when channel exists (network selected)',
+        function() {
+      openNewChannel();
+      networkField.click();
+      configView.element(by.cssContainingText('li', 'Bar')).click();
+      nameField.setInputText('channel3');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(true);
+      expect(alertDialog.isDisplayed()).toBe(true);
+    });
+
+    it('should show the correct dialog text', function() {
+      openNewChannel();
+      nameField.setInputText('channel2');
+      saveButton.click();
+      expect(alertDialog.getText())
+          .toBe('The channel #channel2 already exists on network Foo.');
+    });
+
+    it('should show the correct dialog text (# added)', function() {
+      openNewChannel();
+      nameField.setInputText('#channel2');
+      saveButton.click();
+      expect(alertDialog.getText())
+          .toBe('The channel #channel2 already exists on network Foo.');
+    });
+
+    it('should save change to new channel', function() {
+      editChannel('Bar', 'channel3');
+      nameField.setInputText('channel2');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(false);
+      expect(menuView.evaluate('networks[1].channels[0].name'))
+          .toBe('channel2');
+    });
+
+    it('should show a dialog when saving change to taken channel', function() {
+      editChannel('Bar', 'channel3');
+      nameField.setInputText('channel4');
+      saveButton.click();
+      expect(isConfigOpen()).toBe(true);
+      expect(alertDialog.isDisplayed()).toBe(true);
+    });
 
   });
 

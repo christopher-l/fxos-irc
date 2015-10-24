@@ -26,6 +26,7 @@ channelConfig.controller(
 
   $scope.networks = networks;
   $scope.channel = channel.getConfig();
+  $scope.network = network.name;
 
   Object.defineProperty($scope, 'networkIndex', {
     get: function() {
@@ -33,12 +34,17 @@ channelConfig.controller(
     },
     set: function(value) {
       network = networks[value];
+      $scope.network = network.name;
     }
   });
 
   $scope.isNew = channel.isNew;
 
   $scope.onSave = function() {
+    if (nameExists()) {
+      $scope.alertDialog.open();
+      return;
+    }
     channel.applyConfig(finalConfig($scope.channel), network);
     $scope.back();
   };
@@ -58,6 +64,13 @@ channelConfig.controller(
       cfg.name = cfg.name.slice(1);
     }
     return cfg;
+  }
+
+  function nameExists() {
+    var name = finalConfig($scope.channel).name;
+    return network.channels.some(function(chan) {
+      return chan !== channel && chan.name === name;
+    });
   }
 
 }]);
