@@ -37,7 +37,7 @@ views.config(['$stateProvider', '$urlRouterProvider',
         },
       })
       .state('main.conversation', {
-        url: '',
+        url: ':network/:channel',
         templateUrl: 'views/conversation/conversation.html',
         controller: 'ConversationCtrl'
       })

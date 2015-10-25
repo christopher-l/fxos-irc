@@ -194,10 +194,12 @@ networks.factory(
  */
 networks.factory(
     'Network', [
+      '$q',
+      '$timeout',
       'netData',
       'NetBase',
       'Channel',
-      function NetworkFactory(netData, NetBase, Channel) {
+      function NetworkFactory($q, $timeout, netData, NetBase, Channel) {
 
   function Network(storageRef) {
     NetBase.call(this, storageRef);
@@ -248,6 +250,17 @@ networks.factory(
 
   NetBase.defineConfigProps(Network.prototype, Network.prototype._configProps);
   NetBase.defineStateProps(Network.prototype, Network.prototype._stateProps);
+
+  Network.prototype.connect = function() {
+    var self = this;
+    var deferred = $q.defer();
+    this.status = 'connecting';
+    $timeout(function() {
+      self.status = 'connected';
+      deferred.resolve();
+    }, 500);
+    return deferred.promise;
+  };
 
   return Network;
 

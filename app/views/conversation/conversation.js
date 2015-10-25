@@ -14,9 +14,35 @@ conversation.directive('ircConversationView', [function() {
 }]);
 
 
-conversation.controller('ConversationCtrl', ['$scope', 'settings',
-    function($scope, settings) {
+conversation.controller(
+    'ConversationCtrl', [
+      '$rootScope',
+      '$scope',
+      '$stateParams',
+      'networks',
+      'settings',
+      function($rootScope, $scope, $stateParams, networks, settings) {
+
   $scope.settings = settings.data;
+
+  this.network = networks.find(function(network) {
+    return network.name === $stateParams.network;
+  });
+
+  if (this.network) {
+    this.channel = this.network.channels.find(function(channel) {
+      return channel.name === $stateParams.channel;
+    });
+  }
+
+  this.room = this.channel || this.network;
+
+  if (this.channel) {
+    $rootScope.title = '#' + this.channel.name;
+  } else if (this.network) {
+    $rootScope.title = this.network.name;
+  }
+
   $scope.users = ['Fooooo', 'bar', 'baz'];
   $scope.messages = [
     {

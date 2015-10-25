@@ -10,22 +10,56 @@ menu.controller(
     'MenuCtrl', [
       '$scope',
       '$timeout',
+      '$state',
       'networks',
       function MenuCtrl(
           $scope,
           $timeout,
+          $state,
           networks) {
 
   $scope.networks = networks;
 
+  var activeRoom = null;
+
+  function focusGeneric(room) {
+    if (activeRoom) {
+      activeRoom.focused = false;
+    }
+    activeRoom = room;
+    room.focused = true;
+  }
+
+  function focusNetwork(network) {
+    focusGeneric(network);
+    $scope.activeNetwork = network;
+    network.collapsed = false;
+    $state.go('main.conversation', {
+      network: network.name,
+      channel: null
+    });
+  }
+
+  function focusChannel(channel) {
+    focusGeneric(channel);
+    $scope.activeNetwork = channel.network.name;
+    $state.go('main.conversation', {
+      network: channel.network.name,
+      channel: channel.name
+    });
+  }
+
+
   // Networks
   $scope.onNetClick = function(network) {
-    $scope.focus(network);
+    if (network.focused && network.status === 'connected') {
+      $scope.drawer.open = false;
+    }
+    if (!network.focused) {
+      focusNetwork(network);
+    }
     if (network.status !== 'connected') {
-      network.status = 'connecting';
-      $timeout(function() {
-        network.status = 'connected';
-      }, 500);
+      network.connect();
     }
   };
 
@@ -53,8 +87,18 @@ menu.controller(
 
   // Channels
   $scope.onChanClick = function(channel) {
-    $scope.focus(channel);
-    channel.joined = true;
+    if (!channel.focused) {
+      focusChannel(channel);
+    }
+    if (channel.network.status === 'connected') {
+      channel.joined = true;
+      $scope.drawer.open = false;
+    } else {
+      channel.network.connect().then(function() {
+        channel.joined = true;
+        $scope.drawer.open = false;
+      });
+    }
   };
 
   $scope.onChanContext = function(channel) {
@@ -71,16 +115,6 @@ menu.controller(
     channel.delete();
     // One additional digest cycle, so it will notice the height
     $timeout();
-  };
-
-  $scope.onAddChannel = function() {
-    $scope.channelDialog.close();
-    channelConfig.open(null, $scope.current.network || networks[0]);
-  };
-
-  $scope.onEditChannel = function(channel) {
-    $scope.channelDialog.close();
-    channelConfig.open(channel);
   };
 
 }]);
