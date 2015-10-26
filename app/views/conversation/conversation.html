@@ -21,6 +21,8 @@
 </section>
 
 <gaia-text-input-multiline
-    irc-message-input on-resize="messageView.updateScrollPos()"
-    irc-complete="users">
+    irc-text-input-multiline model="messageInput"
+    irc-fit-height on-resize="messageView.updateScrollPos()"
+    irc-complete="users"
+    irc-on-enter="onSubmit()">
 </gaia-text-input-multiline>

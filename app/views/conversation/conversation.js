@@ -82,10 +82,15 @@ conversation.controller(
       user: 'Juliet',
     },
   ];
+
+  $scope.onSubmit = function() {
+    console.log($scope.messageInput);
+    $scope.messageInput = '';
+  };
 }]);
 
 conversation.directive(
-    'ircMessageInput', [
+    'ircFitHeight', [
       function() {
   function link(scope, element, attrs) {
     // from https://stackoverflow.com/a/995374
@@ -114,6 +119,30 @@ conversation.directive(
     restrict: 'A',
     link: link
   };
+}]);
+
+conversation.directive(
+    'ircOnEnter', [
+      function() {
+
+  return {
+    restrict: 'A',
+    link: link
+  };
+
+  function link(scope, element, attrs) {
+    var ENTER = 13;
+    var field = angular.element(element[0].els.field);
+    field.on('keydown', function(evt) {
+      if (evt.which === ENTER) {
+        scope.$apply(function() {
+          scope.$eval(attrs.ircOnEnter, {e: evt});
+        });
+        evt.preventDefault();
+      }
+    });
+  }
+
 }]);
 
 conversation.directive(
