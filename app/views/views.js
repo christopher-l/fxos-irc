@@ -39,7 +39,8 @@ views.config(['$stateProvider', '$urlRouterProvider',
       .state('main.conversation', {
         url: ':network/:channel',
         templateUrl: 'views/conversation/conversation.html',
-        controller: 'ConversationCtrl'
+        controller: 'ConversationCtrl',
+        controllerAs: 'CC'
       })
       .state('settings', {
         url: '/settings',

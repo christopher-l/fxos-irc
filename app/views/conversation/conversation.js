@@ -23,6 +23,8 @@ conversation.controller(
       'settings',
       function($rootScope, $scope, $stateParams, networks, settings) {
 
+  var self = this;
+  
   $scope.settings = settings.data;
 
   this.network = networks.find(function(network) {
@@ -44,50 +46,20 @@ conversation.controller(
   }
 
   $scope.users = ['Fooooo', 'bar', 'baz'];
-  $scope.messages = [
-    {
-      type: 'message',
-      time: '18:46',
-      user: 'Juliet',
-      content: 'O Romeo, Romeo, wherefore art thou Romeo?',
-      highlight: true,
-    },
-    {
-      type: 'message',
-      time: '18:47',
-      user: 'Juliet',
-      content: 'Deny thy father and refuse thy name;',
-    },
-    {
-      type: 'message',
-      time: '18:47',
-      user: 'Juliet',
-      content: 'Or if thou wilt not, be but sworn my love',
-    },
-    {
-      type: 'message',
-      time: '18:47',
-      user: 'Juliet',
-      content: 'And I\'ll no longer be a Capulet.',
-    },
-    {
-      type: 'message',
-      time: '18:49',
-      user: 'Romeo',
-      content: 'Shall I hear more, or shall I speak at this?',
-    },
-    {
-      type: 'disconnect',
-      time: '18:49',
-      user: 'Juliet',
-    },
-  ];
+  $scope.messages = [];
 
   $scope.onSubmit = function() {
-    console.log($scope.messageInput);
+    var message = {
+      type: 'message',
+      user: self.network.nick,
+      time: new Date(),
+      content: $scope.messageInput,
+    };
+    $scope.messages.push(message);
     $scope.messageInput = '';
   };
 }]);
+
 
 conversation.directive(
     'ircFitHeight', [
@@ -136,7 +108,7 @@ conversation.directive(
     field.on('keydown', function(evt) {
       if (evt.which === ENTER) {
         scope.$apply(function() {
-          scope.$eval(attrs.ircOnEnter, {e: evt});
+          scope.$eval(attrs.ircOnEnter);
         });
         evt.preventDefault();
       }

@@ -5,7 +5,9 @@
     <div ng-if="::message.type === 'message'">
       <div class="header">
         <span class="user">{{::message.user}}</span>
-        <span class="time">{{::message.time}}</span>
+        <span class="time">
+          {{::message.time.getHours()}}:{{::message.time.getMinutes()}}
+        </span>
       </div>
       <div class="content">
         {{::message.content}}
@@ -24,5 +26,6 @@
     irc-text-input-multiline model="messageInput"
     irc-fit-height on-resize="messageView.updateScrollPos()"
     irc-complete="users"
-    irc-on-enter="onSubmit()">
+    irc-on-enter="onSubmit()"
+    placeholder="{{CC.network.nick}}">
 </gaia-text-input-multiline>

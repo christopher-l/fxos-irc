@@ -3,3 +3,6 @@
   - Reconnect / Join on change
   - Automatically join new channel
   - Hide saved passwords
+
+- Main:
+  - State -> Focus
