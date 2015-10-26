@@ -8,13 +8,17 @@ beforeAll(function() {
    */
   var WIDTH = 360;
   var HEIGHT = 640;
-  browser.driver.manage().window().setSize(WIDTH, HEIGHT);
+  setWindowSize();
 
+  function setWindowSize() {
+    browser.driver.manage().window().setSize(WIDTH, HEIGHT);
+  }
 
   /**
    * Helpers
    */
   this.helpers = {
+    setWindowSize: setWindowSize,
     setDefaultNetworks: function() {
       browser.executeScript(function() {
         /* global localStorage */

@@ -24,7 +24,7 @@ conversation.controller(
       function($rootScope, $scope, $stateParams, networks, settings) {
 
   var self = this;
-  
+
   $scope.settings = settings.data;
 
   this.network = networks.find(function(network) {
@@ -46,7 +46,7 @@ conversation.controller(
   }
 
   $scope.users = ['Fooooo', 'bar', 'baz'];
-  $scope.messages = [];
+  $scope.messages = this.room.messages;
 
   $scope.onSubmit = function() {
     var message = {
@@ -57,6 +57,7 @@ conversation.controller(
     };
     $scope.messages.push(message);
     $scope.messageInput = '';
+    $scope.messageView.updateScrollPos();
   };
 }]);
 

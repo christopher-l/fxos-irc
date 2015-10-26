@@ -54,6 +54,7 @@ networks.factory(
         config: this._config,
       };
     }
+    this.messages = [];
   };
 
   Base.defineConfigProps = function(proto, props) {
