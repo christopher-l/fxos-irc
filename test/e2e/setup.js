@@ -59,15 +59,6 @@ beforeAll(function() {
     return this.elementArrayFinder_.hasAttribute(attribute).toElementFinder_();
   };
 
-  ElementArrayFinder.prototype.execute = function(script) {
-    function executeFn(webElem) {
-      return webElem.getDriver().executeScript(
-          script, webElem);
-    }
-
-    return this.applyAction_(executeFn);
-  };
-
   ElementArrayFinder.prototype.getProperty = function(property) {
     function getProperty(element, property) {
       return element[property];
@@ -85,17 +76,17 @@ beforeAll(function() {
     return this.elementArrayFinder_.getProperty(property).toElementFinder_();
   };
 
-  ElementArrayFinder.prototype.execute = function(script) {
+  ElementArrayFinder.prototype.execute = function(script, params) {
     function executeFn(webElem) {
       return webElem.getDriver().executeScript(
-          script, webElem);
+          script, webElem, params);
     }
 
     return this.applyAction_(executeFn);
   };
 
-  ElementFinder.prototype.execute = function(script) {
-    return this.elementArrayFinder_.execute(script).toElementFinder_();
+  ElementFinder.prototype.execute = function(script, params) {
+    return this.elementArrayFinder_.execute(script, params).toElementFinder_();
   };
 
   ElementArrayFinder.prototype.setInputText = function(text) {

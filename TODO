@@ -6,3 +6,6 @@
 
 - Main:
   - State -> Focus
+
+- conversation
+  - Leading 0 for single digit minutes

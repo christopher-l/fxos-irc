@@ -13,15 +13,21 @@ describe('conversation', function() {
   }
 
   function scrollDown() {
-    // implement
+    messages.execute(function(messages) {
+      messages.scrollTo(0, messages.scrollHeight);
+    });
   }
 
   function scrollUp(pixels) {
-    // implement
+    messages.execute(function(messages, pixels) {
+      messages.scrollBy(0, -pixels);
+    }, pixels);
   }
 
   function getScrollPosition() {
-    // implement
+    return messages.execute(function(messages) {
+      return messages.scrollTop;
+    });
   }
 
   function receiveMessage() {
@@ -81,15 +87,17 @@ describe('conversation', function() {
 
   it('shoud not scroll on size change, when scrolled up', function() {
     scrollUp(10);
-    var scrollPosition = getScrollPosition();
-    decreaseWindowHeight(10);
-    expect(isScrolledDown()).toBe(false);
-    expect(getScrollPosition()).toBe(scrollPosition);
+    getScrollPosition().then(function(scrollPosition) {
+      decreaseWindowHeight(10);
+      expect(isScrolledDown()).toBe(false);
+      expect(getScrollPosition()).toBe(scrollPosition);
+    });
   });
 
   it('should scroll down on size change, when scrolled down', function() {
     scrollUp(10);
     scrollDown();
+    decreaseWindowHeight(10);
     expect(isScrolledDown()).toBe(true);
   });
 
