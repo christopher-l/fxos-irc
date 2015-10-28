@@ -18,10 +18,11 @@ conversation.controller(
     'ConversationCtrl', [
       '$rootScope',
       '$scope',
+      '$timeout',
       '$stateParams',
       'networks',
       'settings',
-      function($rootScope, $scope, $stateParams, networks, settings) {
+      function($rootScope, $scope, $timeout, $stateParams, networks, settings) {
 
   var self = this;
 
@@ -57,8 +58,12 @@ conversation.controller(
     };
     $scope.messages.push(message);
     $scope.messageInput = '';
-    $scope.messageView.updateScrollPos();
+    $timeout(() => $scope.messageView.scrollDown());
   };
+
+  $scope.$watch('messages.length', function() {
+    $timeout(() => $scope.messageView.onResize());
+  });
 }]);
 
 
@@ -112,6 +117,7 @@ conversation.directive(
           scope.$eval(attrs.ircOnEnter);
         });
         evt.preventDefault();
+        field.triggerHandler('input');
       }
     });
   }
@@ -124,8 +130,9 @@ conversation.directive(
       function($parse, $window) {
   // Scroll down the element content initially.
   // Functions:
-  //    updateScrollPos()   If the last position the user scrolled to was the
-  //                        bottom, scroll to the bottom now.
+  //    onResize()   To be called when either the element's or the element's
+  //                 content's height changes.
+  //    scrollDown() Scroll down now.
   function link(scope, element, attrs) {
     var model = $parse(attrs.ircMessages);
     if (!model(scope)) { model.assign(scope, {}); }
@@ -134,19 +141,20 @@ conversation.directive(
     function scrollDown() {
       element[0].scrollTo(0, element[0].scrollHeight);
     }
-    function updateMaxScroll() {
+    function updateMaxScrollTop() {
       maxScrollTop = element[0].scrollHeight - element[0].offsetHeight;
-    }
-    function onResize() {
-      updateMaxScroll();
-      updateScrollPos();
     }
     function updateScrollPos() {
       if (!userScrolled) {
         scrollDown();
       }
     }
-    model(scope).updateScrollPos = updateScrollPos;
+    function onResize() {
+      updateMaxScrollTop();
+      updateScrollPos();
+    }
+    model(scope).scrollDown = scrollDown;
+    model(scope).onResize = onResize;
     setTimeout(onResize);
     angular.element($window).bind('resize', onResize);
 

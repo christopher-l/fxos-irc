@@ -125,6 +125,24 @@ beforeAll(function() {
     return this.elementArrayFinder_.getInputText().toElementFinder_();
   };
 
+  ElementArrayFinder.prototype.setFieldText = function(text) {
+    function setFieldText(element, text) {
+      element.value = text;
+      element.els.field.dispatchEvent(new CustomEvent('field'));
+    }
+
+    function setFieldTextFn(webElem) {
+      return webElem.getDriver().executeScript(
+          setFieldText, webElem, text);
+    }
+
+    return this.applyAction_(setFieldTextFn);
+  };
+
+  ElementFinder.prototype.setFieldText = function(text) {
+    return this.elementArrayFinder_.setFieldText(text).toElementFinder_();
+  };
+
   // var ProtractorBy = by.constructor;
   //
   // ProtractorBy.prototype.shadowCss = function(selector) {

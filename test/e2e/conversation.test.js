@@ -4,6 +4,7 @@ describe('conversation', function() {
 
   var view = $('#conversation-view');
   var messages = view.$('#messages');
+  var messageInput = view.$('gaia-text-input-multiline');
 
   function isScrolledDown() {
     return messages.execute(function(messages) {
@@ -31,11 +32,18 @@ describe('conversation', function() {
   }
 
   function receiveMessage() {
-    // implement
+    view.evaluate(`
+      messages.push({
+        type: 'message',
+        content: 'Baaaaar',
+        user: 'McDoodle',
+      });
+    `);
   }
 
   function sendMessage() {
-    // implement
+    messageInput.setFieldText('Fufufu');
+    view.evaluate('onSubmit(); $digest()');
   }
 
   function decreaseWindowHeight(pixels) {
@@ -87,11 +95,10 @@ describe('conversation', function() {
 
   it('shoud not scroll on size change, when scrolled up', function() {
     scrollUp(10);
-    getScrollPosition().then(function(scrollPosition) {
-      decreaseWindowHeight(10);
-      expect(isScrolledDown()).toBe(false);
-      expect(getScrollPosition()).toBe(scrollPosition);
-    });
+    expect(isScrolledDown()).toBe(false);
+    var scrollPosition = getScrollPosition();
+    decreaseWindowHeight(10);
+    expect(getScrollPosition()).toBe(scrollPosition);
   });
 
   it('should scroll down on size change, when scrolled down', function() {

@@ -24,7 +24,7 @@
 
 <gaia-text-input-multiline
     irc-text-input-multiline model="messageInput"
-    irc-fit-height on-resize="messageView.updateScrollPos()"
+    irc-fit-height on-resize="messageView.onResize()"
     irc-complete="users"
     irc-on-enter="onSubmit()"
     placeholder="{{CC.network.nick}}">
