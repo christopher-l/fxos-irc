@@ -1,0 +1,53 @@
+#userlist-view {
+  position: absolute;
+  height: calc(100% - 50px);
+  width: 100%;
+  z-index: 10;
+  transition-duration: 200ms;
+}
+
+#userlist-view .background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+}
+
+#userlist-view .inner {
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  right: 0px;
+  background-color: var(--background);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#userlist-view .inner li span{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#userlist-view.ng-enter .background,
+#userlist-view.ng-leave.ng-leave-active .background {
+  opacity: 0;
+}
+
+#userlist-view.ng-enter.ng-enter-active .background,
+#userlist-view.ng-leave .background {
+  transition: opacity 200ms 0ms;
+  opacity: 0.5;
+}
+
+#userlist-view.ng-enter .inner,
+#userlist-view.ng-leave.ng-leave-active .inner {
+  transform: translateX(200px);
+}
+
+#userlist-view.ng-enter.ng-enter-active .inner,
+#userlist-view.ng-leave .inner {
+  transform: translateX(0);
+  transition: transform 200ms 0ms;
+}

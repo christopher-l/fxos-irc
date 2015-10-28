@@ -1,8 +1,13 @@
 <gaia-header action="menu" irc-action="drawer.open = !drawer.open">
   <h1>{{title}}</h1>
-  <button>
-    <div id="user-count" style="opacity: {{drawer.open ? 0 : 1}}">
-      42
+  <button
+      ng-disabled="drawer.open"
+      ng-if="MC.channel"
+      ng-click="MC.toggleUserlist()">
+    <div
+        id="user-count"
+        style="opacity: {{drawer.open ? 0 : 1}}">
+      {{MC.channel.users.length}}
     </div>
   </button>
 </gaia-header>

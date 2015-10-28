@@ -2,6 +2,7 @@
 
 var main = angular.module('irc.views.main', [
   'irc.views.conversation',
+  'irc.views.userlist',
   'irc.views.menu',
   'irc.views.main.directives',
 ]);
@@ -10,8 +11,9 @@ var main = angular.module('irc.views.main', [
 main.controller(
     'MainCtrl', [
       '$scope',
+      '$state',
       'networks',
-      function MainCtrl($scope, networks) {
+      function MainCtrl($scope, $state, networks) {
 
   this.updateCurrentRoom = function updateCurrentRoom(params) {
     this.network = networks.find(function(network) {
@@ -33,6 +35,12 @@ main.controller(
     }
   };
 
-  $scope.users = ['Fooooo', 'bar', 'baz'];
+  this.toggleUserlist = function() {
+    if ($state.includes('main.conversation.users')) {
+      $state.go('main.conversation');
+    } else {
+      $state.go('main.conversation.users');
+    }
+  };
 
 }]);

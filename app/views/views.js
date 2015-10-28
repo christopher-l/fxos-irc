@@ -44,6 +44,12 @@ views.config(['$stateProvider', '$urlRouterProvider',
         controller: 'ConversationCtrl',
         controllerAs: 'CC'
       })
+      .state('main.conversation.users', {
+        url: '/users',
+        templateUrl: 'views/userlist/userlist.html',
+        controller: 'UserlistCtrl',
+        controllerAs: 'UC'
+      })
       .state('settings', {
         url: '/settings',
         templateUrl: 'views/settings/settings.html',

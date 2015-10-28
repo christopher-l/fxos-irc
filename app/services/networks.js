@@ -151,6 +151,17 @@ networks.factory(
       // this._state = storageRef.lastState;
       this._setNetwork(network);
     }
+    this.users = ['Fooooo', 'bar', 'baz',
+    'asdfd',
+    'asdfasdfasasdfasdfasdf',
+    'asdf',
+    'asdfasf',
+    'asdf234',
+    'asdfzxc',
+    'asdflkj',
+    'asdfqwe',
+    'asdfxzcv',
+    'asdfzc'];
   }
 
   Channel.prototype = Object.create(Base.prototype);

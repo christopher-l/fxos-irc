@@ -1,3 +1,9 @@
+<div
+    ui-view
+    id="userlist-view"
+    ng-show="$state.includes('main.conversation.users')">
+</div>
+
 <section id="messages" style="font-size: {{settings.fontSize}}pt;"
     irc-messages="messageView">
   <div ng-repeat="message in messages"
