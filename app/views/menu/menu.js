@@ -20,47 +20,38 @@ menu.controller(
 
   $scope.networks = networks;
 
+  var MainCtrl = $scope.MC;
+
   var activeRoom = null;
 
-  function focusGeneric(room) {
+  function focus(room) {
     if (activeRoom) {
       activeRoom.focused = false;
     }
-    activeRoom = room;
-    room.focused = true;
+    activeRoom = MainCtrl.room;
+    if (MainCtrl.room) {
+      MainCtrl.room.focused = true;
+      MainCtrl.network.collapsed = false;
+    }
   }
 
-  function focusNetwork(network) {
-    focusGeneric(network);
-    $scope.activeNetwork = network;
-    network.collapsed = false;
-    $state.go('main.conversation', {
-      network: network.name,
-      channel: null
-    });
-  }
-
-  function focusChannel(channel) {
-    focusGeneric(channel);
-    $scope.activeNetwork = channel.network.name;
-    $state.go('main.conversation', {
-      network: channel.network.name,
-      channel: channel.name
-    });
-  }
-
+  $scope.$on('$stateChangeSuccess', function() {
+    focus($scope.MC.room);
+  });
 
   // Networks
   $scope.onNetClick = function(network) {
-    if (network.focused && network.status === 'connected') {
-      $scope.drawer.open = false;
-    }
-    if (!network.focused) {
-      focusNetwork(network);
-    }
     if (network.status !== 'connected') {
       network.connect();
+      return;
     }
+    if (!network.focused) {
+      $state.go('main.conversation', {
+        network: network.name,
+        channel: null
+      });
+    }
+    $scope.drawer.open = false;
   };
 
   $scope.onNetContext = function(network) {
@@ -88,7 +79,10 @@ menu.controller(
   // Channels
   $scope.onChanClick = function(channel) {
     if (!channel.focused) {
-      focusChannel(channel);
+      $state.go('main.conversation', {
+        network: channel.network.name,
+        channel: channel.name
+      });
     }
     if (channel.network.status === 'connected') {
       channel.joined = true;
@@ -113,7 +107,7 @@ menu.controller(
   $scope.onRemove = function(channel) {
     $scope.channelDialog.close();
     channel.delete();
-    // One additional digest cycle, so it will notice the height
+    // One additional digest cycle, so it will notice the height change
     $timeout();
   };
 

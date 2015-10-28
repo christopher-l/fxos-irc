@@ -16,43 +16,25 @@ conversation.directive('ircConversationView', [function() {
 
 conversation.controller(
     'ConversationCtrl', [
-      '$rootScope',
       '$scope',
       '$timeout',
       '$stateParams',
-      'networks',
       'settings',
-      function($rootScope, $scope, $timeout, $stateParams, networks, settings) {
-
-  var self = this;
+      function($scope, $timeout, $stateParams, settings) {
 
   $scope.settings = settings.data;
 
-  this.network = networks.find(function(network) {
-    return network.name === $stateParams.network;
-  });
+  var MainCtrl = $scope.MC;
+  MainCtrl.updateCurrentRoom($stateParams);
 
-  if (this.network) {
-    this.channel = this.network.channels.find(function(channel) {
-      return channel.name === $stateParams.channel;
-    });
+  if (MainCtrl.room) {
+    $scope.messages = MainCtrl.room.messages;
   }
-
-  this.room = this.channel || this.network;
-
-  if (this.channel) {
-    $rootScope.title = '#' + this.channel.name;
-  } else if (this.network) {
-    $rootScope.title = this.network.name;
-  }
-
-  $scope.users = ['Fooooo', 'bar', 'baz'];
-  $scope.messages = this.room.messages;
 
   $scope.onSubmit = function() {
     var message = {
       type: 'message',
-      user: self.network.nick,
+      user: MainCtrl.network.nick,
       time: new Date(),
       content: $scope.messageInput,
     };

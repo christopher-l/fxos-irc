@@ -29,10 +29,12 @@ views.config(['$stateProvider', '$urlRouterProvider',
           'main@': {
             templateUrl: 'views/main/main.html',
             controller: 'MainCtrl',
+            controllerAs: 'MC',
           },
           'menu@main': {
             templateUrl: 'views/menu/menu.html',
             controller: 'MenuCtrl',
+            controllerAs: 'MenuCtrl',
           },
         },
       })

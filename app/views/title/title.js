@@ -7,11 +7,11 @@ var title = angular.module('irc.views.title', [
 
 title.controller(
     'TitleCtrl', [
-      '$rootScope', '$scope', 'theme',
-      function TitleCtrl($rootScope, $scope, theme) {
+      '$scope', 'theme',
+      function TitleCtrl($scope, theme) {
 
   $scope.statusbarColor = 'var(--header-background)';
-  $rootScope.title = 'IRC';
+  $scope.title = 'IRC';
   $scope.theme = theme;
   theme.titleScope = $scope;
 }]);
