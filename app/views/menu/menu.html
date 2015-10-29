@@ -20,10 +20,6 @@
             <div class="network-name">{{network.name}}</div>
             <div class="network-info">{{network.status}}</div>
           </span>
-          <span class="counter"
-                ng-attr-hidden="{{network.unreadCount == 0 || undefined}}">
-            {{network.unreadCount}}
-          </span>
         </div>
 
         <!-- Keep a wrapper div with unchanged height, so we can collapse and

@@ -70,20 +70,6 @@ networks.factory(
     });
   };
 
-  Base.defineStateProps = function(proto, props) {
-    props.forEach(function(key) {
-      Object.defineProperty(proto, key, {
-        get: function() {
-          return this._state[key];
-        },
-        set: function(value) {
-          this._state[key] = value;
-          this.save();
-        }
-      });
-    });
-  };
-
   Base.prototype = {
     getConfig: function() {
       return angular.copy(this._config);
@@ -144,13 +130,9 @@ networks.factory(
 
   function Channel(storageRef, network) {
     Base.call(this, storageRef);
-    this._state = {
-      unreadCount: 0,
-    };
-    if (storageRef) {
-      // this._state = storageRef.lastState;
-      this._setNetwork(network);
-    }
+    // set up state
+    this.unreadCount = 0;
+    this.joined = false;
     this.users = ['Fooooo', 'bar', 'baz',
     'asdfd',
     'asdfasdfasasdfasdfasdf',
@@ -185,14 +167,7 @@ networks.factory(
     'autoJoin'
   ];
 
-  Channel.prototype._stateProps = [
-    'focused',
-    'joined',
-    'unreadCount',
-  ];
-
   Base.defineConfigProps(Channel.prototype, Channel.prototype._configProps);
-  Base.defineStateProps(Channel.prototype, Channel.prototype._stateProps);
 
   return Channel;
 
@@ -218,16 +193,8 @@ networks.factory(
     this._storage = netData.storage.data;
     this._volatile = netData.networks;
     // Set up state
-    this._state = {
-      status: 'disconnected',
-      unreadCount: 0,
-      focused: false,
-      collapsed: false,
-    };
-    if (storageRef) {
-      this._state.collapsed = storageRef.lastState.collapsed;
-    }
-    this._storageRef.lastState = this._state;
+    this.status = 'disconnected';
+    this.collapsed = true;
     // Set up channels
     if (!storageRef) {
       this._storageRef.channels = [];
@@ -253,15 +220,7 @@ networks.factory(
     'password',
   ];
 
-  Network.prototype._stateProps = [
-    'status',
-    'unreadCount',
-    'focused',
-    'collapsed',
-  ];
-
   NetBase.defineConfigProps(Network.prototype, Network.prototype._configProps);
-  NetBase.defineStateProps(Network.prototype, Network.prototype._stateProps);
 
   Network.prototype.connect = function() {
     var self = this;
