@@ -2,7 +2,7 @@
   <h1>{{title}}</h1>
   <button
       ng-disabled="drawer.open"
-      ng-if="MC.channel"
+      ng-show="MC.channel && MC.channel.users"
       ng-click="MC.toggleUserlist()">
     <div
         id="user-count"

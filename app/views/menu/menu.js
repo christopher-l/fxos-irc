@@ -43,7 +43,7 @@ menu.controller(
 
   // Networks
   $scope.onNetClick = function(network) {
-    if (network.status !== 'connected') {
+    if (!network.online) {
       network.connect();
       $state.go('main.conversation', {
         network: network.name,
@@ -90,12 +90,12 @@ menu.controller(
         channel: channel.name
       });
     }
-    if (channel.network.status === 'connected') {
-      channel.joined = true;
+    if (channel.network.online) {
+      channel.join();
       $scope.drawer.open = false;
     } else {
       channel.network.connect().then(function() {
-        channel.joined = true;
+        channel.join();
         $scope.drawer.open = false;
       });
     }

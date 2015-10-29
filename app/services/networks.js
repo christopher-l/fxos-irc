@@ -138,17 +138,6 @@ networks.factory(
     // set up state
     this.unreadCount = 0;
     this.joined = false;
-    this.users = ['Fooooo', 'bar', 'baz',
-    'asdfd',
-    'asdfasdfasasdfasdfasdf',
-    'asdf',
-    'asdfasf',
-    'asdf234',
-    'asdfzxc',
-    'asdflkj',
-    'asdfqwe',
-    'asdfxzcv',
-    'asdfzc'];
   }
 
   Channel.prototype = Object.create(Base.prototype);
@@ -182,15 +171,32 @@ networks.factory(
       deferred.reject();
     } else {
       $timeout(function() {
-        self.joined = true;
+        self._onJoined();
         deferred.resolve();
       }, 500);
     }
     return deferred.promise;
   };
 
+  Channel.prototype._onJoined = function() {
+    this.joined = true;
+    this.users = ['Fooooo', 'bar', 'baz',
+      'asdfd',
+      'asdfasdfasasdfasdfasdf',
+      'asdf',
+      'asdfasf',
+      'asdf234',
+      'asdfzxc',
+      'asdflkj',
+      'asdfqwe',
+      'asdfxzcv',
+      'asdfzc'
+    ];
+  };
+
   Channel.prototype.part = function() {
     this.joined = false;
+    this.users = null;
   };
 
 
@@ -261,13 +267,13 @@ networks.factory(
     var deferred = $q.defer();
     this.status = 'connecting';
     $timeout(function() {
-      self.onConnected();
+      self._onConnected();
       deferred.resolve();
     }, 500);
     return deferred.promise;
   };
 
-  Network.prototype.onConnected = function() {
+  Network.prototype._onConnected = function() {
     this.status = 'connected';
     this.collapsed = false;
     this.channels.forEach(function(channel) {
@@ -280,7 +286,7 @@ networks.factory(
   Network.prototype.disconnect = function() {
     this.status = 'disconnected';
     this.channels.forEach(function(channel) {
-      channel.joined = false;
+      channel.part();
     });
   };
 
