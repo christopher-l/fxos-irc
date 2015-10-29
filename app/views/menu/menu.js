@@ -111,7 +111,6 @@ menu.controller(
   };
 
   $scope.onRemove = function(channel) {
-    $scope.channelDialog.close();
     channel.delete();
     // One additional digest cycle, so it will notice the height change
     $timeout();

@@ -132,8 +132,10 @@ networks.factory(
 
   function Channel(storageRef, network) {
     Base.call(this, storageRef);
+    if (network) {
+      this._setNetwork(network);
+    }
     // set up state
-    this.network = network;
     this.unreadCount = 0;
     this.joined = false;
     this.users = ['Fooooo', 'bar', 'baz',
@@ -161,6 +163,7 @@ networks.factory(
   Channel.prototype.applyConfig = function(config, network) { // Override
     if (this.isNew) {
       this._setNetwork(network);
+      network.collapsed = false;
     }
     Base.prototype.applyConfig.call(this, config);
   };
@@ -232,6 +235,9 @@ networks.factory(
     this._storageRef.channels.forEach(function(chan) {
       self.channels.push(new Channel(chan, self));
     });
+    if (this.autoConnect) {
+      this.connect();
+    }
   }
 
   Network.prototype = Object.create(NetBase.prototype);
@@ -255,11 +261,20 @@ networks.factory(
     var deferred = $q.defer();
     this.status = 'connecting';
     $timeout(function() {
-      self.status = 'connected';
-      self.collapsed = false;
+      self.onConnected();
       deferred.resolve();
     }, 500);
     return deferred.promise;
+  };
+
+  Network.prototype.onConnected = function() {
+    this.status = 'connected';
+    this.collapsed = false;
+    this.channels.forEach(function(channel) {
+      if (channel.autoJoin) {
+        channel.join();
+      }
+    });
   };
 
   Network.prototype.disconnect = function() {
