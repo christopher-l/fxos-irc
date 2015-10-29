@@ -24,25 +24,31 @@ menu.controller(
 
   var activeRoom = null;
 
-  function focus(room) {
+  function focus() {
     if (activeRoom) {
       activeRoom.focused = false;
     }
     activeRoom = MainCtrl.room;
     if (MainCtrl.room) {
       MainCtrl.room.focused = true;
+    }
+    if (MainCtrl.channel) {
       MainCtrl.network.collapsed = false;
     }
   }
 
   $scope.$on('$stateChangeSuccess', function() {
-    focus($scope.MC.room);
+    focus();
   });
 
   // Networks
   $scope.onNetClick = function(network) {
     if (network.status !== 'connected') {
       network.connect();
+      $state.go('main.conversation', {
+        network: network.name,
+        channel: null
+      });
       return;
     }
     if (!network.focused) {

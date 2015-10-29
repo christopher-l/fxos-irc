@@ -124,13 +124,16 @@ networks.factory(
  */
 networks.factory(
     'Channel', [
+      '$q',
+      '$timeout',
       'netData',
       'NetBase',
-      function ChannelFactory(netData, Base) {
+      function ChannelFactory($q, $timeout, netData, Base) {
 
   function Channel(storageRef, network) {
     Base.call(this, storageRef);
     // set up state
+    this.network = network;
     this.unreadCount = 0;
     this.joined = false;
     this.users = ['Fooooo', 'bar', 'baz',
@@ -168,6 +171,31 @@ networks.factory(
   ];
 
   Base.defineConfigProps(Channel.prototype, Channel.prototype._configProps);
+
+  Channel.prototype.join = function() {
+    var self = this;
+    var deferred = $q.defer();
+    if (!this.network.online) {
+      deferred.reject();
+    } else {
+      $timeout(function() {
+        self.joined = true;
+        deferred.resolve();
+      }, 500);
+    }
+    return deferred.promise;
+  };
+
+  Channel.prototype.part = function() {
+    this.joined = false;
+  };
+
+
+  Object.defineProperty(Channel.prototype, 'online', {
+    get: function() {
+      return this.joined;
+    }
+  });
 
   return Channel;
 
@@ -228,10 +256,24 @@ networks.factory(
     this.status = 'connecting';
     $timeout(function() {
       self.status = 'connected';
+      self.collapsed = false;
       deferred.resolve();
     }, 500);
     return deferred.promise;
   };
+
+  Network.prototype.disconnect = function() {
+    this.status = 'disconnected';
+    this.channels.forEach(function(channel) {
+      channel.joined = false;
+    });
+  };
+
+  Object.defineProperty(Network.prototype, 'online', {
+    get: function() {
+      return this.status === 'connected';
+    }
+  });
 
   return Network;
 

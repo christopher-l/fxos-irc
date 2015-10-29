@@ -72,11 +72,16 @@
     on-closed="Ctrl.onChannelDialogClosed()"
     >
   <h1>#{{channelDialog.channel.name}}</h1>
-  <button ng-if="channelDialog.channel && !channelDialog.channel.joined"
+  <button ng-if="channelDialog.channel && !channelDialog.channel.joined &&
+                 channelDialog.channel.network.online"
+      ng-click="channelDialog.channel.join()"
+      on-click="close"
       class="primary">
     Join
   </button>
-  <button ng-if="channelDialog.channel.joined">
+  <button ng-if="channelDialog.channel.joined"
+      ng-click="channelDialog.channel.part()"
+      on-click="close">
     Part
   </button>
   <button
@@ -97,13 +102,17 @@
     on-closed="Ctrl.onNetworkDialogClosed()"
     >
   <h1>{{networkDialog.network.name}}</h1>
-  <button ng-if="networkDialog.network.status=='connected'">
+  <button ng-if="networkDialog.network.status=='connected'"
+      ng-click="networkDialog.network.disconnect()"
+      on-click="close">
     Disconnect
   </button>
   <button ng-if="networkDialog.network.status=='connecting'">
     Cancel connection
   </button>
   <button ng-if="networkDialog.network.status=='disconnected'"
+      ng-click="networkDialog.network.connect()"
+      on-click="close"
       class="primary">
     Connect
   </button>
