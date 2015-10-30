@@ -15,7 +15,7 @@ describe('Network', function() {
       storageRef = {
         config: {
           name: 'Foo',
-          autoConnect: true,
+          autoConnect: false,
         },
         lastState: {
           unreadCount: 0,
@@ -40,16 +40,18 @@ describe('Network', function() {
       expect(Object.keys(network)).toEqual([
         '_storageRef',
         '_config',
+        'messages',
         '_storage',
         '_volatile',
-        '_state',
+        'status',
+        'collapsed',
         'channels'
       ]);
     });
 
     it('should read the config', function() {
       expect(network.name).toBe('Foo');
-      expect(network.autoConnect).toBe(true);
+      expect(network.autoConnect).toBe(false);
     });
 
     it('should initialize a new state', function() {
@@ -68,22 +70,11 @@ describe('Network', function() {
     it('should set up its storage reference', function() {
       expect(Object.keys(storageRef).length).toBe(3);
       expect(storageRef.config).toBe(network._config);
-      expect(storageRef.lastState).toBe(network._state);
       expect(storageRef.channels).toEqual([]);
     });
 
     it('should not allow to change the config directly', function() {
       expect(function() {network.name = 'Bar';}).toThrow();
-    });
-
-    it('should allow to change the state', function() {
-      network.status = 'connected';
-      expect(network._state.status).toBe('connected');
-    });
-
-    it('should save the changed state', function() {
-      network.status = 'connected';
-      expect(storage.save).toHaveBeenCalled();
     });
 
     it('should give a copy of the config', function() {
@@ -147,17 +138,18 @@ describe('Network', function() {
         'isNew',
         '_config',
         '_storageRef',
+        'messages',
         '_storage',
         '_volatile',
-        '_state',
+        'status',
+        'collapsed',
         'channels'
       ]);
     });
 
     it('should set up its storage reference', function() {
-      expect(Object.keys(network._storageRef).length).toBe(3);
+      expect(Object.keys(network._storageRef).length).toBe(2);
       expect(network._storageRef.config).toBe(network._config);
-      expect(network._storageRef.lastState).toBe(network._state);
       expect(network._storageRef.channels).toEqual([]);
     });
 
