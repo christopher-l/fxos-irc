@@ -43,7 +43,8 @@ describe('conversation', function() {
 
   function sendMessage() {
     messageInput.setFieldText('Fufufu');
-    view.evaluate('onSubmit(); $digest()');
+    view.evaluate('onSubmit()');
+    view.evaluate('$digest()');
   }
 
   function decreaseWindowHeight(pixels) {

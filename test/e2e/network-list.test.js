@@ -13,6 +13,7 @@ describe('network-list', function() {
   var focusIndicator = networkItem.all(by.css('.focus-indicator')).first();
 
   beforeAll(function() {
+    browser.get('');
     this.helpers.setDefaultNetworks();
   });
 
@@ -54,6 +55,7 @@ describe('network-list', function() {
     });
 
     it('should expand when clicking the indicator a second time', function() {
+      collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeTruthy();
       collapseIndicator.click();
       expect(networkItem.getAttribute('collapsed')).toBeFalsy();

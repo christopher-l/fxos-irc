@@ -115,6 +115,7 @@ describe('channel-config', function() {
   it('should edit an existing channel', function() {
     browser.get('');
     this.helpers.clickHeaderActionButton();
+    menuView.evaluate('networks[1].collapsed = false; $digest()');
     browser.actions()
         .mouseMove(element(by.cssContainingText('.channel-name', 'channel3')))
         .click(protractor.Button.RIGHT)
