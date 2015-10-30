@@ -96,8 +96,8 @@ completion.factory('completeString', [function() {
 
 
 completion.directive('ircComplete', [
-    '$parse', 'completeString',
-    function($parse, completeString) {
+    '$parse', '$compile', 'completeString',
+    function($parse, $compile, completeString) {
 
   function link(scope, element, attrs) {
 
@@ -119,6 +119,8 @@ completion.directive('ircComplete', [
 
     var completeButton =
         angular.element('<button>&#8677;</button>');
+    completeButton.attr('ng-disabled', attrs.ngDisabled);
+    completeButton = $compile(completeButton)(scope);
     completeButton.css({
       'position': 'absolute',
       'bottom': '0px',
