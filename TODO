@@ -9,7 +9,6 @@
 
 - conversation
   - Leading 0 for single digit minutes
-  - Reject messages when offline
 
 BUGS:
 - Channel menu, artifacts

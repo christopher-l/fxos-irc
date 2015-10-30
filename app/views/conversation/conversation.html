@@ -33,5 +33,6 @@
     irc-fit-height on-resize="messageView.onResize()"
     irc-complete="users"
     irc-on-enter="onSubmit()"
+    ng-disabled="!MC.room.online"
     placeholder="{{MC.room.online ? MC.network.nick : 'offline'}}">
 </gaia-text-input-multiline>
