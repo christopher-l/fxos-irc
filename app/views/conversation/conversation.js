@@ -32,15 +32,17 @@ conversation.controller(
   }
 
   $scope.onSubmit = function() {
+    var content = $scope.messageInput;
+    if (!content) { return false; }
     var message = {
       type: 'message',
       user: MainCtrl.network.nick,
       time: new Date(),
-      content: $scope.messageInput,
+      content: content,
     };
     $scope.messages.push(message);
-    $scope.messageInput = '';
     $timeout(() => $scope.messageView.scrollDown());
+    return true;
   };
 
   $scope.$watch('messages.length', function() {
@@ -96,10 +98,17 @@ conversation.directive(
     field.on('keydown', function(evt) {
       if (evt.which === ENTER) {
         scope.$apply(function() {
-          scope.$eval(attrs.ircOnEnter);
+          var success = scope.$eval(attrs.ircOnEnter);
+          if (success) {
+            element[0].clear();
+            // Trigger height adjustment for input field
+            field.triggerHandler('input');
+            // Reset initial caps for mobile keyboard
+            field[0].blur();
+            field[0].focus();
+          }
         });
         evt.preventDefault();
-        field.triggerHandler('input');
       }
     });
   }
