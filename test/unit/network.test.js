@@ -6,25 +6,32 @@ describe('Network', function() {
   var storageRef;
   var networks;
   var storage;
+  var networksService;
 
   beforeEach(module('irc.networks'));
+
+  function mockServices() {
+    storage = {
+      data: [],
+      save: () => null
+    };
+    module(function($provide) {
+      $provide.value('Storage', function() {
+        return storage;
+      });
+    });
+
+    inject(function($injector) {
+      networksService = $injector.get('networks');
+    });
+
+    storage.save = jasmine.createSpy('storage.save');
+  }
 
   describe('from storage', function() {
 
     beforeEach(function() {
-      storage = {
-        data: [],
-        save: () => null
-      };
-      module(function($provide) {
-        $provide.value('Storage', function() {
-          return storage;
-        });
-      });
-      var Network;
-      inject(function($injector) {
-        Network = $injector.get('networks').newNetwork().constructor;
-      });
+      mockServices();
       storageRef = {
         config: {
           name: 'Foo',
@@ -33,7 +40,7 @@ describe('Network', function() {
         channels: []
       };
       storage.data = ['foo', storageRef, 'bar'];
-      storage.save = jasmine.createSpy('storage.save');
+      var Network = networksService.newNetwork().constructor;
       network = new Network(storageRef);
       networks = ['fooo', network, 'baar'];
       network._volatile = networks;
@@ -123,15 +130,13 @@ describe('Network', function() {
 
   describe('newly created', function() {
 
-    beforeEach(module(function($provide) {
+    beforeEach(function() {
+      mockServices();
       networks = ['fooo', 'baar'];
-      storage = {
-        data: ['foo', 'bar'],
-        save: jasmine.createSpy('storage.save')
-      };
-      $provide.value('netData', {storage: storage, networks: networks});
-      network = networks.newNetwork();
-    }));
+      storage.data = ['foo', 'bar'];
+      network = networksService.newNetwork();
+      network._volatile = networks;
+    });
 
     it('should have the correct properties', function() {
       expect(Object.keys(network)).toEqual([
