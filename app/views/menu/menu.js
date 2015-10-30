@@ -42,7 +42,7 @@ menu.controller(
   });
 
   // Networks
-  $scope.onNetClick = function(network) {
+  this.onNetClick = function(network) {
     if (!network.online) {
       network.connect();
       $state.go('main.conversation', {
@@ -60,7 +60,7 @@ menu.controller(
     $scope.drawer.open = false;
   };
 
-  $scope.onNetContext = function(network) {
+  this.onNetContext = function(network) {
     $scope.networkDialog.network = network;
     $timeout(function() {
       $scope.networkDialog.open();
@@ -71,7 +71,7 @@ menu.controller(
     $scope.networkDialog.network = null;
   };
 
-  $scope.onDelete = function() {
+  this.onDelete = function() {
     var network = $scope.networkDialog.network;
     $scope.networkDialog.close();
     $scope.confirmDialog.toBeDeleted = network;
@@ -83,7 +83,7 @@ menu.controller(
 
 
   // Channels
-  $scope.onChanClick = function(channel) {
+  this.onChanClick = function(channel) {
     if (!channel.focused) {
       $state.go('main.conversation', {
         network: channel.network.name,
@@ -101,7 +101,7 @@ menu.controller(
     }
   };
 
-  $scope.onChanContext = function(channel) {
+  this.onChanContext = function(channel) {
     $scope.channelDialog.channel = channel;
     $scope.channelDialog.open();
   };
@@ -110,7 +110,7 @@ menu.controller(
     $scope.channelDialog.channel = null;
   };
 
-  $scope.onRemove = function(channel) {
+  this.onRemove = function(channel) {
     channel.delete();
     // One additional digest cycle, so it will notice the height change
     $timeout();

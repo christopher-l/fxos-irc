@@ -8,8 +8,8 @@
         <div class="network-entry"
             ng-attr-status="{{network.status}}"
             ng-attr-focused="{{network.focused || undefined}}"
-            ng-click="onNetClick(network)"
-            irc-context-menu="onNetContext(network)">
+            ng-click="MenuCtrl.onNetClick(network)"
+            irc-context-menu="MenuCtrl.onNetContext(network)">
           <span class="collapse-indicator"
                 ng-click="network.collapsed = !network.collapsed;
                           $event.stopPropagation();">
@@ -31,11 +31,11 @@
                 ng-repeat="channel in network.channels"
                 ng-attr-active="{{channel.joined || undefined}}"
                 ng-attr-focused="{{channel.focused || undefined}}"
-                irc-context-menu="onChanContext(channel)">
+                irc-context-menu="MenuCtrl.onChanContext(channel)">
               <span class="focus-indicator"></span>
                     <!-- ng-click="network.channels.splice($index, 1)" -->
               <span class="channel-text"
-                    ng-click="onChanClick(channel)">
+                    ng-click="MenuCtrl.onChanClick(channel)">
                 <div class="channel-name">#{{channel.name}}</div>
                 <div class="channel-info"></div>
               </span>
@@ -69,7 +69,7 @@
 </gaia-drawer>
 
 <gaia-dialog-action irc-dialog="channelDialog"
-    on-closed="Ctrl.onChannelDialogClosed()"
+    on-closed="MenuCtrl.onChannelDialogClosed()"
     >
   <h1>#{{channelDialog.channel.name}}</h1>
   <button ng-if="channelDialog.channel && !channelDialog.channel.joined &&
@@ -93,14 +93,14 @@
     Edit
   </button>
   <button class="danger"
-      ng-click="onRemove(channelDialog.channel);"
+      ng-click="MenuCtrl.onRemove(channelDialog.channel);"
       on-click="close">
     Remove
   </button>
 </gaia-dialog-action>
 
 <gaia-dialog-action irc-dialog="networkDialog"
-    on-closed="Ctrl.onNetworkDialogClosed()"
+    on-closed="MenuCtrl.onNetworkDialogClosed()"
     >
   <h1>{{networkDialog.network.name}}</h1>
   <button ng-if="networkDialog.network.status=='connected'"
@@ -126,7 +126,7 @@
       on-click="close">
     Edit
   </button>
-  <button class="danger" ng-click="onDelete()">Delete</button>
+  <button class="danger" ng-click="MenuCtrl.onDelete()">Delete</button>
 </gaia-dialog-action>
 
 <gaia-dialog-confirm irc-dialog="confirmDialog"
