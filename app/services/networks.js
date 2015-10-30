@@ -1,45 +1,24 @@
-/**
- * Services:
- *   networks   Provide an array of known networks.
- *
- * Other services serve the implementation of the above and should not be used
- * publicly.
- */
 'use strict';
 
 var networks = angular.module('irc.networks', [
   'irc.storage',
 ]);
 
-
 /**
- * netData
+ * Networks Service
  *
- * Provides stored and volatile data on networks.
- *
- * The volatile array is referenced by the networks service, too.  However there
- * exists a dependency cycle: networks depends on Network and Network depends on
- * the networks array.  Hence this service.
- */
-networks.service(
-    'netData', [
-      'Storage',
-      function netDataService(Storage) {
-  this.storage = new Storage('networks', []);
-  this.networks = [];
-}]);
-
-
-/**
- * NetBase
- *
- * A base class to Network and Channel.
+ * Provides an array of all known networks.
  */
 networks.factory(
-    'NetBase', [
-      'netData',
-      function NetBaseFactory(netData) {
+    'networks', [
+      '$q',
+      '$timeout',
+      'Storage',
+      function networksFactory($q, $timeout, Storage) {
 
+  /**
+   * Base Class
+   */
   var Base = function(storageRef) {
     // Set up this._config and this._storageRef.
     // this._state must be set up by implementation.
@@ -57,19 +36,6 @@ networks.factory(
     this.messages = [];
   };
 
-  Base.defineConfigProps = function(proto, props) {
-    props.forEach(function(key) {
-      Object.defineProperty(proto, key, {
-        get: function() {
-          return this._config[key];
-        },
-        set: function(value) {
-          throw new Error('Tried to write access config.');
-        }
-      });
-    });
-  };
-
   Base.prototype = {
     getConfig: function() {
       return angular.copy(this._config);
@@ -83,13 +49,13 @@ networks.factory(
       if (this.isNew) {
         this._create();
       }
-      netData.storage.save();
+      storage.save();
     },
     delete: function() {
       var index = this._volatile.indexOf(this);
       this._volatile.splice(index, 1);
       this._storage.splice(index, 1);
-      netData.storage.save();
+      storage.save();
     },
     compareConfig: function(config) {
       var self = this;
@@ -112,24 +78,24 @@ networks.factory(
     },
   };
 
-  return Base;
 
-}]);
+  function defineConfigProps(proto, props) {
+    props.forEach(function(key) {
+      Object.defineProperty(proto, key, {
+        get: function() {
+          return this._config[key];
+        },
+        set: function(value) {
+          throw new Error('Tried to write access config.');
+        }
+      });
+    });
+  }
 
 
-/**
- * Channel
- *
- * Constructor of channel objects referenced by networks.
- */
-networks.factory(
-    'Channel', [
-      '$q',
-      '$timeout',
-      'netData',
-      'NetBase',
-      function ChannelFactory($q, $timeout, netData, Base) {
-
+  /**
+   * Channel Class
+   */
   function Channel(storageRef, network) {
     Base.call(this, storageRef);
     if (network) {
@@ -162,7 +128,7 @@ networks.factory(
     'autoJoin'
   ];
 
-  Base.defineConfigProps(Channel.prototype, Channel.prototype._configProps);
+  defineConfigProps(Channel.prototype, Channel.prototype._configProps);
 
   Channel.prototype.join = function() {
     var self = this;
@@ -199,36 +165,20 @@ networks.factory(
     this.users = null;
   };
 
-
   Object.defineProperty(Channel.prototype, 'online', {
     get: function() {
       return this.joined;
     }
   });
 
-  return Channel;
 
-}]);
-
-
-/**
- * Network Service
- *
- * Constructor of network objects inside the networks array.
- */
-networks.factory(
-    'Network', [
-      '$q',
-      '$timeout',
-      'netData',
-      'NetBase',
-      'Channel',
-      function NetworkFactory($q, $timeout, netData, NetBase, Channel) {
-
+  /**
+   * Network Class
+   */
   function Network(storageRef) {
-    NetBase.call(this, storageRef);
-    this._storage = netData.storage.data;
-    this._volatile = netData.networks;
+    Base.call(this, storageRef);
+    this._storage = storage.data;
+    this._volatile = networks;
     // Set up state
     this.status = 'disconnected';
     this.collapsed = true;
@@ -246,7 +196,7 @@ networks.factory(
     }
   }
 
-  Network.prototype = Object.create(NetBase.prototype);
+  Network.prototype = Object.create(Base.prototype);
   Network.prototype.constructor = Network;
 
   Network.prototype._configProps = [
@@ -260,7 +210,7 @@ networks.factory(
     'password',
   ];
 
-  NetBase.defineConfigProps(Network.prototype, Network.prototype._configProps);
+  defineConfigProps(Network.prototype, Network.prototype._configProps);
 
   Network.prototype.connect = function() {
     var self = this;
@@ -296,39 +246,31 @@ networks.factory(
     }
   });
 
-  return Network;
 
-}]);
+  /**
+   * Set up networks
+   */
+  var storage = new Storage('networks', []);
+  var networks = [];
 
-
-/**
- * Networks Service
- *
- * Provides an array of all known networks.
- */
-networks.factory(
-    'networks', [
-      'netData', 'Network', 'Channel',
-      function networksFactory(netData, Network, Channel) {
-
-  var saveToDisk = netData.storage.save.bind(netData.storage);
+  var saveToDisk = storage.save.bind(storage);
   Network.prototype._saveToDisk = saveToDisk;
   Channel.prototype._saveToDisk = saveToDisk;
 
-  netData.storage.data.forEach(function(net) {
-    netData.networks.push(new Network(net));
+  storage.data.forEach(function(net) {
+    networks.push(new Network(net));
   });
 
-  netData.storage.save();
+  storage.save();
 
-  netData.networks.newNetwork = function() {
+  networks.newNetwork = function() {
     return new Network();
   };
 
-  netData.networks.newChannel = function() {
+  networks.newChannel = function() {
     return new Channel();
   };
 
-  return netData.networks;
+  return networks;
 
 }]);

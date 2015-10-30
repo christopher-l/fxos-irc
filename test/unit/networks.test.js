@@ -19,7 +19,7 @@ describe('networks', function() {
     });
     inject(function($injector) {
       networks = $injector.get('networks');
-      Network = $injector.get('Network');
+      Network = networks.newNetwork().constructor;
     });
   });
 
@@ -39,9 +39,9 @@ describe('networks', function() {
 
     var network;
 
-    beforeEach(inject(function(_Network_) {
+    beforeEach(function() {
       network = networks.newNetwork();
-    }));
+    });
 
     it('should be a new instance of Network', function() {
       expect(network).toBeDefined();

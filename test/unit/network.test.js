@@ -11,30 +11,33 @@ describe('Network', function() {
 
   describe('from storage', function() {
 
-    beforeEach(module(function($provide) {
+    beforeEach(function() {
+      storage = {
+        data: [],
+        save: () => null
+      };
+      module(function($provide) {
+        $provide.value('Storage', function() {
+          return storage;
+        });
+      });
+      var Network;
+      inject(function($injector) {
+        Network = $injector.get('networks').newNetwork().constructor;
+      });
       storageRef = {
         config: {
           name: 'Foo',
           autoConnect: false,
         },
-        lastState: {
-          unreadCount: 0,
-          status: 'connected',
-        },
         channels: []
       };
-      storage = {
-        data: ['foo', storageRef, 'bar'],
-        save: jasmine.createSpy('storage.save')
-      };
-      networks = ['fooo', 'nerwork', 'baar'];
-      $provide.value('netData', {storage: storage, networks: networks});
-    }));
-
-    beforeEach(inject(function(Network) {
+      storage.data = ['foo', storageRef, 'bar'];
+      storage.save = jasmine.createSpy('storage.save');
       network = new Network(storageRef);
-      networks[1] = network;
-    }));
+      networks = ['fooo', network, 'baar'];
+      network._volatile = networks;
+    });
 
     it('should have the correct properties', function() {
       expect(Object.keys(network)).toEqual([
@@ -68,7 +71,7 @@ describe('Network', function() {
     });
 
     it('should set up its storage reference', function() {
-      expect(Object.keys(storageRef).length).toBe(3);
+      expect(Object.keys(storageRef).length).toBe(2);
       expect(storageRef.config).toBe(network._config);
       expect(storageRef.channels).toEqual([]);
     });
@@ -127,10 +130,7 @@ describe('Network', function() {
         save: jasmine.createSpy('storage.save')
       };
       $provide.value('netData', {storage: storage, networks: networks});
-    }));
-
-    beforeEach(inject(function(Network) {
-      network = new Network();
+      network = networks.newNetwork();
     }));
 
     it('should have the correct properties', function() {
