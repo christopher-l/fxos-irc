@@ -102,6 +102,7 @@ completion.directive('ircComplete', [
   function link(scope, element, attrs) {
 
     function complete() {
+      var completions = $parse(attrs.ircComplete)(scope);
       var oldStr = input[0].value;
       var oldPos = input[0].selectionStart;
       var newStr = completeString(oldStr, oldPos, completions, cycling);
@@ -113,7 +114,6 @@ completion.directive('ircComplete', [
       input.triggerHandler('input');
     }
 
-    var completions = $parse(attrs.ircComplete)(scope);
     var input = angular.element(element[0].els.field);
     var cycling = false;
 
@@ -138,7 +138,7 @@ completion.directive('ircComplete', [
     input[0].addEventListener('keydown', function(evt) {
       var TABKEY = 9;
       if (evt.keyCode === TABKEY) {
-        complete(input[0].value);
+        complete();
         evt.preventDefault();
       } else {
         cycling = false;

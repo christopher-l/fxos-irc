@@ -31,7 +31,7 @@
 <gaia-text-input-multiline
     irc-text-input-multiline model="messageInput"
     irc-fit-height on-resize="messageView.onResize()"
-    irc-complete="users"
+    irc-complete="MC.room.users"
     irc-on-enter="onSubmit()"
     ng-disabled="!MC.room.online"
     placeholder="{{MC.room.online ? MC.network.nick : 'offline'}}">
