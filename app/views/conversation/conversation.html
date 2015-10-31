@@ -11,9 +11,7 @@
     <div ng-if="::message.type === 'message'">
       <div class="header">
         <span class="user">{{::message.user}}</span>
-        <span class="time">
-          {{::message.time.getHours()}}:{{::message.time.getMinutes()}}
-        </span>
+        <span class="time">{{::message.time.toLocaleTimeString()}}</span>
       </div>
       <div class="content">
         {{::message.content}}

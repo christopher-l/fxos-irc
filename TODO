@@ -4,8 +4,5 @@
   - Automatically join new channel
   - Hide saved passwords
 
-- conversation
-  - Leading 0 for single digit minutes
-
 BUGS:
 - Focus on removed channel
