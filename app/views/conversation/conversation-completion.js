@@ -117,8 +117,7 @@ completion.directive('ircComplete', [
     var input = angular.element(element[0].els.field);
     var cycling = false;
 
-    var completeButton =
-        angular.element('<button>&#8677;</button>');
+    var completeButton = angular.element('<button>&#8677;</button>');
     completeButton.attr('ng-disabled', attrs.ngDisabled);
     completeButton = $compile(completeButton)(scope);
     completeButton.css({

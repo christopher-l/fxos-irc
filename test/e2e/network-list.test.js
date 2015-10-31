@@ -64,28 +64,4 @@ describe('network-list', function() {
 
   });
 
-  xdescribe('restore state', function() {
-
-    beforeAll(function() {
-      browser.get('');
-      browser.executeScript(function() {
-        /* global localStorage */
-        localStorage.removeItem('networks');
-      });
-    });
-
-    it('should restore focus', function() {
-      expect(focusIndicator.getCssValue('background-color'))
-          .toBe('transparent');
-      networkEntry.click();
-      expect(focusIndicator.getCssValue('background-color'))
-          .not.toBe('transparent');
-      browser.get('');
-      uiView.evaluate('drawer.open = true; $digest();');
-      expect(focusIndicator.getCssValue('background-color'))
-          .not.toBe('transparent');
-    });
-
-  });
-
 });
