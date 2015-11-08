@@ -265,7 +265,7 @@ networks.factory(
     }, 2000);
     this._setUpClient();
     this.client.connect(function() {
-      self._onConnected();
+      $timeout(() => self._onConnected());
       deferred.resolve();
       $timeout.cancel(fail);
     });

@@ -1,5 +1,7 @@
 # IRC
 
+## Getting Started
+
 The project hierarchy was created using angular-seed. Go to https://github.com/angular/angular-seed for a detailed documentation.
 
 ### Installation
@@ -12,7 +14,7 @@ npm install
 ```
 
 ```
-node_modules/browserify/bin/cmd.js lib/irc.js -o app/lib/irc.js -u node-icu-charset-detector -u iconv
+npm run browserify
 ```
 
 ### Run the Application
@@ -56,3 +58,16 @@ and
 ```
 npm run protractor
 ```
+
+## Third Party Libraries
+
+- [AngularJS](https://angularjs.org/)
+- [UI-Router](https://angular-ui.github.io/ui-router)
+- [UI-Router Extras](https://christopherthielen.github.io/ui-router-extras)
+- [Gaia](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Platform/Gaia)
+- [Node-IRC](https://github.com/martynsmith/node-irc) + some code of its [fork by nickdesaulniers](https://github.com/nickdesaulniers/node-irc)
+
+Testing:
+- [Karma](https://karma-runner.github.io)
+- [Jasmine](https://jasmine.github.io/)
+- [Protractor](https://angular.github.io/protractor/#/)

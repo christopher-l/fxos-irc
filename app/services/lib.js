@@ -1,8 +1,8 @@
 'use strict';
 
-var ircLib = angular.module('irc.lib', [
+var lib = angular.module('irc.lib', [
 ]);
 
-ircLib.factory('irc', ['$window', function($window) {
-  return $window['node-irc'];
+lib.factory('irc', ['$window', function($window) {
+  return $window.nodeIrc;
 }]);

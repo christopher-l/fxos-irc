@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.nodeIrc = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 function emit (evt) {
   if (evt === 'connect') {
     evt = 'open';
@@ -63,10 +63,6 @@ Connection.prototype = {
 exports.Connection = Connection;
 
 },{}],2:[function(require,module,exports){
-// require('tl')
-window['node-irc'] = require('irc');
-
-},{"irc":14}],3:[function(require,module,exports){
 var Connection = require('./Connection.js').Connection;
 
 exports.createConnection = function (options, connectListener) {
@@ -75,14 +71,14 @@ exports.createConnection = function (options, connectListener) {
   return socket;
 };
 
-},{"./Connection.js":1}],4:[function(require,module,exports){
+},{"./Connection.js":1}],3:[function(require,module,exports){
 var Connection = require('./Connection.js').Connection;
 
 exports.connect = function (port, server, creds, cb) {
   return new Connection(port, server, true);
 };
 
-},{"./Connection.js":1}],5:[function(require,module,exports){
+},{"./Connection.js":1}],4:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -208,7 +204,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (global){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1756,7 +1752,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":5,"ieee754":9,"is-array":16}],7:[function(require,module,exports){
+},{"base64-js":4,"ieee754":8,"is-array":15}],6:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2056,7 +2052,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = Hash;
 var Traverse = require('traverse');
 
@@ -2311,7 +2307,7 @@ Hash.compact = function (ref) {
     return Hash(ref).compact.items;
 };
 
-},{"traverse":18}],9:[function(require,module,exports){
+},{"traverse":17}],8:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -2397,7 +2393,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2422,7 +2418,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var Hash = require('hashish');
 
 
@@ -2561,7 +2557,7 @@ exports.global = function() {
   });
 };
 
-},{"hashish":8}],12:[function(require,module,exports){
+},{"hashish":7}],11:[function(require,module,exports){
 module.exports = {
    '001': {
       name: 'rpl_welcome',
@@ -3077,7 +3073,7 @@ module.exports = {
    }
 };
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var codes = {
     white: '\u000300',
     black: '\u000301',
@@ -3112,7 +3108,78 @@ function wrap(color, text, resetColor) {
 }
 exports.wrap = wrap;
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
+var ircColors = require('irc-colors');
+var replyFor = require('./codes');
+
+/**
+ * parseMessage(line, stripColors)
+ *
+ * takes a raw "line" from the IRC server and turns it into an object with
+ * useful keys
+ * @param {String} line Raw message from IRC server.
+ * @param {Boolean} stripColors If true, strip IRC colors.
+ * @return {Object} A parsed message object.
+ */
+module.exports = function parseMessage(line, stripColors) {
+    var message = {};
+    var match;
+
+    if (stripColors) {
+        line = ircColors.stripColorsAndStyle(line);
+    }
+
+    // Parse prefix
+    match = line.match(/^:([^ ]+) +/);
+    if (match) {
+        message.prefix = match[1];
+        line = line.replace(/^:[^ ]+ +/, '');
+        match = message.prefix.match(/^([_a-zA-Z0-9\[\]\\`^{}|-]*)(!([^@]+)@(.*))?$/);
+        if (match) {
+            message.nick = match[1];
+            message.user = match[3];
+            message.host = match[4];
+        }
+        else {
+            message.server = message.prefix;
+        }
+    }
+
+    // Parse command
+    match = line.match(/^([^ ]+) */);
+    message.command = match[1];
+    message.rawCommand = match[1];
+    message.commandType = 'normal';
+    line = line.replace(/^[^ ]+ +/, '');
+
+    if (replyFor[message.rawCommand]) {
+        message.command     = replyFor[message.rawCommand].name;
+        message.commandType = replyFor[message.rawCommand].type;
+    }
+
+    message.args = [];
+    var middle, trailing;
+
+    // Parse parameters
+    if (line.search(/^:|\s+:/) != -1) {
+        match = line.match(/(.*?)(?:^:|\s+:)(.*)/);
+        middle = match[1].trimRight();
+        trailing = match[2];
+    }
+    else {
+        middle = line;
+    }
+
+    if (middle.length)
+        message.args = middle.split(/ +/);
+
+    if (typeof (trailing) != 'undefined' && trailing.length)
+        message.args.push(trailing);
+
+    return message;
+}
+
+},{"./codes":11,"irc-colors":10}],14:[function(require,module,exports){
 (function (Buffer){
 /*
     irc.js - Node JS IRC client library
@@ -3134,8 +3201,8 @@ exports.wrap = wrap;
 */
 
 exports.Client = Client;
-var net  = require('../../../lib/net.js');
-var tls  = require('../../../lib/tls.js');
+var net  = require('./../../../lib/net.js');
+var tls  = require('./../../../lib/tls.js');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
@@ -4167,78 +4234,7 @@ Client.prototype._updateMaxLineLength = function() {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"../../../lib/net.js":3,"../../../lib/tls.js":4,"./colors":13,"./parse_message":15,"buffer":6,"events":7,"iconv":undefined,"node-icu-charset-detector":undefined,"util":20}],15:[function(require,module,exports){
-var ircColors = require('irc-colors');
-var replyFor = require('./codes');
-
-/**
- * parseMessage(line, stripColors)
- *
- * takes a raw "line" from the IRC server and turns it into an object with
- * useful keys
- * @param {String} line Raw message from IRC server.
- * @param {Boolean} stripColors If true, strip IRC colors.
- * @return {Object} A parsed message object.
- */
-module.exports = function parseMessage(line, stripColors) {
-    var message = {};
-    var match;
-
-    if (stripColors) {
-        line = ircColors.stripColorsAndStyle(line);
-    }
-
-    // Parse prefix
-    match = line.match(/^:([^ ]+) +/);
-    if (match) {
-        message.prefix = match[1];
-        line = line.replace(/^:[^ ]+ +/, '');
-        match = message.prefix.match(/^([_a-zA-Z0-9\[\]\\`^{}|-]*)(!([^@]+)@(.*))?$/);
-        if (match) {
-            message.nick = match[1];
-            message.user = match[3];
-            message.host = match[4];
-        }
-        else {
-            message.server = message.prefix;
-        }
-    }
-
-    // Parse command
-    match = line.match(/^([^ ]+) */);
-    message.command = match[1];
-    message.rawCommand = match[1];
-    message.commandType = 'normal';
-    line = line.replace(/^[^ ]+ +/, '');
-
-    if (replyFor[message.rawCommand]) {
-        message.command     = replyFor[message.rawCommand].name;
-        message.commandType = replyFor[message.rawCommand].type;
-    }
-
-    message.args = [];
-    var middle, trailing;
-
-    // Parse parameters
-    if (line.search(/^:|\s+:/) != -1) {
-        match = line.match(/(.*?)(?:^:|\s+:)(.*)/);
-        middle = match[1].trimRight();
-        trailing = match[2];
-    }
-    else {
-        middle = line;
-    }
-
-    if (middle.length)
-        message.args = middle.split(/ +/);
-
-    if (typeof (trailing) != 'undefined' && trailing.length)
-        message.args.push(trailing);
-
-    return message;
-}
-
-},{"./codes":12,"irc-colors":11}],16:[function(require,module,exports){
+},{"./../../../lib/net.js":2,"./../../../lib/tls.js":3,"./colors":12,"./parse_message":13,"buffer":5,"events":6,"iconv":undefined,"node-icu-charset-detector":undefined,"util":19}],15:[function(require,module,exports){
 
 /**
  * isArray
@@ -4273,7 +4269,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4366,7 +4362,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var traverse = module.exports = function (obj) {
     return new Traverse(obj);
 };
@@ -4682,14 +4678,14 @@ var hasOwnProperty = Object.hasOwnProperty || function (obj, key) {
     return key in obj;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5279,4 +5275,5 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":19,"_process":17,"inherits":10}]},{},[2]);
+},{"./support/isBuffer":18,"_process":16,"inherits":9}]},{},[14])(14)
+});
