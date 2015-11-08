@@ -2,6 +2,7 @@
 
 var networks = angular.module('irc.networks', [
   'irc.storage',
+  'irc.lib',
 ]);
 
 /**
@@ -14,7 +15,8 @@ networks.factory(
       '$q',
       '$timeout',
       'Storage',
-      function networksFactory($q, $timeout, Storage) {
+      'irc',
+      function networksFactory($q, $timeout, Storage, irc) {
 
   /**
    * Base Class

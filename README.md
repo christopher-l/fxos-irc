@@ -11,6 +11,10 @@ The project hierarchy was created using angular-seed. Go to https://github.com/a
 npm install
 ```
 
+```
+node_modules/browserify/bin/cmd.js lib/irc.js -o app/lib/irc.js -u node-icu-charset-detector -u iconv
+```
+
 ### Run the Application
 
 To run the app on an actual phone or the simulator use `Firefox`&#8217;es WebIDE and navigate to the `app` folder.
