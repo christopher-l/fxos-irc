@@ -34,6 +34,7 @@ menu.controller(
     }
     if (MainCtrl.channel) {
       MainCtrl.network.collapsed = false;
+      MainCtrl.channel.unreadCount = 0;
     }
   }
 

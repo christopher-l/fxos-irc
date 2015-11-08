@@ -34,13 +34,7 @@ conversation.controller(
   $scope.onSubmit = function() {
     var content = $scope.messageInput;
     if (!content) { return false; }
-    var message = {
-      type: 'message',
-      user: MainCtrl.network.nick,
-      time: new Date(),
-      content: content,
-    };
-    $scope.messages.push(message);
+    MainCtrl.room.send(content);
     $timeout(() => $scope.messageView.scrollDown());
     return true;
   };

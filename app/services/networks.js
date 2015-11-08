@@ -171,6 +171,33 @@ networks.factory(
     }
   });
 
+  Channel.prototype.send = function(content) {
+    var message = {
+      type: 'message',
+      user: this.network.nick,
+      time: new Date(),
+      content: content,
+    };
+    this.messages.push(message);
+  };
+
+  Channel.prototype.receive = function(user, content, time) {
+    var message = {
+      type: 'message',
+      user: user,
+      time: time || new Date(),
+      content: content,
+    };
+    this.messages.push(message);
+    this._onReceive();
+  };
+
+  Channel.prototype._onReceive = function() {
+    if (!this.focused) {
+      this.unreadCount++;
+    }
+  };
+
 
   /**
    * Network Class

@@ -8,11 +8,7 @@ describe('conversation', function() {
 
   function receiveMessage() {
     view.evaluate(`
-      messages.push({
-        type: 'message',
-        content: 'Baaaaar',
-        user: 'McDoodle',
-      });
+      MC.room.receive('McDoodle', 'Baaar');
     `);
   }
 
@@ -48,13 +44,7 @@ describe('conversation', function() {
       url = currentUrl.match(/^.*#/)[0];
     });
     for (var i=0; i<10; i++) {
-      view.evaluate(`
-        messages.push({
-          type: 'message',
-          content: 'Fuuuuuu',
-          user: 'McDoodle',
-        });
-      `);
+      receiveMessage();
     }
   });
 
