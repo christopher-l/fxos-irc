@@ -16,6 +16,9 @@
     "url": "http://example.com"
   },
   "permissions": {
-    "themeable":{}
+    "themeable":{},
+    "tcp-socket": {
+      "description": "tcp"
+    }
   }
 }

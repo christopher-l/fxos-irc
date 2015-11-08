@@ -241,14 +241,34 @@ networks.factory(
 
   defineConfigProps(Network.prototype, Network.prototype._configProps);
 
+  Network.prototype._setUpClient = function() {
+    this.client = new irc.Client(this.host, this.nick, {
+      port: this.port,
+      secure: this.tls,
+      selfSigned: true,
+      autoConnect: false,
+      userName: this.user,
+      password: this.password,
+      debug: true,
+      channels: ['#chrisi-irc-test'],
+    });
+    console.log(this.client)
+  };
+
   Network.prototype.connect = function() {
     var self = this;
     var deferred = $q.defer();
     this.status = 'connecting';
-    $timeout(function() {
+    var fail = $timeout(function() {
+      deferred.reject();
+      self.status = 'connection lost';
+    }, 2000);
+    this._setUpClient();
+    this.client.connect(function() {
       self._onConnected();
       deferred.resolve();
-    }, 500);
+      $timeout.cancel(fail);
+    });
     return deferred.promise;
   };
 

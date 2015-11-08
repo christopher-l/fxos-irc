@@ -1,9 +1,88 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-window.lib = {
-  irc: require('irc')
+function emit (evt) {
+  if (evt === 'connect') {
+    evt = 'open';
+  }
+  //console.log('trying to emit ' + evt);
+  var args = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
+  var e = new CustomEvent(evt, { detail: args });
+  this.eventEmitter.dispatchEvent(e);
 };
 
-},{"irc":12}],2:[function(require,module,exports){
+function once (evt, cb) {
+  var handler = (function (data) {
+    //console.log('once listener for ' + evt);
+    this.eventEmitter.removeEventListener(evt, handler);
+    cb.call(this, data);
+  }).bind(this);
+  this.eventEmitter.addEventListener(evt, handler);
+};
+
+function Connection (port, server, useSSL) {
+  if (typeof useSSL === "undefined") {
+    useSSL = false;
+  }
+  this._conn = navigator.mozTCPSocket.open(server, port, { useSecureTransport: useSSL, useSSL: useSSL });
+  this.eventEmitter = document.createDocumentFragment();
+  this.connected = false;
+  this.authorized = useSSL;
+  this.authorizationError = null;
+};
+
+Connection.prototype = {
+  addListener: function (evt, cb) {
+    if (evt === 'connect') {
+      evt = 'open';
+    } else if (evt === 'end') {
+      evt = 'close';
+    }
+    //console.log('trying to set on' + evt + ' on the connection');
+    this._conn['on' + evt] = function (msg) {
+      //console.log('connection got an on' + evt + ' event');
+      if(msg && 'data' in msg) {
+        cb(msg.data);
+      } else {
+        cb();
+      }
+    };
+  },
+  once: once,
+  emit: emit,
+  write: function (data) {
+    //console.log('sending: ' + data);
+    this._conn.send(data);
+  },
+  end: function () {
+    this._conn.close();
+    this.emit('end');
+  },
+  setTimeout: function () {},
+  setEncoding: function () {},
+};
+
+exports.Connection = Connection;
+
+},{}],2:[function(require,module,exports){
+// require('tl')
+window['node-irc'] = require('irc');
+
+},{"irc":14}],3:[function(require,module,exports){
+var Connection = require('./Connection.js').Connection;
+
+exports.createConnection = function (options, connectListener) {
+  var socket =  new Connection(options.port, options.host, false);
+  socket.addListener('open', connectListener);
+  return socket;
+};
+
+},{"./Connection.js":1}],4:[function(require,module,exports){
+var Connection = require('./Connection.js').Connection;
+
+exports.connect = function (port, server, creds, cb) {
+  return new Connection(port, server, true);
+};
+
+},{"./Connection.js":1}],5:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -129,9 +208,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],3:[function(require,module,exports){
-
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (global){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1679,7 +1756,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":2,"ieee754":7,"is-array":14}],5:[function(require,module,exports){
+},{"base64-js":5,"ieee754":9,"is-array":16}],7:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1979,7 +2056,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = Hash;
 var Traverse = require('traverse');
 
@@ -2234,7 +2311,7 @@ Hash.compact = function (ref) {
     return Hash(ref).compact.items;
 };
 
-},{"traverse":16}],7:[function(require,module,exports){
+},{"traverse":18}],9:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -2320,7 +2397,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2345,7 +2422,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var Hash = require('hashish');
 
 
@@ -2484,7 +2561,7 @@ exports.global = function() {
   });
 };
 
-},{"hashish":6}],10:[function(require,module,exports){
+},{"hashish":8}],12:[function(require,module,exports){
 module.exports = {
    '001': {
       name: 'rpl_welcome',
@@ -3000,7 +3077,7 @@ module.exports = {
    }
 };
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var codes = {
     white: '\u000300',
     black: '\u000301',
@@ -3035,7 +3112,7 @@ function wrap(color, text, resetColor) {
 }
 exports.wrap = wrap;
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (Buffer){
 /*
     irc.js - Node JS IRC client library
@@ -3057,8 +3134,8 @@ exports.wrap = wrap;
 */
 
 exports.Client = Client;
-var net  = require('net');
-var tls  = require('tls');
+var net  = require('../../../lib/net.js');
+var tls  = require('../../../lib/tls.js');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
@@ -4090,7 +4167,7 @@ Client.prototype._updateMaxLineLength = function() {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"./colors":11,"./parse_message":13,"buffer":4,"events":5,"iconv":undefined,"net":3,"node-icu-charset-detector":undefined,"tls":3,"util":18}],13:[function(require,module,exports){
+},{"../../../lib/net.js":3,"../../../lib/tls.js":4,"./colors":13,"./parse_message":15,"buffer":6,"events":7,"iconv":undefined,"node-icu-charset-detector":undefined,"util":20}],15:[function(require,module,exports){
 var ircColors = require('irc-colors');
 var replyFor = require('./codes');
 
@@ -4161,7 +4238,7 @@ module.exports = function parseMessage(line, stripColors) {
     return message;
 }
 
-},{"./codes":10,"irc-colors":9}],14:[function(require,module,exports){
+},{"./codes":12,"irc-colors":11}],16:[function(require,module,exports){
 
 /**
  * isArray
@@ -4196,7 +4273,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4289,7 +4366,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var traverse = module.exports = function (obj) {
     return new Traverse(obj);
 };
@@ -4605,14 +4682,14 @@ var hasOwnProperty = Object.hasOwnProperty || function (obj, key) {
     return key in obj;
 };
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5202,4 +5279,4 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":17,"_process":15,"inherits":8}]},{},[1]);
+},{"./support/isBuffer":19,"_process":17,"inherits":10}]},{},[2]);
