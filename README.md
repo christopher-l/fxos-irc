@@ -1,4 +1,6 @@
-# IRC
+# FxOS IRC
+
+This is a work-in-progress project that aims to bring an IRC app with a native feeling UI to FirefoxOS (version &#8805; 2.5).
 
 ## Getting Started
 
@@ -17,7 +19,7 @@ npm install
 npm run browserify
 ```
 
-### Run the Application
+### Running the Application
 
 To run the app on an actual phone or the simulator use `Firefox`&#8217;es WebIDE and navigate to the `app` folder.
 
@@ -41,7 +43,7 @@ or
 npm run test-single-run
 ```
 
-### End to end testing
+### End-to-End Testing
 
 ```
 npm start
@@ -71,3 +73,6 @@ Testing:
 - [Karma](https://karma-runner.github.io)
 - [Jasmine](https://jasmine.github.io/)
 - [Protractor](https://angular.github.io/protractor/#/)
+
+## License
+[GPLv3](https://www.gnu.org/licenses/gpl.html)
