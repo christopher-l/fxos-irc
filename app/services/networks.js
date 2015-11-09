@@ -16,7 +16,8 @@ networks.factory(
       '$timeout',
       'Storage',
       'irc',
-      function networksFactory($q, $timeout, Storage, irc) {
+      'toast',
+      function networksFactory($q, $timeout, Storage, irc, toast) {
 
   /**
    * Base Class
@@ -251,8 +252,8 @@ networks.factory(
       password: this.password,
       debug: true,
       channels: ['#chrisi-irc-test'],
+      retryCount: 0,
     });
-    console.log(this.client)
   };
 
   Network.prototype.connect = function() {
@@ -262,12 +263,21 @@ networks.factory(
     var fail = $timeout(function() {
       deferred.reject();
       self.status = 'connection lost';
+      toast.open('Connection failed: timeout.');
     }, 2000);
     this._setUpClient();
     this.client.connect(function() {
       $timeout(() => self._onConnected());
       deferred.resolve();
       $timeout.cancel(fail);
+    });
+    this.client.on('netError', function(evt) {
+      $timeout(function() {
+        self.status = 'connection lost';
+      });
+      $timeout.cancel(fail);
+      toast.open('Connection failed: ' + evt.name + '.' +
+          (evt.message ? ' ' + evt.message : ''));
     });
     return deferred.promise;
   };

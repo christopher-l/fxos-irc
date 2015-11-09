@@ -50,6 +50,7 @@
   <script src="services/settings.js"></script>
   <script src="services/storage.js"></script>
   <script src="services/lib.js"></script>
+  <script src="services/toast.js"></script>
 
   <script src="views/title/title.js"></script>
 
@@ -104,6 +105,8 @@
       class="{{theme.settings}} {{$state.current.name}}"
       ng-show="!$state.includes('main')">
   </div>
+
+  <irc-toast class="{{theme.group}}"></irc-toast>
 
 </body>
 </html>
