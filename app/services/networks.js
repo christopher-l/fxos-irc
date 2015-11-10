@@ -17,7 +17,8 @@ networks.factory(
       'Storage',
       'irc',
       'toast',
-      function networksFactory($q, $timeout, Storage, irc, toast) {
+      'alert',
+      function networksFactory($q, $timeout, Storage, irc, toast, alert) {
 
   /**
    * Base Class
@@ -254,30 +255,42 @@ networks.factory(
       channels: ['#chrisi-irc-test'],
       retryCount: 0,
     });
+    this.client.on('connect', function(evt) {
+      console.log('connect');
+      console.log(evt);
+    });
+    this.client.on('registered', function(evt) {
+      console.log('registered');
+      console.log(evt);
+    });
   };
 
   Network.prototype.connect = function() {
     var self = this;
     var deferred = $q.defer();
     this.status = 'connecting';
-    var fail = $timeout(function() {
-      deferred.reject();
-      self.status = 'connection lost';
-      toast.open('Connection failed: timeout.');
-    }, 2000);
     this._setUpClient();
     this.client.connect(function() {
       $timeout(() => self._onConnected());
       deferred.resolve();
-      $timeout.cancel(fail);
     });
     this.client.on('netError', function(evt) {
       $timeout(function() {
         self.status = 'connection lost';
       });
-      $timeout.cancel(fail);
-      toast.open('Connection failed: ' + evt.name + '.' +
+      toast('Connection failed: ' + evt.name + '.' +
           (evt.message ? ' ' + evt.message : ''));
+      if (evt.name === 'SecurityUntrustedCertificateIssuerError' ||
+          (evt.name === 'SecurityError' &&
+           evt.message === 'SecurityCertificate')) {
+        var message =
+            'Certificate cannot be verified. If your server uses ' +
+            'a self-signed certificate, try to go to ' +
+            '<a href="https://' + self.host + ':' + self.port + '">' +
+            self.host + ':' + self.port + '</a> ' +
+            'and add a permanent security exception.';
+        alert(message);
+      }
     });
     return deferred.promise;
   };

@@ -20,7 +20,8 @@
     "gaia-theme": "gaia-components/gaia-theme",
     "gaia-toast": "gaia-components/gaia-toast",
     "gaia-value-selector": "gaia-components/gaia-value-selector",
-    "ui-router-extras": "~0.1.0"
+    "ui-router-extras": "~0.1.0",
+    "angular-sanitize": "~1.4.7"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.0"

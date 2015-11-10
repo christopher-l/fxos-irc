@@ -8,9 +8,7 @@ toast.factory('toast', ['$rootScope', function($rootScope) {
     $rootScope.$emit('toast', text);
   }
 
-  return {
-    open: open
-  };
+  return open;
 
 }]);
 
@@ -27,6 +25,7 @@ toast.directive('ircToast', ['$rootScope', function($rootScope) {
 
   return {
     restrict: 'E',
+    scope: {},
     template: '<gaia-toast timeout="{{timeout}}">{{text}}</gaia-toast>',
     link: link
   };

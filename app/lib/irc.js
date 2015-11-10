@@ -39,8 +39,8 @@ Connection.prototype = {
     }
     //console.log('trying to set on' + evt + ' on the connection');
     this._conn['on' + evt] = function (msg) {
+      console.log(msg);
       //console.log('connection got an on' + evt + ' event');
-      console.log(msg)
       if (msg && 'data' in msg) {
         cb(msg.data);
       } else if (msg){
@@ -78,8 +78,10 @@ exports.createConnection = function (options, connectListener) {
 },{"./Connection.js":1}],3:[function(require,module,exports){
 var Connection = require('./Connection.js').Connection;
 
-exports.connect = function (port, server, creds, cb) {
-  return new Connection(port, server, true);
+exports.connect = function (options, connectListener) {
+  var socket =  new Connection(options.port, options.host, true);
+  socket.addListener('open', connectListener);
+  return socket;
 };
 
 },{"./Connection.js":1}],4:[function(require,module,exports){
