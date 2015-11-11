@@ -175,25 +175,28 @@ networks.factory(
     }
   });
 
-  Channel.prototype.send = function(content) {
+  Channel.prototype.send = function(text) {
     var message = {
       type: 'message',
-      user: this.network.nick,
+      nick: this.network.nick,
       time: new Date(),
-      content: content,
+      text: text,
     };
     this.messages.push(message);
   };
 
-  Channel.prototype.receive = function(user, content, time) {
+  Channel.prototype.receive = function(nick, text, time) {
+    var self = this;
     var message = {
       type: 'message',
-      user: user,
+      nick: nick,
       time: time || new Date(),
-      content: content,
+      text: text,
     };
-    this.messages.push(message);
-    this._onReceive();
+    $timeout(function() {
+      self.messages.push(message);
+      self._onReceive();
+    });
   };
 
   Channel.prototype._onReceive = function() {
@@ -313,6 +316,7 @@ networks.factory(
     });
     this.client.removeListener('netError', this._errorListener);
     this.client.on('close', () => this._onDisconnect());
+    this.client.on('message', this._onMessage.bind(this));
   };
 
   Network.prototype._onConnectionError = function(evt) {
@@ -350,6 +354,38 @@ networks.factory(
       self.status = 'connection lost';
     });
   };
+
+  Network.prototype._onMessage = function(nick, to, text, message) {
+    console.log('nick: ' + nick);
+    console.log('to: ' + to);
+    console.log('text: ' + text);
+    console.log('message: ' + message);
+
+    var channel = this.channels.find(function(channel) {
+      return '#' + channel.name === to;
+    });
+
+    if (channel) {
+      channel.receive(nick, text);
+    } else {
+      this.receive(nick, to + ': ' + text);
+    }
+
+  };
+
+  Network.prototype.receive = function(nick, text, time) {
+    var self = this;
+    var message = {
+      type: 'message',
+      nick: nick,
+      time: time || new Date(),
+      text: text,
+    };
+    $timeout(function() {
+      self.messages.push(message);
+    });
+  };
+
 
   Object.defineProperty(Network.prototype, 'online', {
     get: function() {

@@ -10,16 +10,16 @@
       ng-class="::{highlight: message.highlight}">
     <div ng-if="::message.type === 'message'">
       <div class="header">
-        <span class="user">{{::message.user}}</span>
+        <span class="user">{{::message.nick}}</span>
         <span class="time">{{::message.time.toLocaleTimeString()}}</span>
       </div>
       <div class="content">
-        {{::message.content}}
+        {{::message.text}}
       </div>
     </div>
     <div ng-if="::message.type === 'disconnect'">
       <div class="header">
-        <span class="info">{{::message.user}} has disconnected.</span>
+        <span class="info">{{::message.nick}} has disconnected.</span>
         <span class="time">{{::message.time}}</span>
       </div>
     </div>
