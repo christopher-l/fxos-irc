@@ -138,6 +138,11 @@
   color: var(--color-destructive);
 }
 
+#menu-view [status='error'] .network-info {
+  color: var(--color-destructive);
+}
+
+
 
 #menu-view :not([active]) > .channel-text {
   color: var(--text-color-minus);

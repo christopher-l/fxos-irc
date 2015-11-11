@@ -265,50 +265,89 @@ networks.factory(
     });
   };
 
+  function getErrorInformation(evt) {
+    if (evt.name === 'SecurityUntrustedCertificateIssuerError' ||
+        (evt.name === 'SecurityError' &&
+         evt.message === 'SecurityCertificate')) {
+      return {
+        type: 'certificate',
+        description: 'cannot verify certificate'
+      };
+    } else if (evt.name === 'ConnectionRefusedError') {
+      return {
+        type: 'refused',
+        description: 'connection refused'
+      };
+    } else {
+      return {
+        type: evt.name,
+        description: evt.name
+      };
+    }
+  }
+
   Network.prototype.connect = function() {
     var self = this;
     var deferred = $q.defer();
     this.status = 'connecting';
     this._setUpClient();
     this.client.connect(function() {
-      $timeout(() => self._onConnected());
+      self._onConnected();
       deferred.resolve();
     });
-    this.client.on('netError', function(evt) {
-      $timeout(function() {
-        self.status = 'connection lost';
-      });
-      toast('Connection failed: ' + evt.name + '.' +
-          (evt.message ? ' ' + evt.message : ''));
-      if (evt.name === 'SecurityUntrustedCertificateIssuerError' ||
-          (evt.name === 'SecurityError' &&
-           evt.message === 'SecurityCertificate')) {
-        var url = 'https://' + self.host + ':' + self.port;
-        var message =
-            'Certificate cannot be verified. If your server uses ' +
-            'a self-signed certificate, try goint to ' +
-            '<a href="' + url + '" target="_blank">' + url + '</a> ' +
-            'and adding a permanent exception.';
-        alert(message);
-      }
-    });
+    this._errorListener = (evt) => this._onConnectionError(evt);
+    this.client.on('netError', this._errorListener);
     return deferred.promise;
   };
 
   Network.prototype._onConnected = function() {
-    this.status = 'connected';
-    this.collapsed = false;
+    var self = this;
+    $timeout(function() {
+      self.status = 'connected';
+      self.collapsed = false;
+    });
     this.channels.forEach(function(channel) {
       if (channel.autoJoin) {
         channel.join();
       }
     });
+    this.client.removeListener('netError', this._errorListener);
+    this.client.on('close', () => this._onDisconnect());
+  };
+
+  Network.prototype._onConnectionError = function(evt) {
+    var self = this;
+    $timeout(function() {
+      self.status = 'error';
+    });
+    this.error = getErrorInformation(evt);
+
+    if (getErrorInformation(evt).type === 'certificate') {
+      var url = 'https://' + self.host + ':' + self.port;
+      var message =
+          'Certificate cannot be verified. If your server uses ' +
+          'a self-signed certificate, try goint to ' +
+          '<a href="' + url + '" target="_blank">' + url + '</a> ' +
+          'and adding a permanent exception.';
+      alert(message);
+      return;
+    }
+
+    toast('Connection failed: ' + evt.name + '.' +
+        (evt.message ? ' ' + evt.message : ''));
   };
 
   Network.prototype.disconnect = function() {
     this.status = 'disconnected';
     this.channels.forEach(function(channel) {
       channel.part();
+    });
+  };
+
+  Network.prototype._onDisconnect = function() {
+    var self = this;
+    $timeout(function() {
+      self.status = 'connection lost';
     });
   };
 
