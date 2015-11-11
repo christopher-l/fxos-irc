@@ -283,12 +283,12 @@ networks.factory(
       if (evt.name === 'SecurityUntrustedCertificateIssuerError' ||
           (evt.name === 'SecurityError' &&
            evt.message === 'SecurityCertificate')) {
+        var url = 'https://' + self.host + ':' + self.port;
         var message =
             'Certificate cannot be verified. If your server uses ' +
-            'a self-signed certificate, try to go to ' +
-            '<a href="https://' + self.host + ':' + self.port + '">' +
-            self.host + ':' + self.port + '</a> ' +
-            'and add a permanent security exception.';
+            'a self-signed certificate, try goint to ' +
+            '<a href="' + url + '" target="_blank">' + url + '</a> ' +
+            'and adding a permanent exception.';
         alert(message);
       }
     });
