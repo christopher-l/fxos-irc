@@ -176,9 +176,10 @@ networks.factory(
   });
 
   Channel.prototype.send = function(text) {
+    this.network.client.say('#' + this.name, text);
     var message = {
       type: 'message',
-      nick: this.network.nick,
+      nick: this.network.client.nick,
       time: new Date(),
       text: text,
     };
