@@ -14,11 +14,13 @@ networks.factory(
     'networks', [
       '$q',
       '$timeout',
+      '$window',
       'Storage',
       'irc',
       'toast',
       'alert',
-      function networksFactory($q, $timeout, Storage, irc, toast, alert) {
+      function networksFactory(
+          $q, $timeout, $window, Storage, irc, toast, alert) {
 
   /**
    * Base Class
@@ -251,17 +253,15 @@ networks.factory(
     this.client = new irc.Client(this.host, this.nick, {
       port: this.port,
       secure: this.tls,
-      selfSigned: true,
       autoConnect: false,
       userName: this.user,
       password: this.password,
-      debug: true,
+      // debug: true,
       channels: ['#chrisi-irc-test'],
       retryCount: 0,
     });
     this.client.on('connect', function(evt) {
       console.log('connect');
-      console.log(evt);
     });
     this.client.on('registered', function(evt) {
       console.log('registered');
@@ -282,6 +282,11 @@ networks.factory(
         type: 'refused',
         description: 'connection refused'
       };
+    } else if (evt.name === 'NetworkTimeoutError') {
+      return {
+        type: 'timeout',
+        description: 'connection timeout'
+      };
     } else {
       return {
         type: evt.name,
@@ -292,22 +297,43 @@ networks.factory(
 
   Network.prototype.connect = function() {
     var self = this;
+    if (!this.client) {
+      this._setUpClient();
+    }
     var deferred = $q.defer();
-    this.status = 'connecting';
-    this._setUpClient();
-    this.client.connect(function() {
+    this._connect().then(function() {
       self._onConnected();
       deferred.resolve();
+    }, function(evt) {
+      self._onConnectionError(evt);
+      deferred.reject();
     });
-    this._errorListener = (evt) => this._onConnectionError(evt);
-    this.client.on('netError', this._errorListener);
+  };
+
+  Network.prototype._connect = function() {
+    var self = this;
+    var deferred = $q.defer();
+    $timeout(function() {
+      self.status = 'connecting';
+    });
+    this.client.connect(function() {
+      $timeout(function() {
+        self.status = 'connected';
+      });
+      self.client.removeListener('netError', errorListener);
+      deferred.resolve();
+    });
+    function errorListener(evt) {
+      self.client.removeListener('netError', errorListener);
+      deferred.reject(evt);
+    }
+    this.client.on('netError', errorListener);
     return deferred.promise;
   };
 
   Network.prototype._onConnected = function() {
     var self = this;
     $timeout(function() {
-      self.status = 'connected';
       self.collapsed = false;
     });
     this.channels.forEach(function(channel) {
@@ -315,8 +341,7 @@ networks.factory(
         channel.join();
       }
     });
-    this.client.removeListener('netError', this._errorListener);
-    this.client.on('netError', () => this._onDisconnect());
+    this.client.on('netError', this._onConnectionLost.bind(this));
     this.client.on('message', this._onMessage.bind(this));
   };
 
@@ -342,6 +367,15 @@ networks.factory(
         (evt.message ? ' ' + evt.message : ''));
   };
 
+  Network.prototype.reconnect = function(cb) {
+    var self = this;
+    if (this._reconnecting) { return; }
+    this._reconnecting = true;
+    return this._connect().finally(function() {
+      delete self._reconnecting;
+    });
+  };
+
   Network.prototype.disconnect = function() {
     this.status = 'disconnected';
     this.channels.forEach(function(channel) {
@@ -349,18 +383,24 @@ networks.factory(
     });
   };
 
-  Network.prototype._onDisconnect = function() {
+  Network.prototype._onConnectionLost = function(evt) {
     var self = this;
+
+    if (getErrorInformation(evt).type === 'timeout') {
+      this.reconnect();
+      return;
+    }
+
     $timeout(function() {
       self.status = 'connection lost';
     });
   };
 
   Network.prototype._onMessage = function(nick, to, text, message) {
-    console.log('nick: ' + nick);
-    console.log('to: ' + to);
-    console.log('text: ' + text);
-    console.log('message: ' + message);
+    // console.log('nick: ' + nick);
+    // console.log('to: ' + to);
+    // console.log('text: ' + text);
+    // console.log('message: ' + message);
 
     var channel = this.channels.find(function(channel) {
       return '#' + channel.name === to;
@@ -418,6 +458,14 @@ networks.factory(
   networks.newChannel = function() {
     return new Channel();
   };
+
+  $window.addEventListener('online', function() {
+    networks.forEach(function(network) {
+      if (network.status === 'connection lost') {
+        network.reconnect();
+      }
+    });
+  });
 
   return networks;
 
