@@ -316,7 +316,7 @@ networks.factory(
       }
     });
     this.client.removeListener('netError', this._errorListener);
-    this.client.on('close', () => this._onDisconnect());
+    this.client.on('netError', () => this._onDisconnect());
     this.client.on('message', this._onMessage.bind(this));
   };
 

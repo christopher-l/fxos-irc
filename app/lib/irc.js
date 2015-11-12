@@ -42,11 +42,9 @@ Connection.prototype = {
       console.log(msg);
       //console.log('connection got an on' + evt + ' event');
       if (msg && 'data' in msg) {
-        cb(msg.data);
-      } else if (msg){
-        cb(msg);
+        cb(decode_utf8(msg.data));
       } else {
-        cb();
+        cb(decode_utf8(msg));
       }
     };
   },
@@ -54,7 +52,7 @@ Connection.prototype = {
   emit: emit,
   write: function (data) {
     //console.log('sending: ' + data);
-    this._conn.send(data);
+    this._conn.send(encode_utf8(data));
   },
   end: function () {
     this._conn.close();
@@ -63,6 +61,15 @@ Connection.prototype = {
   setTimeout: function () {},
   setEncoding: function () {},
 };
+
+// from http://ecmanaut.blogspot.de/2006/07/encoding-decoding-utf8-in-javascript.html
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
 
 exports.Connection = Connection;
 
